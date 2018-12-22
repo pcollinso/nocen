@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,6 +13,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        Model::unguard();
+        DB::beginTransaction();
         $this->call([
             ModeTableSeeder::class,
             GenderTableSeeder::class,
@@ -39,7 +43,7 @@ class DatabaseSeeder extends Seeder
             DepartmentTableSeeder::class,
             GradeATableSeeder::class,
             CourseTableSeeder::class,
-            QualfTableSeeder::class,
+            QualificationTableSeeder::class,
             StaffTableSeeder::class,
             HodTableSeeder::class,
             DeanTableSeeder::class,
@@ -50,5 +54,7 @@ class DatabaseSeeder extends Seeder
             GeneralCourseTableSeeder::class,
             StaffCourseTableSeeder::class,
         ]);
+        DB::commit();
+        Model::reguard();
     }
 }
