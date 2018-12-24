@@ -15,14 +15,17 @@ class OptionsServiceTest extends TestCase
     const STATE_ID = 1;
     const LGA_ID = 1;
     const TOWN_ID = 1;
+    const INSTITUTION_TYPE_ID = 1;
     const COUNTRY = 'Nigeria';
     const STATE = 'ABIA';
     const LGA = 'ABA NORTH';
 
+    private $optionsService;
+
     public function setUp()
     {
         parent::setUp();
-        $this->optionsService = app()->make(OptionsService::class);
+        if (!$this->optionsService) $this->optionsService = app()->make(OptionsService::class);
         Artisan::call('db:seed');
     }
 
@@ -211,5 +214,13 @@ class OptionsServiceTest extends TestCase
         $this->assertTrue(is_array($settings));
         $this->assertGreaterThan(0, count($settings));
         $this->assertArrayHasKey('key_name', $settings[0]->getAttributes());
+    }
+
+    public function testGetInstitutionTypes()
+    {
+        $institutionTypes = $this->optionsService->getInstitutionTypes();
+        $this->assertTrue(is_array($institutionTypes));
+        $this->assertGreaterThan(0, count($institutionTypes));
+        $this->assertArrayHasKey('institution_type', $institutionTypes[0]->getAttributes());
     }
 }

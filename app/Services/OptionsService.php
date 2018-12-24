@@ -13,6 +13,7 @@ use App\Models\Title;
 use App\Models\Semester;
 use App\Models\Qualification;
 use App\Models\GlobalSetting;
+use App\Models\InstitutionType;
 
 class OptionsService
 {
@@ -139,5 +140,10 @@ class OptionsService
   public function getGlobalSettings()
   {
     return GlobalSetting::all()->all();
+  }
+
+  public function getInstitutionTypes()
+  {
+    return InstitutionType::all()->all();
   }
 }
