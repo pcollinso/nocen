@@ -60,8 +60,8 @@ class BatchServiceTest extends TestCase
     $attrs['batch_name'] = '2018/2019';
     $batch = $this->batchService->createBatch($attrs);
     $batchAttrs = $batch->getAttributes();
-    $this->assertEquals(2018, $batchAttrs['batch_year']);
-    $this->assertEquals('2018/2019', $batchAttrs['batch_name']);
+    $this->assertEquals($attrs['batch_year'], $batchAttrs['batch_year']);
+    $this->assertEquals($attrs['batch_name'], $batchAttrs['batch_name']);
   }
 
   public function testCreateBatchShouldReturnExistingIfGivenDuplicateYear()

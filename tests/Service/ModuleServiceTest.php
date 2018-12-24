@@ -57,7 +57,7 @@ class ModuleServiceTest extends TestCase
     $attrs['module_name'] = 'TEST MODULE';
     $module = $this->moduleService->createModule($attrs);
     $moduleAttrs = $module->getAttributes();
-    $this->assertEquals('TEST MODULE', $moduleAttrs['module_name']);
+    $this->assertEquals($attrs['module_name'], $moduleAttrs['module_name']);
   }
 
   public function testCreateModuleShouldReturnExistingIfGivenDuplicateName()
