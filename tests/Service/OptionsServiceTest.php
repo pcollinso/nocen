@@ -255,4 +255,12 @@ class OptionsServiceTest extends TestCase
         $this->assertGreaterThan(0, count($olevelQualifications));
         $this->assertArrayHasKey('olevel_name', $olevelQualifications[0]->getAttributes());
     }
+
+    public function testGetCourseLevels()
+    {
+        $courseLevels = $this->optionsService->getCourseLevels();
+        $this->assertTrue(is_array($courseLevels));
+        $this->assertGreaterThan(0, count($courseLevels));
+        $this->assertArrayHasKey('course_level_name', $courseLevels[0]->getAttributes());
+    }
 }

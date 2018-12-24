@@ -17,6 +17,7 @@ use App\Models\InstitutionType;
 use App\Models\QualificationType;
 use App\Models\Relationship;
 use App\Models\OlevelQualification;
+use App\Models\CourseLevel;
 
 class OptionsService
 {
@@ -168,5 +169,10 @@ class OptionsService
   public function getOlevelQualifications()
   {
     return OlevelQualification::all()->all();
+  }
+
+  public function getCourseLevels()
+  {
+    return CourseLevel::all()->all();
   }
 }
