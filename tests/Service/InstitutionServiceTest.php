@@ -13,11 +13,24 @@ class InstitutionServiceTest extends TestCase
 
   const INSTITUTION_ID = 1;
   const PROGRAMME_ID = 1;
+  const FACULTY_ID = 1;
+  const DEPARTMENT_ID = 2;
   const INSTITUTION_CODE = 'N225';
   const INSTITUTION_NAME = 'NWAFOR ORIZU COLLEGE OF EDUCTAION, NSUGBE';
   const PROGRAMME_NAME = 'DEGREE';
+  const DEPARTMENT_NAME = 'AAB';
 
   private $institutionService;
+
+  private function getAttrs()
+  {
+    return [
+      'programme_id' => self::PROGRAMME_ID,
+      'institution_id' => self::INSTITUTION_ID,
+      'faculty_id' => self::FACULTY_ID,
+      'department_name' => self::DEPARTMENT_NAME,
+    ];
+  }
 
   public function setUp()
   {
@@ -78,5 +91,86 @@ class InstitutionServiceTest extends TestCase
     $programmeAttrs = $programme->getAttributes();
     $this->assertEquals(self::INSTITUTION_ID, $programmeAttrs['institution_id']);
     $this->assertEquals(self::PROGRAMME_NAME, $programmeAttrs['programme_name']);
+  }
+
+  public function testGetFaculties()
+  {
+    $faculties = $this->institutionService->getFaculties();
+    $this->assertTrue(is_array($faculties));
+    $this->assertGreaterThan(0, count($faculties));
+  }
+
+  public function testGetFacultiesByInstitution()
+  {
+    $faculties = $this->institutionService->getFacultiesByInstitution(self::INSTITUTION_ID);
+    $this->assertTrue(is_array($faculties));
+    $this->assertGreaterThan(0, count($faculties));
+  }
+
+  public function testGetFacultiesByProgramme()
+  {
+    $faculties = $this->institutionService->getFacultiesByProgramme(self::PROGRAMME_ID);
+    $this->assertTrue(is_array($faculties));
+    $this->assertGreaterThan(0, count($faculties));
+  }
+
+  public function testGetFacultyById()
+  {
+    $faculty = $this->institutionService->getFacultyById(self::FACULTY_ID);
+    $facultyAttrs = $faculty->getAttributes();
+    $this->assertArrayHasKey('faculty_name', $facultyAttrs);
+    $this->assertEquals(self::FACULTY_ID, $facultyAttrs['id']);
+  }
+
+  public function testGetDepartments()
+  {
+    $depts = $this->institutionService->getDepartments();
+    $this->assertTrue(is_array($depts));
+    $this->assertGreaterThan(0, count($depts));
+  }
+
+  public function testGetDepartmentsByInstitution()
+  {
+    $depts = $this->institutionService->getDepartmentsByInstitution(self::INSTITUTION_ID);
+    $this->assertTrue(is_array($depts));
+    $this->assertGreaterThan(0, count($depts));
+  }
+
+  public function testGetDepartmentsByProgramme()
+  {
+    $depts = $this->institutionService->getDepartmentsByProgramme(self::PROGRAMME_ID);
+    $this->assertTrue(is_array($depts));
+    $this->assertGreaterThan(0, count($depts));
+  }
+
+  public function testGetDepartmentsByFaculty()
+  {
+    $depts = $this->institutionService->getDepartmentsByFaculty(self::FACULTY_ID);
+    $this->assertTrue(is_array($depts));
+    $this->assertGreaterThan(0, count($depts));
+  }
+
+  public function testGetDepartmentById()
+  {
+    $dept = $this->institutionService->getDepartmentById(self::DEPARTMENT_ID);
+    $deptAttrs = $dept->getAttributes();
+    $this->assertArrayHasKey('department_name', $deptAttrs);
+    $this->assertEquals(self::DEPARTMENT_ID, $deptAttrs['id']);
+  }
+
+  public function testCreateDepartment()
+  {
+    $attrs = $this->getAttrs();
+    $attrs['department_name'] = 'TEST DEPT';
+    $dept = $this->institutionService->createDepartment($attrs);
+    $deptAttrs = $dept->getAttributes();
+    $this->assertEquals($dept['department_name'], $deptAttrs['department_name']);
+  }
+
+  public function testCreateDepartmentShouldReturnExistingIfGivenDuplicateValues()
+  {
+    $dept = $this->institutionService->createDepartment($this->getAttrs());
+    $deptAttrs = $dept->getAttributes();
+    $this->assertEquals(self::DEPARTMENT_ID, $deptAttrs['id']);
   }
 }
