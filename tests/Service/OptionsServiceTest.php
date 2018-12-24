@@ -16,6 +16,7 @@ class OptionsServiceTest extends TestCase
     const LGA_ID = 1;
     const TOWN_ID = 1;
     const INSTITUTION_TYPE_ID = 1;
+    const QUALIFICATION_TYPE_ID = 7;
     const COUNTRY = 'Nigeria';
     const STATE = 'ABIA';
     const LGA = 'ABA NORTH';
@@ -222,5 +223,20 @@ class OptionsServiceTest extends TestCase
         $this->assertTrue(is_array($institutionTypes));
         $this->assertGreaterThan(0, count($institutionTypes));
         $this->assertArrayHasKey('institution_type', $institutionTypes[0]->getAttributes());
+    }
+
+    public function testGetQualificationTypes()
+    {
+        $qualificationTypes = $this->optionsService->getQualificationTypes();
+        $this->assertTrue(is_array($qualificationTypes));
+        $this->assertGreaterThan(0, count($qualificationTypes));
+        $this->assertArrayHasKey('type', $qualificationTypes[0]->getAttributes());
+    }
+
+    public function testGetQualificationTypeById()
+    {
+        $qualificationType = $this->optionsService->getQualificationTypeById(self::QUALIFICATION_TYPE_ID);
+        $this->assertArrayHasKey('type', $qualificationType->getAttributes());
+        $this->assertEquals(self::QUALIFICATION_TYPE_ID, $qualificationType->getAttributes()['id']);
     }
 }

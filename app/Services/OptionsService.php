@@ -14,6 +14,7 @@ use App\Models\Semester;
 use App\Models\Qualification;
 use App\Models\GlobalSetting;
 use App\Models\InstitutionType;
+use App\Models\QualificationType;
 
 class OptionsService
 {
@@ -145,5 +146,15 @@ class OptionsService
   public function getInstitutionTypes()
   {
     return InstitutionType::all()->all();
+  }
+
+  public function getQualificationTypes()
+  {
+    return QualificationType::all()->all();
+  }
+
+  public function getQualificationTypeById($id)
+  {
+    return QualificationType::find($id);
   }
 }
