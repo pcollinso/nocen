@@ -15,6 +15,7 @@ use App\Models\Qualification;
 use App\Models\GlobalSetting;
 use App\Models\InstitutionType;
 use App\Models\QualificationType;
+use App\Models\Relationship;
 
 class OptionsService
 {
@@ -156,5 +157,10 @@ class OptionsService
   public function getQualificationTypeById($id)
   {
     return QualificationType::find($id);
+  }
+
+  public function getRelationships()
+  {
+    return Relationship::all()->all();
   }
 }

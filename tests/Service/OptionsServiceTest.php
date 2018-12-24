@@ -239,4 +239,12 @@ class OptionsServiceTest extends TestCase
         $this->assertArrayHasKey('type', $qualificationType->getAttributes());
         $this->assertEquals(self::QUALIFICATION_TYPE_ID, $qualificationType->getAttributes()['id']);
     }
+
+    public function testGetRelationships()
+    {
+        $relationships = $this->optionsService->getRelationships();
+        $this->assertTrue(is_array($relationships));
+        $this->assertGreaterThan(0, count($relationships));
+        $this->assertArrayHasKey('relationship', $relationships[0]->getAttributes());
+    }
 }
