@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Services\OptionsService;
+use App\Services\BatchService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,5 +26,6 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(OptionsService::class, OptionsService::class);
+        $this->app->bind(BatchService::class, BatchService::class);
     }
 }

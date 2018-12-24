@@ -16,71 +16,88 @@ use App\Models\GlobalSetting;
 
 class OptionsService
 {
-  public function getCountries() {
+  public function getCountries()
+  {
     return Country::all()->all();
   }
 
-  public function getCountryById($id) {
+  public function getCountryById($id)
+  {
     return Country::find($id);
   }
 
-  public function getCountryByName($name) {
+  public function getCountryByName($name)
+  {
     return Country::where('country', $name)->first();
   }
 
-  public function getStates() {
+  public function getStates()
+  {
     return State::all()->all();
   }
 
-  public function getStateById($id) {
+  public function getStateById($id)
+  {
     return State::find($id);
   }
 
-  public function getStatesByCountry($id) {
+  public function getStatesByCountry($id)
+  {
     return State::where('country_id', $id)->get()->all();
   }
 
-  public function getStateByName($name) {
+  public function getStateByName($name)
+  {
     return State::where('state', $name)->first();
   }
 
-  public function getLgas() {
+  public function getLgas()
+  {
     return Lga::all()->all();
   }
 
-  public function getLgaById($id) {
+  public function getLgaById($id)
+  {
     return Lga::find($id);
   }
 
-  public function getLgasByState($id) {
+  public function getLgasByState($id)
+  {
     return Lga::where('state_id', $id)->get()->all();
   }
 
-  public function getLgasByCountry($id) {
+  public function getLgasByCountry($id)
+  {
     return Lga::where('country_id', $id)->get()->all();
   }
 
-  public function getTowns() {
+  public function getTowns()
+  {
     return Town::all()->all();
   }
 
-  public function getTownById($id) {
+  public function getTownById($id)
+  {
     return Town::find($id);
   }
 
-  public function getTownsByStateId($id) {
+  public function getTownsByStateId($id)
+  {
     return Town::where('state_id', $id)->get()->all();
   }
 
-  public function getTownsByStateName($name) {
+  public function getTownsByStateName($name)
+  {
     return Town::where('state', $name)->get()->all();
   }
 
-  public function getTownsByLgaId($id) {
+  public function getTownsByLgaId($id)
+  {
     return Town::where('lga_id', $id)->get()->all();
   }
 
-  public function getTownsByLgaName($name) {
+  public function getTownsByLgaName($name)
+  {
     return Town::where('lga', $name)->get()->all();
   }
 

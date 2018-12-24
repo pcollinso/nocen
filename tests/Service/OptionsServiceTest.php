@@ -19,8 +19,6 @@ class OptionsServiceTest extends TestCase
     const STATE = 'ABIA';
     const LGA = 'ABA NORTH';
 
-    protected static $migrated = false;
-
     public function setUp()
     {
         parent::setUp();
