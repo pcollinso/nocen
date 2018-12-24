@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
             GlobalSettingTableSeeder::class,
             BatchTableSeeder::class,
             GradeOTableSeeder::class,
-            OlevelTableSeeder::class,
+            OlevelQualificationTableSeeder::class,
             CourseLevelTableSeeder::class,
             ProgrammeTableSeeder::class,
             FacultyTableSeeder::class,

@@ -16,6 +16,7 @@ use App\Models\GlobalSetting;
 use App\Models\InstitutionType;
 use App\Models\QualificationType;
 use App\Models\Relationship;
+use App\Models\OlevelQualification;
 
 class OptionsService
 {
@@ -162,5 +163,10 @@ class OptionsService
   public function getRelationships()
   {
     return Relationship::all()->all();
+  }
+
+  public function getOlevelQualifications()
+  {
+    return OlevelQualification::all()->all();
   }
 }

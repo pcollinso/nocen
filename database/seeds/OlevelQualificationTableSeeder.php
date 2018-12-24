@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class OlevelTableSeeder extends Seeder
+class OlevelQualificationTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
