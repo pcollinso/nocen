@@ -27,10 +27,8 @@ class SubjectService
 
   public function createSubject($attrs)
   {
-    $existingSubject = $this->getSubjectByName(strtoupper($attrs['subject_name']));
-    if ($existingSubject) return $existingSubject;
-
-    $existingSubject = $this->getSubjectByCode(strtoupper($attrs['subject_code']));
+    $existingSubject = Subject::where('subject_name', strtoupper($attrs['subject_name']))
+      ->orWhere('subject_code', strtoupper($attrs['subject_code']))->first();
     if ($existingSubject) return $existingSubject;
 
     Subject::unguard();
