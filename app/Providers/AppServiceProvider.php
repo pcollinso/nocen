@@ -8,7 +8,6 @@ use App\Services\BatchService;
 use App\Services\InstitutionService;
 use App\Services\ModuleService;
 use App\Services\SubjectService;
-use App\Services\ProgrammeService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,6 +33,5 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(InstitutionService::class, InstitutionService::class);
         $this->app->bind(ModuleService::class, ModuleService::class);
         $this->app->bind(SubjectService::class, SubjectService::class);
-        $this->app->bind(ProgrammeService::class, ProgrammeService::class);
     }
 }
