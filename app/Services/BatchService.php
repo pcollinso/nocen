@@ -5,24 +5,24 @@ use App\Models\Batch;
 
 class BatchService
 {
-  public function getBatches()
+  public function getAll()
   {
     return Batch::all()->all();
   }
 
-  public function getBatchById($id)
+  public function getById($id)
   {
     return Batch::find($id);
   }
 
-  public function getBatchByYear($year)
+  public function getByYear($year)
   {
     return Batch::where('batch_year', $year)->first();
   }
 
-  public function createBatch($attrs)
+  public function create($attrs)
   {
-    $existingBatch = $this->getBatchByYear($attrs['batch_year']);
+    $existingBatch = $this->getByYear($attrs['batch_year']);
     if ($existingBatch) return $existingBatch;
     Batch::unguard();
     $batch = Batch::create($attrs);

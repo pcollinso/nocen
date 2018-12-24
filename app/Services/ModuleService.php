@@ -5,24 +5,24 @@ use App\Models\Module;
 
 class ModuleService
 {
-  public function getModules()
+  public function getAll()
   {
     return Module::all()->all();
   }
 
-  public function getModuleById($id)
+  public function getById($id)
   {
     return Module::find($id);
   }
 
-  public function getModuleByName($name)
+  public function getByName($name)
   {
     return Module::where('module_name', $name)->first();
   }
 
-  public function createModule($attrs)
+  public function create($attrs)
   {
-    $existingModule = $this->getModuleByName(strtoupper($attrs['module_name']));
+    $existingModule = $this->getByName(strtoupper($attrs['module_name']));
     if ($existingModule) return $existingModule;
     Module::unguard();
     $module = Module::create($attrs);

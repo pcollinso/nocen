@@ -5,22 +5,22 @@ use App\Models\Institution;
 
 class InstitutionService
 {
-  public function getInstitutions()
+  public function getAll()
   {
     return Institution::all()->all();
   }
 
-  public function getInstitutionById($id)
+  public function getById($id)
   {
     return Institution::find($id);
   }
 
-  public function getInstitutionByCode($code)
+  public function getByCode($code)
   {
     return Institution::where('institution_code', $code)->first();
   }
 
-  public function getInstitutionByName($name)
+  public function getByName($name)
   {
     return Institution::where('institution_name', $name)->first();
   }

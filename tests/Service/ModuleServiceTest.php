@@ -28,41 +28,41 @@ class ModuleServiceTest extends TestCase
     Artisan::call('db:seed');
   }
 
-  public function testGetModules()
+  public function testGetAll()
   {
-    $modules = $this->moduleService->getModules();
+    $modules = $this->moduleService->getAll();
     $this->assertTrue(is_array($modules));
     $this->assertGreaterThan(0, count($modules));
   }
 
-  public function testGeModuleById()
+  public function testGetById()
   {
-    $module = $this->moduleService->getModuleById(self::MODULE_ID);
+    $module = $this->moduleService->getById(self::MODULE_ID);
     $moduleAttrs = $module->getAttributes();
     $this->assertArrayHasKey('module_name', $moduleAttrs);
     $this->assertEquals(self::MODULE_ID, $moduleAttrs['id']);
   }
 
-  public function testGetModuleByName()
+  public function testGetByName()
   {
-    $module = $this->moduleService->getModuleByName(self::MODULE_NAME);
+    $module = $this->moduleService->getByName(self::MODULE_NAME);
     $moduleAttrs = $module->getAttributes();
     $this->assertArrayHasKey('module_name', $moduleAttrs);
     $this->assertEquals(self::MODULE_NAME, $moduleAttrs['module_name']);
   }
 
-  public function testCreateModule()
+  public function testCreate()
   {
     $attrs = $this->getAttrs();
     $attrs['module_name'] = 'TEST MODULE';
-    $module = $this->moduleService->createModule($attrs);
+    $module = $this->moduleService->create($attrs);
     $moduleAttrs = $module->getAttributes();
     $this->assertEquals($attrs['module_name'], $moduleAttrs['module_name']);
   }
 
-  public function testCreateModuleShouldReturnExistingIfGivenDuplicateName()
+  public function testCreateShouldReturnExistingIfGivenDuplicateName()
   {
-    $module = $this->moduleService->createModule($this->getAttrs());
+    $module = $this->moduleService->create($this->getAttrs());
     $moduleAttrs = $module->getAttributes();
     $this->assertEquals(self::MODULE_NAME, $moduleAttrs['module_name']);
     $this->assertEquals(self::MODULE_ID, $moduleAttrs['id']);

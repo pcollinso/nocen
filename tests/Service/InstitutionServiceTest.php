@@ -24,32 +24,32 @@ class InstitutionServiceTest extends TestCase
     Artisan::call('db:seed');
   }
 
-  public function testGetInstitutions()
+  public function testGetAll()
   {
-    $institutions = $this->institutionService->getInstitutions();
+    $institutions = $this->institutionService->getAll();
     $this->assertTrue(is_array($institutions));
     $this->assertGreaterThan(0, count($institutions));
   }
 
   public function testGetInstitionById()
   {
-    $institution = $this->institutionService->getInstitutionById(self::INSTITUTION_ID);
+    $institution = $this->institutionService->getById(self::INSTITUTION_ID);
     $institutionAttrs = $institution->getAttributes();
     $this->assertArrayHasKey('institution_name', $institutionAttrs);
     $this->assertEquals(self::INSTITUTION_ID, $institutionAttrs['id']);
   }
 
-  public function testGetInstitutionByCode()
+  public function testGetByCode()
   {
-    $institution = $this->institutionService->getInstitutionByCode(self::INSTITUTION_CODE);
+    $institution = $this->institutionService->getByCode(self::INSTITUTION_CODE);
     $institutionAttrs = $institution->getAttributes();
     $this->assertArrayHasKey('institution_code', $institutionAttrs);
     $this->assertEquals(self::INSTITUTION_CODE, $institutionAttrs['institution_code']);
   }
 
-  public function testGetInstitutionByName()
+  public function testGetByName()
   {
-    $institution = $this->institutionService->getInstitutionByName(self::INSTITUTION_NAME);
+    $institution = $this->institutionService->getByName(self::INSTITUTION_NAME);
     $institutionAttrs = $institution->getAttributes();
     $this->assertArrayHasKey('institution_name', $institutionAttrs);
     $this->assertEquals(self::INSTITUTION_NAME, $institutionAttrs['institution_name']);

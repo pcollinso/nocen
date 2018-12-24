@@ -28,45 +28,45 @@ class BatchServiceTest extends TestCase
     Artisan::call('db:seed');
   }
 
-  public function testGetBatches()
+  public function testGetAll()
   {
-    $batches = $this->batchService->getBatches();
+    $batches = $this->batchService->getAll();
     $this->assertTrue(is_array($batches));
     $this->assertGreaterThan(0, count($batches));
   }
 
-  public function testGetBatchById()
+  public function testGetById()
   {
-    $batch = $this->batchService->getBatchById(self::BATCH_ID);
+    $batch = $this->batchService->getById(self::BATCH_ID);
     $batchAttrs = $batch->getAttributes();
     $this->assertArrayHasKey('batch_name', $batchAttrs);
     $this->assertArrayHasKey('batch_year', $batchAttrs);
     $this->assertEquals(self::BATCH_ID, $batchAttrs['id']);
   }
 
-  public function testGetBatchByYear()
+  public function testGetByYear()
   {
-    $batch = $this->batchService->getBatchByYear(self::BATCH_YEAR);
+    $batch = $this->batchService->getByYear(self::BATCH_YEAR);
     $batchAttrs = $batch->getAttributes();
     $this->assertArrayHasKey('batch_name', $batchAttrs);
     $this->assertArrayHasKey('batch_year', $batchAttrs);
     $this->assertEquals(self::BATCH_YEAR, $batchAttrs['batch_year']);
   }
 
-  public function testCreateBatch()
+  public function testCreate()
   {
     $attrs = $this->getAttrs();
     $attrs['batch_year'] = 2018;
     $attrs['batch_name'] = '2018/2019';
-    $batch = $this->batchService->createBatch($attrs);
+    $batch = $this->batchService->create($attrs);
     $batchAttrs = $batch->getAttributes();
     $this->assertEquals($attrs['batch_year'], $batchAttrs['batch_year']);
     $this->assertEquals($attrs['batch_name'], $batchAttrs['batch_name']);
   }
 
-  public function testCreateBatchShouldReturnExistingIfGivenDuplicateYear()
+  public function testCreateShouldReturnExistingIfGivenDuplicateYear()
   {
-    $batch = $this->batchService->createBatch($this->getAttrs());
+    $batch = $this->batchService->create($this->getAttrs());
     $batchAttrs = $batch->getAttributes();
     $this->assertEquals(self::BATCH_YEAR, $batchAttrs['batch_year']);
     $this->assertEquals(self::BATCH_ID, $batchAttrs['id']);
