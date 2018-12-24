@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Services\OptionsService;
 use App\Services\BatchService;
 use App\Services\InstitutionService;
+use App\Services\ModuleService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,5 +30,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(OptionsService::class, OptionsService::class);
         $this->app->bind(BatchService::class, BatchService::class);
         $this->app->bind(InstitutionService::class, InstitutionService::class);
+        $this->app->bind(ModuleService::class, ModuleService::class);
     }
 }
