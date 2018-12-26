@@ -19,6 +19,8 @@ class CourseServiceTest extends TestCase
   const PROG_ID = 1;
   const DEPT_ID = 2;
   const GEN_COURSE_ID = 1;
+  const STAFF_COURSE_ID = 1;
+  const STAFF_ID = 7;
   const C_CODE = 'CS101';
   const C_NAME = 'INTRODUCTION TO COMPUTER';
 
@@ -55,6 +57,15 @@ class CourseServiceTest extends TestCase
       'department_id' => self::DEPT_ID,
       'level_id' => self::LVL_ID,
       'semester_id' => self::SEM_ID,
+    ];
+  }
+
+  private function getStaffCourseAttrs()
+  {
+    return [
+      'institution_id' => self::INST_ID,
+      'course_id' => self::COURSE_ID,
+      'staff_id' => self::STAFF_ID,
     ];
   }
 
@@ -190,5 +201,47 @@ class CourseServiceTest extends TestCase
     $course = $this->courseService->createGeneralCourse($this->getGeneralCourseAttrs());
     $courseAttrs = $course->getAttributes();
     $this->assertEquals(self::GEN_COURSE_ID, $courseAttrs['id']);
+  }
+
+  public function testGetAllStaffCourses()
+  {
+    $courses = $this->courseService->getAllStaffCourses();
+    $this->assertTrue(is_array($courses));
+    $this->assertGreaterThan(0, count($courses));
+  }
+
+  public function testGetStaffCourseById()
+  {
+    $course = $this->courseService->getStaffCourseById(self::STAFF_COURSE_ID);
+    $courseAttrs = $course->getAttributes();
+    $this->assertEquals(self::COURSE_ID, $courseAttrs['course_id']);
+  }
+
+  public function testGetStaffCoursesByInstitution()
+  {
+    $courses = $this->courseService->getStaffCoursesByInstitution(self::INST_ID);
+    $this->assertGreaterThan(0, count($courses));
+  }
+
+  public function testGetStaffCoursesByStaff()
+  {
+    $courses = $this->courseService->getStaffCoursesByStaff(self::STAFF_ID);
+    $this->assertGreaterThan(0, count($courses));
+  }
+
+  public function testCreateStaffCourse()
+  {
+    $attrs = $this->getStaffCourseAttrs();
+    $attrs['course_id'] = 3;
+    $course = $this->courseService->createStaffCourse($attrs);
+    $courseAttrs = $course->getAttributes();
+    $this->assertEquals($attrs['course_id'], $courseAttrs['course_id']);
+  }
+
+  public function testCreateStaffCourseReturnsExistingWhenGivenDuplicate()
+  {
+    $course = $this->courseService->createGeneralCourse($this->getGeneralCourseAttrs());
+    $courseAttrs = $course->getAttributes();
+    $this->assertEquals(self::STAFF_COURSE_ID, $courseAttrs['id']);
   }
 }

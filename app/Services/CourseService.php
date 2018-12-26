@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Models\Course;
 use App\Models\CoursePrerequisite;
 use App\Models\GeneralCourse;
+use App\Models\StaffCourse;
 
 class CourseService
 {
@@ -120,6 +121,39 @@ class CourseService
     $genCourse = GeneralCourse::create($attrs);
     GeneralCourse::reguard();
     return $genCourse;
+  }
+
+  public function getAllStaffCourses()
+  {
+    return StaffCourse::all()->all();
+  }
+
+  public function getStaffCourseById($id)
+  {
+    return StaffCourse::find($id);
+  }
+
+  public function getStaffCoursesByInstitution($id)
+  {
+    return StaffCourse::where('institution_id', $id)->get()->all();
+  }
+
+  public function getStaffCoursesByStaff($id)
+  {
+    return StaffCourse::where('staff_id', $id)->get()->all();
+  }
+
+  public function createStaffCourse($attrs)
+  {
+    $existingStaffCourse = StaffCourse::where('institution_id', $attrs['institution_id'])
+      ->where('course_id', $attrs['course_id'])
+      ->where('staff_id', $attrs['staff_id'])
+      ->first();
+    if ($existingStaffCourse) return $existingStaffCourse;
+    StaffCourse::unguard();
+    $staffCourse = StaffCourse::create($attrs);
+    StaffCourse::reguard();
+    return $staffCourse;
   }
 
 }

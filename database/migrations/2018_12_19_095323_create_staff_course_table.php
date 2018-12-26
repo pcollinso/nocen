@@ -18,8 +18,8 @@ class CreateStaffCourseTable extends Migration
             $table->bigInteger('institution_id');
             $table->bigInteger('course_id');
             $table->bigInteger('staff_id');
-            $table->bigInteger('entered_by');
-            $table->bigInteger('last_modified_by');
+            $table->bigInteger('entered_by')->nullable();
+            $table->bigInteger('last_modified_by')->nullable();
             $table->tinyInteger('status')->default('1');
 
             $table->timestamps();
