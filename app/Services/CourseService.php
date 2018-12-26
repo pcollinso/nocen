@@ -2,6 +2,7 @@
 
 namespace App\Services;
 use App\Models\Course;
+use App\Models\CoursePrerequisite;
 
 class CourseService
 {
@@ -39,17 +40,50 @@ class CourseService
   {
     $attrs['course_name'] = strtoupper($attrs['course_name']);
     $existingCourse = Course::where('course_name', $attrs['course_name'])
-      ->where('course_code', strtoupper($attrs['course_code']))
-      ->where('department_id', strtoupper($attrs['department_id']))
-      ->where('faculty_id', strtoupper($attrs['faculty_id']))
-      ->where('programme_id', strtoupper($attrs['programme_id']))
-      ->where('institution_id', strtoupper($attrs['institution_id']))
+      ->where('course_code', $attrs['course_code'])
+      ->where('department_id', $attrs['department_id'])
+      ->where('faculty_id', $attrs['faculty_id'])
+      ->where('programme_id', $attrs['programme_id'])
+      ->where('institution_id', $attrs['institution_id'])
       ->first();
     if ($existingCourse) return $existingCourse;
     Course::unguard();
     $course = Course::create($attrs);
     Course::reguard();
     return $course;
+  }
+
+  public function getAllPrerequisites()
+  {
+    return CoursePrerequisite::all()->all();
+  }
+
+  public function getPrerequisiteById($id)
+  {
+    return CoursePrerequisite::find($id);
+  }
+
+  public function getPrerequisitesByInstitution($id)
+  {
+    return CoursePrerequisite::where('institution_id', $id)->get()->all();
+  }
+
+  public function getPrerequisitesByCourse($id)
+  {
+    return CoursePrerequisite::where('course_id', $id)->get()->all();
+  }
+
+  public function createPrerequisite($attrs)
+  {
+    $existingCoursePrereq = CoursePrerequisite::where('institution_id', $attrs['institution_id'])
+      ->where('course_id', $attrs['course_id'])
+      ->where('require_course_id', $attrs['require_course_id'])
+      ->first();
+    if ($existingCoursePrereq) return $existingCoursePrereq;
+    CoursePrerequisite::unguard();
+    $prereq = CoursePrerequisite::create($attrs);
+    CoursePrerequisite::reguard();
+    return $prereq;
   }
 
 }

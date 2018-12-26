@@ -37,6 +37,15 @@ class CourseServiceTest extends TestCase
     ];
   }
 
+  private function getPrerequisiteAttrs()
+  {
+    return [
+      'institution_id' => self::INST_ID,
+      'course_id' => self::COURSE_ID,
+      'require_course_id' => 10
+    ];
+  }
+
   public function setUp()
   {
     parent::setUp();
@@ -99,5 +108,33 @@ class CourseServiceTest extends TestCase
     $course = $this->courseService->create($this->getAttrs());
     $courseAttrs = $course->getAttributes();
     $this->assertEquals(self::COURSE_ID, $courseAttrs['id']);
+  }
+
+  public function testGetAllPrerequisites()
+  {
+    $courses = $this->courseService->getAllPrerequisites();
+    $this->assertTrue(is_array($courses));
+  }
+
+  public function testCreatePrerequisite()
+  {
+    $prereq = $this->courseService->createPrerequisite($this->getPrerequisiteAttrs());
+    $preAttrs = $prereq->getAttributes();
+    $this->assertEquals(self::COURSE_ID, $preAttrs['course_id']);
+    $this->assertEquals(self::INST_ID, $preAttrs['institution_id']);
+  }
+
+  public function testGetPrerequisiteById()
+  {
+    $prereq = $this->courseService->createPrerequisite($this->getPrerequisiteAttrs())->getAttributes();
+    $pre = $this->courseService->getPrerequisiteById($prereq['id']);
+    $preAttrs = $pre->getAttributes();
+    $this->assertEquals(self::COURSE_ID, $preAttrs['course_id']);
+  }
+
+  public function testGetPrerequisitesByInstitution()
+  {
+    $pres = $this->courseService->getPrerequisitesByInstitution(self::INST_ID);
+    $this->assertTrue(is_array($pres));
   }
 }
