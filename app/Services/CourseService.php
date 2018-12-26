@@ -3,6 +3,7 @@
 namespace App\Services;
 use App\Models\Course;
 use App\Models\CoursePrerequisite;
+use App\Models\GeneralCourse;
 
 class CourseService
 {
@@ -84,6 +85,41 @@ class CourseService
     $prereq = CoursePrerequisite::create($attrs);
     CoursePrerequisite::reguard();
     return $prereq;
+  }
+
+  public function getAllGeneralCourses()
+  {
+    return GeneralCourse::all()->all();
+  }
+
+  public function getGeneralCourseById($id)
+  {
+    return GeneralCourse::find($id);
+  }
+
+  public function getGeneralCoursesByInstitution($id)
+  {
+    return GeneralCourse::where('institution_id', $id)->get()->all();
+  }
+
+  public function getGeneralCoursesByDepartment($id)
+  {
+    return GeneralCourse::where('department_id', $id)->get()->all();
+  }
+
+  public function createGeneralCourse($attrs)
+  {
+    $existingGenCourse = GeneralCourse::where('institution_id', $attrs['institution_id'])
+      ->where('course_id', $attrs['course_id'])
+      ->where('department_id', $attrs['department_id'])
+      ->where('level_id', $attrs['level_id'])
+      ->where('semester_id', $attrs['semester_id'])
+      ->first();
+    if ($existingGenCourse) return $existingGenCourse;
+    GeneralCourse::unguard();
+    $genCourse = GeneralCourse::create($attrs);
+    GeneralCourse::reguard();
+    return $genCourse;
   }
 
 }

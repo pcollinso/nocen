@@ -14,6 +14,7 @@ class GeneralCourseTableSeeder extends Seeder
     {
         $data = [
             [
+                'id' => 1,
                 'institution_id' => 1,
                 'course_id' => 3,
                 'department_id' => 2,

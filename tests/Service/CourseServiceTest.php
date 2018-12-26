@@ -18,6 +18,7 @@ class CourseServiceTest extends TestCase
   const FAC_ID = 1;
   const PROG_ID = 1;
   const DEPT_ID = 2;
+  const GEN_COURSE_ID = 1;
   const C_CODE = 'CS101';
   const C_NAME = 'INTRODUCTION TO COMPUTER';
 
@@ -43,6 +44,17 @@ class CourseServiceTest extends TestCase
       'institution_id' => self::INST_ID,
       'course_id' => self::COURSE_ID,
       'require_course_id' => 10
+    ];
+  }
+
+  private function getGeneralCourseAttrs()
+  {
+    return [
+      'institution_id' => self::INST_ID,
+      'course_id' => 3,
+      'department_id' => self::DEPT_ID,
+      'level_id' => self::LVL_ID,
+      'semester_id' => self::SEM_ID,
     ];
   }
 
@@ -136,5 +148,47 @@ class CourseServiceTest extends TestCase
   {
     $pres = $this->courseService->getPrerequisitesByInstitution(self::INST_ID);
     $this->assertTrue(is_array($pres));
+  }
+
+  public function testGetAllGeneralCourses()
+  {
+    $courses = $this->courseService->getAllGeneralCourses();
+    $this->assertTrue(is_array($courses));
+    $this->assertGreaterThan(0, count($courses));
+  }
+
+  public function testGetGeneralCourseById()
+  {
+    $course = $this->courseService->getGeneralCourseById(self::GEN_COURSE_ID);
+    $courseAttrs = $course->getAttributes();
+    $this->assertEquals(3, $courseAttrs['course_id']);
+  }
+
+  public function testGetGeneralCoursesByInstitution()
+  {
+    $courses = $this->courseService->getGeneralCoursesByInstitution(self::INST_ID);
+    $this->assertGreaterThan(0, count($courses));
+  }
+
+  public function testGetGeneralCoursesByDepartment()
+  {
+    $courses = $this->courseService->getGeneralCoursesByDepartment(self::DEPT_ID);
+    $this->assertGreaterThan(0, count($courses));
+  }
+
+  public function testCreateGeneralCourse()
+  {
+    $attrs = $this->getGeneralCourseAttrs();
+    $attrs['course_id'] = self::COURSE_ID;
+    $course = $this->courseService->createGeneralCourse($attrs);
+    $courseAttrs = $course->getAttributes();
+    $this->assertEquals($attrs['course_id'], $courseAttrs['course_id']);
+  }
+
+  public function testCreateGeneralCourseReturnsExistingWhenGivenDuplicate()
+  {
+    $course = $this->courseService->createGeneralCourse($this->getGeneralCourseAttrs());
+    $courseAttrs = $course->getAttributes();
+    $this->assertEquals(self::GEN_COURSE_ID, $courseAttrs['id']);
   }
 }
