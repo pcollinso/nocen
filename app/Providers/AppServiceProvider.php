@@ -10,6 +10,7 @@ use App\Services\ModuleService;
 use App\Services\SubjectService;
 use App\Services\GradeAService;
 use App\Services\ActionHistoryService;
+use App\Services\CourseService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -37,5 +38,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SubjectService::class, SubjectService::class);
         $this->app->bind(GradeAService::class, GradeAService::class);
         $this->app->bind(ActionHistoryService::class, ActionHistoryService::class);
+        $this->app->bind(CourseService::class, CourseService::class);
     }
 }
