@@ -71,24 +71,9 @@ Vue.component('input-tag', VueInputTag)
 Vue.component('vue-slider', VueSlider)
 Vue.component(VueCountdown.name, VueCountdown);
 
-Vue.component('Page', require('./pages/Page.vue'));
-Vue.component('Dashboard', require('./pages/Dashboard.vue'));
-/*
-Vue.component('PageOptions', require('./components/PageOptions.vue'));
-Vue.component('Footer', require('./components/footer/Footer.vue'));
-Vue.component('Header', require('./components/header/Header.vue'));
-Vue.component('HeaderMegaMenu', require('./components/header/HeaderMegaMenu.vue'));
-Vue.component('Sidebar', require('./components/sidebar/Sidebar.vue'));
-Vue.component('SidebarMenu', require('./components/sidebar/SidebarMenu.vue'));
-Vue.component('SidebarNavList', require('./components/sidebar/SidebarNavList.vue'));
-Vue.component('SidebarNavProfile', require('./components/sidebar/SidebarNavProfile.vue'));
-Vue.component('TopMenu', require('./components/top-menu/TopMenu.vue'));
-Vue.component('TopMenuNav', require('./components/top-menu/TopMenuNav.vue'));
-Vue.component('TopMenuNavList', require('./components/top-menu/TopMenuNavList.vue'));
-*/
 
-// const files = require.context('./', true, /\.vue$/i);
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)));
+const files = require.context('./pages', true, /\.vue$/i);
+files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)));
 
 
 /**
