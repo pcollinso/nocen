@@ -13,13 +13,16 @@ const mix = require('laravel-mix');
 const package = require('./package.json');
 
 mix.js('resources/js/app.js', 'public/js')
+  .js('resources/js/front.js', 'public/js')
   .extract(Object.keys(package.dependencies))
-   .sass('resources/sass/app.scss', 'public/css')
-   .version()
-   .babelConfig({
-      presets: [
-        'env',
-        'stage-2'
-      ]
-   })
-   .copy('resources/images/', 'public/images/');
+  .sass('resources/sass/app.scss', 'public/css')
+  .sass('resources/sass/front.scss', 'public/css')
+  .version()
+  .babelConfig({
+    presets: [
+      'env',
+      'stage-2'
+    ]
+  })
+  .copy('resources/images/', 'public/images/')
+  .copy('resources/assets_front/', 'public/assets_front/');
