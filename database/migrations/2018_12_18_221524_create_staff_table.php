@@ -56,6 +56,7 @@ class CreateStaffTable extends Migration
             $table->integer('status')->default('1');
             $table->integer('staff_type_id')->default('1')->unsigned()->index();
             $table->timestamps();
+            $table->rememberToken();
 
             $table->unique(['verification_no','institution_id'], 'duplicate_staff_code');
             $table->unique('staff_phone', 'duplicate_phone');

@@ -1,14 +1,28 @@
 <?php
 
 namespace App\Models;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Model implements Authenticatable
+class User extends Authenticatable
 {
+    protected $guard = 'admin';
     protected $table = 'sup_users';
+    protected $hidden = [
+        'user_password', 'remember_token',
+    ];
 
-    public function getAuthPassword() {
-        $this->hash_code;
+    public function getAuthIdentifierName()
+    {
+        return 'username';
+    }
+
+    public function getAuthIdentifier()
+    {
+        return $this->username;
+    }
+
+    public function getAuthPassword()
+    {
+        return $this->user_password;
     }
 }
