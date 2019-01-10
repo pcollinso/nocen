@@ -23,12 +23,14 @@
       <div class="collapse navbar-collapse" id="header-navbar">
         <ul class="nav navbar-nav navbar-right">
           <li class="nav-item dropdown">
-            <a class="nav-link active" href="#home" data-click="scroll-to-target" data-scroll-target="#home" data-toggle="dropdown">HOME <b class="caret"></b></a>
+            <a class="nav-link active" href="#home" data-click="scroll-to-target" data-scroll-target="#home" data-toggle="dropdown">Portal <b class="caret"></b></a>
             <div class="dropdown-menu dropdown-menu-left animated fadeInDown">
-              <a class="dropdown-item" href="index.html">Page with Transparent Header</a>
-              <a class="dropdown-item" href="index_inverse_header.html">Page with Inverse Header</a>
+              <a class="dropdown-item" href="/login">Login</a>
+              {{--<a class="dropdown-item" href="index_inverse_header.html">Page with Inverse Header</a>
+              <a class="dropdown-item" href="/login2">Login 2</a>
+                <a class="dropdown-item" href="/login3">Login 3</a>
               <a class="dropdown-item" href="index_default_header.html">Page with White Header</a>
-              <a class="dropdown-item" href="extra_element.html">Extra Element</a>
+              <a class="dropdown-item" href="extra_element.html">Extra Element</a>--}}
             </div>
           </li>
           <li class="nav-item"><a class="nav-link" href="#about" data-click="scroll-to-target">ABOUT</a></li>
