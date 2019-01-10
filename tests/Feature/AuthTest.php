@@ -20,11 +20,11 @@ class AuthTest extends TestCase
 
   private function getCredentials($type) {
     if ($type === 'user') {
-      return ['type' => 'user', 'email' => 'support@appmartgroup.com', 'password' => 'Children12@'];
+      return ['login' => 'support@appmartgroup.com', 'password' => 'Children12@'];
     }
 
     if ($type === 'staff') {
-      return ['type' => 'staff', 'staff_code' => 'N225229892', 'password' => 'Children12@'];
+      return ['login' => 'N225229892', 'password' => 'Children12@'];
     }
   }
 
