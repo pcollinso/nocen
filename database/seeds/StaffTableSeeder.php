@@ -30,7 +30,7 @@ class StaffTableSeeder extends Seeder
                 'gender_id' => 2,
                 'qualf_id' => 2,
                 'username' => 'mbaebie.paulcollins',
-                'user_password' => '0',
+                'user_password' => 'ba16926613bca60629dcdd93bb567a43',
                 'temp_password' => 'YfwpQCmwPGcy5F2NK7wAnQEu8gloFX02dAco8YmSXPKeqAvowBhZpne31DfogM2LiSmVQ02+1T00pQHio957b9eVKrMDcj0tMqVCM+0Y51CXHJwnNlPbXrpnvvmFKhbE',
                 'first_login' => 2,
                 'email_link' => '3c8a7ddfc026e38ec5bdf8ff7fad9fe5',

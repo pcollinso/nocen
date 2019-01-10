@@ -46,6 +46,7 @@ class CreateUsersTable extends Migration
             $table->boolean('is_password_reset')->default('0');
             $table->string('auth_code', 255)->nullable();
             $table->timestamps();
+            $table->rememberToken();
 
             $table->unique('username', 'DUPLICATE_USERNAME');
             $table->unique('phone', 'DUPLICATE_PHONE');

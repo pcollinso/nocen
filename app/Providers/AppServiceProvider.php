@@ -11,6 +11,7 @@ use App\Services\SubjectService;
 use App\Services\GradeAService;
 use App\Services\ActionHistoryService;
 use App\Services\CourseService;
+use App\Providers\CustomUserProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -39,5 +40,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(GradeAService::class, GradeAService::class);
         $this->app->bind(ActionHistoryService::class, ActionHistoryService::class);
         $this->app->bind(CourseService::class, CourseService::class);
+        $this->app->bind(CustomUserProvider::class, function ($app, array $config) {
+            return new CustomUserProvider($app['hash'], $app['config']['auth.providers.users.model']);
+        });
     }
 }

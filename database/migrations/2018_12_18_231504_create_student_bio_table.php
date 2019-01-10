@@ -36,8 +36,8 @@ class CreateStudentBioTable extends Migration
             $table->string('stud_passport', 200);
             $table->boolean('verified')->default('0');
             $table->string('username', 45);
-            $table->string('user_password', 300);
-            $table->string('temp_password', 300);
+            $table->string('user_password', 300)->nullable();
+            $table->string('temp_password', 300)->nullable();
             $table->tinyInteger('first_login')->default('0')->comment('1: First login ; 0: not logged in ever; 2: has used account');
             $table->string('hash_code', 55);
             $table->dateTime('hash_code_sent_on');
@@ -60,6 +60,7 @@ class CreateStudentBioTable extends Migration
             $table->string('mobile_token', 255);
             $table->boolean('locked')->default('0');
             $table->timestamps();
+            $table->rememberToken();
 
             $table->unique(['regno','institution_id'], 'duplicate_regno');
             $table->unique(['j_regno','institution_id'], 'duplicate_jamb_regno');

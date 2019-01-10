@@ -3,22 +3,22 @@
 namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class Student extends Authenticatable
 {
-    protected $guard = 'admin';
-    protected $table = 'sup_users';
+    protected $guard = 'student';
+    protected $table = 'sch_student_bio';
     protected $hidden = [
         'user_password', 'remember_token',
     ];
 
     public function getAuthIdentifierName()
     {
-        return 'username';
+        return 'regno';
     }
 
     public function getAuthIdentifier()
     {
-        return $this->username;
+        return $this->regno;
     }
 
     public function getAuthPassword()
