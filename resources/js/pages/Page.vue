@@ -1,5 +1,8 @@
 <template>
-	<div class="fade page-sidebar-fixed page-header-fixed show page-container" v-if="!pageOptions.pageEmpty" v-bind:class="{
+  <div
+    class="fade page-sidebar-fixed page-header-fixed show page-container"
+    v-if="!pageOptions.pageEmpty"
+    v-bind:class="{
 		'page-sidebar-minified': pageOptions.pageSidebarMinified,
 		'page-content-full-height': pageOptions.pageContentFullHeight,
 		'page-without-sidebar': pageOptions.pageWithoutSidebar,
@@ -11,20 +14,23 @@
 		'page-sidebar-toggled': pageOptions.pageMobileSidebarToggled,
 		'page-right-sidebar-toggled': pageOptions.pageMobileRightSidebarToggled || pageOptions.pageRightSidebarToggled,
 		'has-scroll': pageOptions.pageBodyScrollTop
-	}">
-		<Header />
-		<TopMenu v-if="pageOptions.pageWithTopMenu" />
-		<Sidebar v-if="!pageOptions.pageWithoutSidebar" />
-		<div id="content" class="content" v-bind:class="{ 'content-full-width': pageOptions.pageContentFullWidth, 'content-inverse-mode': pageOptions.pageContentInverseMode }">
-			<slot />
-			<vue-ins-progress-bar></vue-ins-progress-bar>
-		</div>
-		<Footer v-if="pageOptions.pageWithFooter" />
-	</div>
-	<div v-else>
-    <slot />
-		<vue-ins-progress-bar></vue-ins-progress-bar>
-	</div>
+	}"
+  >
+    <Header/>
+    <TopMenu v-if="pageOptions.pageWithTopMenu"/>
+    <Sidebar v-if="!pageOptions.pageWithoutSidebar"/>
+    <div
+      id="content"
+      class="content"
+      v-bind:class="{ 'content-full-width': pageOptions.pageContentFullWidth, 'content-inverse-mode': pageOptions.pageContentInverseMode }"
+    >
+      <slot/>
+    </div>
+    <Footer v-if="pageOptions.pageWithFooter"/>
+  </div>
+  <div v-else>
+    <slot/>
+  </div>
 </template>
 
 <script>
@@ -35,7 +41,7 @@ import Footer from '../components/footer/Footer.vue';
 import PageOptions from '../components/PageOptions.vue';
 
 export default {
-  name: 'app',
+  name: 'Page',
   components: {
     Sidebar,
     Header,

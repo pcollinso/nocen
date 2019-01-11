@@ -11,20 +11,28 @@
 |
 */
 
-Route::get('/', function () {
-    return view('home');
+
+Route::group(['middleware' => ['query_log']], function () {
+    Route::get('/', function () {
+        return view('home');
+    });
+
+    Route::get('/welcome', function () {
+        return view('welcome');
+    });
+
+    Route::group(['middleware' => ['guest']], function () {
+        Route::match(['get', 'post'], 'login', ['uses' => '\App\Http\Controllers\Auth\LoginController@login', 'as' => 'login']);
+        Route::post('auth/check-user', ['uses' => '\App\Http\Controllers\Auth\LoginController@checkUser', 'as' => 'check-user']);
+    });
+
+
+    Route::group(['middleware' => ['auth']], function () {
+        Route::match(['get', 'post'], 'logout', ['uses' => '\App\Http\Controllers\Auth\LoginController@logout', 'as' => 'logout']);
+        Route::get('dashboard', ['uses' => '\App\Http\Controllers\Admin\AdminController@index', 'as' => 'dashboard']);
+    });
 });
 
-Route::get('/welcome', function () {
-    return view('welcome');
-});
 
-Route::get('/login', function () {
-    return view('login');
-});
-
-Route::get('/password', function () {
-    return view('password', array('name' => 'Mbaebie paulcollins', 'role' => 'staff'));
-});
 
 

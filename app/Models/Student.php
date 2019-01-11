@@ -5,11 +5,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Student extends Authenticatable
 {
-    protected $guard = 'student';
+    protected $guard = 'web';
     protected $table = 'sch_student_bio';
     protected $hidden = [
         'user_password', 'remember_token',
     ];
+    protected $appends = ['full_name'];
 
     public function getAuthIdentifierName()
     {
@@ -24,5 +25,10 @@ class Student extends Authenticatable
     public function getAuthPassword()
     {
         return $this->user_password;
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->stud_middle_name ? "{$this->stud_first_name} {$this->stud_middle_name} {$this->stud_surname}" : "{$this->stud_first_name} {$this->stud_surname}";
     }
 }

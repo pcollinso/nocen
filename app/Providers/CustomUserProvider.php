@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
-use Validator;
 use App\Utils\Passcode;
 use App\Models\User;
 use App\Models\Staff;
