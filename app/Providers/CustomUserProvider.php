@@ -12,28 +12,33 @@ use App\Models\Student;
 
 class CustomUserProvider extends EloquentUserProvider
 {
+    public function retrieveByToken($identifier, $token)
+    {
+        $model = $this->retrieveById($identifier);
 
-    public function retrieveById($identifier, $type = 'user')
+        if (! $model) {
+            return null;
+        }
+
+        $rememberToken = $model->getRememberToken();
+
+        return $rememberToken && hash_equals($rememberToken, $token) ? $model : null;
+    }
+
+    public function retrieveById($identifier)
 	{
-        if ($type === 'user') return User::find($identifier);
-        if ($type === 'staff') return Staff::find($identifier);
-        if ($type === 'student') return Student::find($identifier);
-        return null;
+        return $this->retrieveByCredentials(['login' => $identifier]);
 	}
 
     public function retrieveByCredentials(array $credentials)
     {
-        $user = User::where('phone', $credentials['login'])->first();
+        $user = User::where((new User)->getAuthIdentifierName(), $credentials['login'])->first();
         if ($user) return $user;
 
-        $user = User::where('email', $credentials['login'])->first();
+        $user = Staff::where((new Staff)->getAuthIdentifierName(), $credentials['login'])->first();
         if ($user) return $user;
 
-        $user = Staff::where('verification_no', $credentials['login'])->first();
-        if ($user) return $user;
-
-        $user = Student::where('regno', $credentials['login'])->first();
-        return $user;
+        return Student::where((new Student)->getAuthIdentifierName(), $credentials['login'])->first();
     }
 
     public function validateCredentials(UserContract $user, array $credentials)

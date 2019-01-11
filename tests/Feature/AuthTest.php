@@ -79,15 +79,14 @@ class AuthTest extends TestCase
   public function testUserRetrievalById()
   {
     $provider = $this->getUserProvider();
-    $user = $provider->retrieveById(13);
+    $user = $provider->retrieveById('support@appmartgroup.com');
     $this->assertEquals($user->email, 'support@appmartgroup.com');
     $this->assertNull($provider->retrieveById(10000000));
   }
 
   public function testStaffRetrievalById()
   {
-    $provider = $this->getUserProvider();
-    $user = $provider->retrieveById(7, 'staff');
+    $user = $this->getUserProvider()->retrieveById('N225229892');
     $this->assertEquals($user->staff_email, 'pcollinso@yahoo.com');
   }
 }
