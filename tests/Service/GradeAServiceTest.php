@@ -25,7 +25,7 @@ class GradeAServiceTest extends TestCase
   {
     parent::setUp();
     if (!$this->gradeAService) $this->gradeAService = app()->make(GradeAService::class);
-    Artisan::call('db:seed');
+    Artisan::call('db:seed', ['--class' => 'GradeATableSeeder']);
   }
 
   public function testGetAll()

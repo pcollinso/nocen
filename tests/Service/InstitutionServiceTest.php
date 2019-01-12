@@ -36,7 +36,11 @@ class InstitutionServiceTest extends TestCase
   {
     parent::setUp();
     if (!$this->institutionService) $this->institutionService = app()->make(InstitutionService::class);
-    Artisan::call('db:seed');
+    Artisan::call('db:seed', ['--class' => 'InstitutionTypeTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'InstitutionTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'ProgrammeTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'FacultyTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'DepartmentTableSeeder']);
   }
 
   public function testGetInstitutions()

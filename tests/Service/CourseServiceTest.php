@@ -19,7 +19,7 @@ class CourseServiceTest extends TestCase
   const PROG_ID = 1;
   const DEPT_ID = 2;
   const GEN_COURSE_ID = 1;
-  const STAFF_COURSE_ID = 1;
+  const STAFF_COURSE_ID = 4;
   const STAFF_ID = 7;
   const C_CODE = 'CS101';
   const C_NAME = 'INTRODUCTION TO COMPUTER';
@@ -73,7 +73,20 @@ class CourseServiceTest extends TestCase
   {
     parent::setUp();
     if (!$this->courseService) $this->courseService = app()->make(CourseService::class);
-    Artisan::call('db:seed');
+    Artisan::call('db:seed', ['--class' => 'RoleAndPermissionSeeder']);
+    Artisan::call('db:seed', ['--class' => 'GenderTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'QualificationTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'InstitutionTypeTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'InstitutionTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'LevelTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'SemesterTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'ProgrammeTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'FacultyTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'DepartmentTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'CourseTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'GeneralCourseTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'StaffTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'StaffCourseTableSeeder']);
   }
 
   public function testGetAll()
@@ -242,6 +255,6 @@ class CourseServiceTest extends TestCase
   {
     $course = $this->courseService->createGeneralCourse($this->getGeneralCourseAttrs());
     $courseAttrs = $course->getAttributes();
-    $this->assertEquals(self::STAFF_COURSE_ID, $courseAttrs['id']);
+    $this->assertEquals(self::COURSE_ID, $courseAttrs['id']);
   }
 }

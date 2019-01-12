@@ -25,7 +25,7 @@ class ModuleServiceTest extends TestCase
   {
     parent::setUp();
     if (!$this->moduleService) $this->moduleService = app()->make(ModuleService::class);
-    Artisan::call('db:seed');
+    Artisan::call('db:seed', ['--class' => 'ModuleTableSeeder']);
   }
 
   public function testGetAll()

@@ -22,7 +22,6 @@ class ActionHistoryServiceTest extends TestCase
   {
     parent::setUp();
     if (!$this->actionHistoryService) $this->actionHistoryService = app()->make(ActionHistoryService::class);
-    Artisan::call('db:seed');
   }
 
   public function testGetAll()

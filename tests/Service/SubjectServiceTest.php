@@ -26,7 +26,7 @@ class SubjectServiceTest extends TestCase
   {
     parent::setUp();
     if (!$this->subjectService) $this->subjectService = app()->make(SubjectService::class);
-    Artisan::call('db:seed');
+    Artisan::call('db:seed', ['--class' => 'SubjectTableSeeder']);
   }
 
   public function testGetAll()

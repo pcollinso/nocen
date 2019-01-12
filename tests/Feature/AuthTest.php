@@ -15,10 +15,20 @@ class AuthTest extends TestCase
   public function setUp()
   {
     parent::setUp();
-    Artisan::call('db:seed');
+    Artisan::call('db:seed', ['--class' => 'GenderTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'QualificationTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'InstitutionTypeTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'InstitutionTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'ProgrammeTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'FacultyTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'DepartmentTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'RoleAndPermissionSeeder']);
+    Artisan::call('db:seed', ['--class' => 'UserTableSeeder']);
+    Artisan::call('db:seed', ['--class' => 'StaffTableSeeder']);
   }
 
-  private function getCredentials($type) {
+  private function getCredentials($type)
+  {
     if ($type === 'user') {
       return ['login' => 'support@appmartgroup.com', 'password' => 'Children12@'];
     }
@@ -28,7 +38,8 @@ class AuthTest extends TestCase
     }
   }
 
-  private function getUserProvider() {
+  private function getUserProvider()
+  {
     return app()->make(CustomUserProvider::class);
   }
 

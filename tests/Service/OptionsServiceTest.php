@@ -27,7 +27,25 @@ class OptionsServiceTest extends TestCase
     {
         parent::setUp();
         if (!$this->optionsService) $this->optionsService = app()->make(OptionsService::class);
-        Artisan::call('db:seed');
+        Artisan::call('db:seed', ['--class' => 'CountryTableSeeder']);
+        Artisan::call('db:seed', ['--class' => 'StateTableSeeder']);
+        Artisan::call('db:seed', ['--class' => 'LgaTableSeeder']);
+        Artisan::call('db:seed', ['--class' => 'TownTableSeeder']);
+        Artisan::call('db:seed', ['--class' => 'GenderTableSeeder']);
+        Artisan::call('db:seed', ['--class' => 'ModeTableSeeder']);
+        Artisan::call('db:seed', ['--class' => 'ReligionTableSeeder']);
+        Artisan::call('db:seed', ['--class' => 'TitleTableSeeder']);
+        Artisan::call('db:seed', ['--class' => 'SemesterTableSeeder']);
+        Artisan::call('db:seed', ['--class' => 'QualificationTableSeeder']);
+        Artisan::call('db:seed', ['--class' => 'GlobalSettingTableSeeder']);
+        Artisan::call('db:seed', ['--class' => 'InstitutionTypeTableSeeder']);
+        Artisan::call('db:seed', ['--class' => 'QualificationTypeTableSeeder']);
+        Artisan::call('db:seed', ['--class' => 'RelationshipTableSeeder']);
+        Artisan::call('db:seed', ['--class' => 'OlevelQualificationTableSeeder']);
+        Artisan::call('db:seed', ['--class' => 'CourseLevelTableSeeder']);
+        Artisan::call('db:seed', ['--class' => 'LevelTableSeeder']);
+        Artisan::call('db:seed', ['--class' => 'TitleTableSeeder']);
+
     }
 
     public function testGetCountries()

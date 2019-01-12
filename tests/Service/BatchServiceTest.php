@@ -25,7 +25,7 @@ class BatchServiceTest extends TestCase
   {
     parent::setUp();
     if (!$this->batchService) $this->batchService = app()->make(BatchService::class);
-    Artisan::call('db:seed');
+    Artisan::call('db:seed', ['--class' => 'BatchTableSeeder']);
   }
 
   public function testGetAll()
