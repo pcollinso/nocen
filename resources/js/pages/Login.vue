@@ -57,6 +57,7 @@
 
           <div class="login-buttons">
             <button type="submit" class="btn btn-primary btn-block btn-lg">{{ buttonText }}</button>
+            <a v-if="secondStep" href="/login" class="btn btn-danger btn-block btn-lg">Cancel</a>
           </div>
           <!--<div class="m-t-20">
 						Not a member yet? Click <a href="javascript:;">here</a> to register.
