@@ -27,10 +27,8 @@ class PermissionTest extends TestCase
     public function testHasPermission()
     {
         $superadmin = $this->getUserProvider()->retrieveById('support@appmartgroup.com');
-        $permission = Permission::where('name', 'institution:create')->first();
 
-        $this->assertTrue($superadmin->hasPermission($permission));
-        $this->assertTrue($superadmin->hasPermission($permission->name));
+        $this->assertTrue($superadmin->hasPermission('institution:create'));
         $this->assertFalse($superadmin->hasPermission('random:do'));
     }
 

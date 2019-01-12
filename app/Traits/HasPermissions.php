@@ -37,12 +37,7 @@ trait HasPermissions
 
     public function hasPermission($permission)
     {
-        if (is_string($permission))
-        {
-            $permission = Permission::where('name', $permission)->first();
-        }
-
-        return (bool) $this->permissions()->where('name', $permission['name'])->count();
+        return (bool) $this->permissions()->where('name', $permission)->count();
     }
 
     public function getAllPermissions(array $permissions)
