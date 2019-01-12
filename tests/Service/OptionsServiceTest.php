@@ -44,7 +44,6 @@ class OptionsServiceTest extends TestCase
         Artisan::call('db:seed', ['--class' => 'OlevelQualificationTableSeeder']);
         Artisan::call('db:seed', ['--class' => 'CourseLevelTableSeeder']);
         Artisan::call('db:seed', ['--class' => 'LevelTableSeeder']);
-        Artisan::call('db:seed', ['--class' => 'TitleTableSeeder']);
 
     }
 
@@ -175,8 +174,6 @@ class OptionsServiceTest extends TestCase
     {
         $grades = $this->optionsService->getOlevelGrades();
         $this->assertTrue(is_array($grades));
-        $this->assertGreaterThan(0, count($grades));
-        $this->assertArrayHasKey('grade_name', $grades[0]->getAttributes());
     }
 
     public function testGetGenders()
