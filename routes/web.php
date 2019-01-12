@@ -30,6 +30,12 @@ Route::group(['middleware' => ['query_log']], function () {
     Route::group(['middleware' => ['auth']], function () {
         Route::match(['get', 'post'], 'logout', ['uses' => '\App\Http\Controllers\Auth\LoginController@logout', 'as' => 'logout']);
         Route::get('dashboard', ['uses' => '\App\Http\Controllers\Admin\AdminController@index', 'as' => 'dashboard']);
+
+        // Route::group(['middleware' => ['role:student,school:write,user:list']], function () {
+        //     Route::get('/', function () {
+        //         return view('home');
+        //     });
+        // });
     });
 });
 

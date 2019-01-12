@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\Role;
+use App\Models\Staff;
 
 class StaffTableSeeder extends Seeder
 {
@@ -144,5 +146,9 @@ class StaffTableSeeder extends Seeder
         ];
 
         DB::table('sch_staff')->insert($data);
+
+        Staff::find(7)
+            ->roles()
+            ->attach(Role::where('name', 'staff')->first());
     }
 }

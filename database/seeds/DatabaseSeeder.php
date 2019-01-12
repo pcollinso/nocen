@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         Model::unguard();
         DB::beginTransaction();
         $this->call([
+            RoleAndPermissionSeeder::class,
             ModeTableSeeder::class,
             GenderTableSeeder::class,
             ReligionTableSeeder::class,

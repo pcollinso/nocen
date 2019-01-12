@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\Role;
+use App\Models\User;
 
 class UserTableSeeder extends Seeder
 {
@@ -14,7 +16,7 @@ class UserTableSeeder extends Seeder
     {
         $data = [
             [
-                'id' => '13',
+                'id' => 13,
                 'username' => 'support@appmartgroup.com',
                 'user_password' => 'ba16926613bca60629dcdd93bb567a43',
                 'temp_password' => 'unC9/9pG0vVzx851cl/bhT4qIZWdask1MK0bDDr45fEaAi5sQMBznfdlxt0sILb4XU2elwTZXEsg6m29CYsH1uziUNpM9gaM7HXUMAEhS9eBa6IgZFDuNCJjhuHGzLRC',
@@ -41,7 +43,7 @@ class UserTableSeeder extends Seeder
                 'is_password_reset' => '0',
             ],
             [
-                'id' => '15',
+                'id' => 15,
                 'username' => 'umejiofor.anthony.chinedu',
                 'user_password' => 'ba16926613bca60629dcdd93bb567a43',
                 'temp_password' => '74vCT/Tt7tmcAqnr3KR1jvSwaQc6Nu5JzHVqO+fHNsYiXvWxorAm4SJsemagvmjdrNgz4LD+DmDVf2t6oR4ZGJGFBjd0kIxAUCnm31a2lAXXWossufXOPsmMLn7mPblg',
@@ -68,7 +70,7 @@ class UserTableSeeder extends Seeder
                 'is_password_reset' => '0',
             ],
             [
-                'id' => '16',
+                'id' => 16,
                 'username' => 'mbaebie.paulcollins',
                 'user_password' => 'ba16926613bca60629dcdd93bb567a43',
                 'temp_password' => 'iiUEDv9Aq5UiLjrby4Bj+/qjreqERVjQX2tnXMLHATASM8Wf4Tk715uogcJPOrJ2UkTpMzCiKpLUveblKCOIUs3navPoiTyAaa7CWmeRAynLVpMuPOq7j8VcyO+zknVo',
@@ -95,7 +97,7 @@ class UserTableSeeder extends Seeder
                 'is_password_reset' => '0',
             ],
             [
-                'id' => '17',
+                'id' => 17,
                 'username' => 'omen.agha.stanistus',
                 'user_password' => 'ba16926613bca60629dcdd93bb567a43',
                 'temp_password' => '1jt44MLK96qnP0hxxn+h6cOObEq9d+C6NrsFgTYV8gKiughk9DkEo2V3G4sSulOdBG+fLCBC0GudRMBY/fwvHimdGMOIw94lYtmxUI9F/+A3Agj0CbqY/GqcMtEgCIQy',
@@ -124,5 +126,10 @@ class UserTableSeeder extends Seeder
         ];
 
         DB::table('sup_users')->insert($data);
+        $superAdminRole = Role::where('name', 'superadmin')->first();
+        $user = User::find(13);
+        $user->roles()->attach($superAdminRole);
+        $user->permissions()->attach($superAdminRole->permissions()->get());
+
     }
 }

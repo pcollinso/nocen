@@ -2,15 +2,21 @@
 
 namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Traits\HasPermissions;
 
 class Student extends Authenticatable
 {
+    use HasPermissions;
+
     protected $guard = 'web';
     protected $table = 'sch_student_bio';
     protected $hidden = [
         'user_password', 'remember_token',
     ];
     protected $appends = ['full_name'];
+
+    protected $roles_table = 'student_roles';
+    protected $permissions_table = 'student_permissions';
 
     public function getAuthIdentifierName()
     {
