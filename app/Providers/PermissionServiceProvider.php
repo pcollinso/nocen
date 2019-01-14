@@ -7,7 +7,7 @@ use Gate;
 use Blade;
 use App\Models\Permission;
 
-class PermissionsServiceProvider extends ServiceProvider
+class PermissionServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap services.
