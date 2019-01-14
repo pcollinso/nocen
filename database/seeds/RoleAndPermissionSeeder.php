@@ -97,6 +97,11 @@ class RoleAndPermissionSeeder extends Seeder
         $createRole->save();
         $createRole->roles()->attach($this->superAdmin);
 
+        $editRole = new Permission();
+        $editRole->name = 'role:edit';
+        $editRole->save();
+        $editRole->roles()->attach($this->superAdmin);
+
         $deleteRole = new Permission();
         $deleteRole->name = 'role:delete';
         $deleteRole->save();
@@ -120,6 +125,11 @@ class RoleAndPermissionSeeder extends Seeder
         $createPermission->name = 'permission:create';
         $createPermission->save();
         $createPermission->roles()->attach($this->superAdmin);
+
+        $editPermission = new Permission();
+        $editPermission->name = 'permission:edit';
+        $editPermission->save();
+        $editPermission->roles()->attach($this->superAdmin);
 
         $deletePermission = new Permission();
         $deletePermission->name = 'permission:delete';

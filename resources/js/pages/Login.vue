@@ -139,7 +139,7 @@ export default {
       step: 1,
       name: 'Test',
       form: {
-        login: 'N225229892',
+        login: 'support@appmartgroup.com',
         password: 'Children12@',
         type: '',
         token: ''

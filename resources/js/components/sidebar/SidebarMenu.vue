@@ -17,10 +17,9 @@ const sidebarMenu = [
   { path: '#', icon: 'fa fa-th', title: 'Manage roles and permissions',
     roles: ['superadmin'],
     children: [
-      { path: '/roles/add', title: 'Add role', roles: ['superadmin'] },
-      { path: '/roles/list', title: 'List roles', roles: ['superadmin'] },
-      { path: '/permissions/add', title: 'Add permission', roles: ['superadmin'] },
-      { path: '/permissions/list', title: 'List permissions', roles: ['superadmin'] }
+      { path: '/s/roles', title: 'Roles', roles: ['superadmin'] },
+      { path: '/s/permissions', title: 'Permissions', roles: ['superadmin'] },
+      { path: '/s/roles/default-permissions', title: 'Default permissions', roles: ['superadmin'] }
     ]
   },
   { path: '#', icon: 'fa fa-hdd', title: 'Manage staff',

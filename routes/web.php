@@ -31,11 +31,16 @@ Route::group(['middleware' => ['query_log']], function () {
         Route::match(['get', 'post'], 'logout', ['uses' => '\App\Http\Controllers\Auth\LoginController@logout', 'as' => 'logout']);
         Route::get('dashboard', ['uses' => '\App\Http\Controllers\Admin\AdminController@index', 'as' => 'dashboard']);
 
-        // Route::group(['middleware' => ['role:student,school:write,user:list']], function () {
-        //     Route::get('/', function () {
-        //         return view('home');
-        //     });
-        // });
+        Route::group(['middleware' => ['role:superadmin']], function () {
+            Route::get('s/roles', ['uses' => '\App\Http\Controllers\Admin\RoleController@index', 'as' => 'role.index']);
+            Route::get('s/roles/default-permissions', ['uses' => '\App\Http\Controllers\Admin\RoleController@defaultPermissions', 'as' => 'role.defaultPermissions']);
+            Route::post('s/roles', ['uses' => '\App\Http\Controllers\Admin\RoleController@create', 'as' => 'role.create']);
+            Route::post('s/roles/assign-permissions', ['uses' => '\App\Http\Controllers\Admin\RoleController@assignPermissions', 'as' => 'role.assignPermissions']);
+            Route::delete('s/roles/{id}', ['uses' => '\App\Http\Controllers\Admin\RoleController@delete', 'as' => 'role.delete']);
+            Route::get('s/permissions', ['uses' => '\App\Http\Controllers\Admin\PermissionController@index', 'as' => 'permission.index']);
+            Route::post('s/permissions', ['uses' => '\App\Http\Controllers\Admin\PermissionController@create', 'as' => 'permission.create']);
+            Route::delete('s/permissions/{id}', ['uses' => '\App\Http\Controllers\Admin\PermissionController@delete', 'as' => 'permission.delete']);
+        });
     });
 });
 

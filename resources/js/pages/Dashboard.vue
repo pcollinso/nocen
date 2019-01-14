@@ -1,18 +1,10 @@
 <template>
   <Page>
     <!-- begin breadcrumb -->
-    <ol class="breadcrumb pull-right">
-      <li class="breadcrumb-item">
-        <a href="javascript:;">Home</a>
-      </li>
-      <li class="breadcrumb-item active">Dashboard</li>
-    </ol>
+    <breadcrumb/>
     <!-- end breadcrumb -->
     <!-- begin page-header -->
-    <h1 class="page-header">
-      Dashboard
-      <small>header small text goes here...</small>
-    </h1>
+    <page-title title="Dashboard" subtitle="header small text goes here..."/>
     <!-- end page-header -->
     <!-- begin row -->
     <div class="row">
@@ -656,11 +648,15 @@
 import Page from './Page';
 import LineChart from '../components/vue-chartjs/LineChart';
 import DoughnutChart from '../components/vue-chartjs/DoughnutChart';
+import PageTitle from '../components/header/PageTitle';
+import Breadcrumb from '../components/header/Breadcrumb';
 
 export default {
 	name: 'Dashboard',
 	components: {
     Page,
+    PageTitle,
+    Breadcrumb,
 		LineChart,
 		DoughnutChart
 	},

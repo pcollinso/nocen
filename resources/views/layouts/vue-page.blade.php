@@ -4,8 +4,8 @@
         <meta charset="utf-8">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta name="current-user-name" content="{{ $currentUserName }}">
-        <meta name="roles" content="{{ json_encode($roles) }}">
-        <meta name="permissions" content="{{ json_encode($permissions) }}">
+        <meta name="roles" content="{{ json_encode($currentRoles) }}">
+        <meta name="permissions" content="{{ json_encode($currentPermissions) }}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>{{ $pageTitle }}</title>

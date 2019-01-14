@@ -26,14 +26,15 @@ import VueDatepicker from "vuejs-datepicker/dist/vuejs-datepicker.esm.js";
 import VueMaskedInput from 'vue-maskedinput';
 import VueInputTag from 'vue-input-tag';
 import VueSlider from 'vue-slider-component';
-import VueGoodTable from 'vue-good-table';;
+import VueGoodTable from 'vue-good-table';
 import VueFullCalendar from 'vue-full-calendar';
 import VueCountdown from '@xkeshi/vue-countdown';
 import VueColorpicker from 'vue-pop-colorpicker';
+import VueMultiselect from 'vue-multiselect';
 
 Vue.use(VueBootstrap);
 Vue.use(VueNVD3);
-Vue.use(VueEventCalendar, {locale: 'en'});
+Vue.use(VueEventCalendar, { locale: 'en' });
 Vue.use(VueSparkline);
 Vue.use(Vueditor);
 Vue.use(VueHljs);
@@ -70,6 +71,7 @@ Vue.component('masked-input', VueMaskedInput)
 Vue.component('input-tag', VueInputTag)
 Vue.component('vue-slider', VueSlider)
 Vue.component(VueCountdown.name, VueCountdown);
+Vue.component('vue-multiselect', VueMultiselect);
 
 
 const files = require.context('./pages', true, /\.vue$/i);
@@ -83,5 +85,5 @@ files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(
  */
 
 new Vue({
-    el: '#app'
+  el: '#app'
 });

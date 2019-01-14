@@ -28,8 +28,8 @@ class AppServiceProvider extends ServiceProvider
             $permissions = auth()->user() ? auth()->user()->permissions()->get() : [];
             $pageTitle = $view->pageTitle ? $view->pageTitle : 'Nocen';
             $view->with('currentUserName', $name);
-            $view->with('roles', $roles);
-            $view->with('permissions', $permissions);
+            $view->with('currentRoles', $roles);
+            $view->with('currentPermissions', $permissions);
             $view->with('pageTitle', $pageTitle);
         });
     }
