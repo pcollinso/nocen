@@ -1,11 +1,7 @@
 <template>
   <Page>
-    <!-- begin breadcrumb -->
     <breadcrumb/>
-    <!-- end breadcrumb -->
-    <!-- begin page-header -->
     <page-title title="Permissions"/>
-    <!-- end page-header -->
     <div class="row">
       <div class="col-lg-4 col-sm-12">
         <div class="panel panel-inverse">

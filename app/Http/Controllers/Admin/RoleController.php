@@ -60,15 +60,13 @@ class RoleController extends Controller
             ], 422);
         }
 
-        Permission::unguard();
         Role::unguard();
+        $role = new Role($data['role']);
+        Role::reguard();
+
         $permissionIds = array_map(function ($perm) {
             return $perm['id'];
         }, $data['permissions']);
-
-        $role = new Role($data['role']);
-        Permission::reguard();
-        Role::reguard();
 
         $role->permissions()->sync($permissionIds);
 
