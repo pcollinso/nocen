@@ -19,10 +19,10 @@ class CreateInstitutionTable extends Migration
             $table->string('institution_name', 45);
             $table->integer('institution_type_id');
             $table->string('logo', 45)->nullable();
-            $table->string('address', 125);
-            $table->string('city', 45);
-            $table->string('lga', 45);
-            $table->string('state', 45);
+            $table->string('address', 125)->nullable();
+            $table->string('city', 45)->nullable();
+            $table->string('lga', 45)->nullable();
+            $table->string('state', 45)->nullable();
             $table->string('phone', 15)->nullable();
             $table->string('email', 165)->nullable();
             $table->boolean('employee_2wa')->default('0');

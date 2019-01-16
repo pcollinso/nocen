@@ -37,9 +37,14 @@ Route::group(['middleware' => ['query_log']], function () {
             Route::post('s/roles', ['uses' => '\App\Http\Controllers\Admin\RoleController@create', 'as' => 'role.create']);
             Route::post('s/roles/assign-permissions', ['uses' => '\App\Http\Controllers\Admin\RoleController@assignPermissions', 'as' => 'role.assignPermissions']);
             Route::delete('s/roles/{id}', ['uses' => '\App\Http\Controllers\Admin\RoleController@delete', 'as' => 'role.delete']);
+
             Route::get('s/permissions', ['uses' => '\App\Http\Controllers\Admin\PermissionController@index', 'as' => 'permission.index']);
             Route::post('s/permissions', ['uses' => '\App\Http\Controllers\Admin\PermissionController@create', 'as' => 'permission.create']);
             Route::delete('s/permissions/{id}', ['uses' => '\App\Http\Controllers\Admin\PermissionController@delete', 'as' => 'permission.delete']);
+
+            Route::get('s/institutions', ['uses' => '\App\Http\Controllers\Admin\InstitutionController@index', 'as' => 'institution.index']);
+            Route::post('s/institutions', ['uses' => '\App\Http\Controllers\Admin\InstitutionController@create', 'as' => 'institution.create']);
+            Route::put('s/institutions/{id}', ['uses' => '\App\Http\Controllers\Admin\InstitutionController@update', 'as' => 'institution.update']);
         });
     });
 });
