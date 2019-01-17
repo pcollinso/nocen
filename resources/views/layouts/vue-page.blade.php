@@ -7,6 +7,7 @@
         <meta name="roles" content="{{ json_encode($currentRoles) }}">
         <meta name="permissions" content="{{ json_encode($currentPermissions) }}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}">
 
         <title>{{ $pageTitle }}</title>
 
