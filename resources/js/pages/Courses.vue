@@ -1,6 +1,5 @@
 <template>
   <Page>
-    <breadcrumb/>
     <page-title title="Courses"/>
     <div class="row">
       <div class="col-lg-5 col-sm-12">
@@ -179,7 +178,6 @@
 <script>
 import Page from './Page';
 import PageTitle from '../components/header/PageTitle';
-import Breadcrumb from '../components/header/Breadcrumb';
 
 const defaultCourse = {
   course_code: '',
@@ -198,8 +196,7 @@ export default {
   name: 'Courses',
   components: {
     Page,
-    PageTitle,
-    Breadcrumb
+    PageTitle
   },
   props: ['levels', 'semesters', 'institution'],
   data() {

@@ -1,6 +1,5 @@
 <template>
   <Page>
-    <breadcrumb/>
     <page-title title="Institution admins"/>
     <div class="row">
       <div class="col-sm-12">
@@ -121,7 +120,6 @@
 <script>
 import Page from './Page';
 import PageTitle from '../components/header/PageTitle';
-import Breadcrumb from '../components/header/Breadcrumb';
 
 
 const defaultUser = {
@@ -147,8 +145,7 @@ export default {
   },
   components: {
     Page,
-    PageTitle,
-    Breadcrumb
+    PageTitle
   },
   data() {
     return {

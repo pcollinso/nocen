@@ -1,6 +1,5 @@
 <template>
   <Page>
-    <breadcrumb/>
     <page-title title="Course coordinators"/>
     <div class="row">
       <div class="col-lg-4 col-sm-12">
@@ -101,7 +100,6 @@
 <script>
 import Page from './Page';
 import PageTitle from '../components/header/PageTitle';
-import Breadcrumb from '../components/header/Breadcrumb';
 
 const defaultCourseCoordinator = {
   institution_id: 0,
@@ -114,8 +112,7 @@ export default {
   name: 'CourseCoordinators',
   components: {
     Page,
-    PageTitle,
-    Breadcrumb
+    PageTitle
   },
   props: ['institution'],
   data() {

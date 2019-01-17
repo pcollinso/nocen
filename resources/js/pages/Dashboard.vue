@@ -1,8 +1,5 @@
 <template>
   <Page>
-    <!-- begin breadcrumb -->
-    <breadcrumb/>
-    <!-- end breadcrumb -->
     <!-- begin page-header -->
     <page-title title="Dashboard" subtitle="header small text goes here..."/>
     <!-- end page-header -->
@@ -518,14 +515,12 @@ import Page from './Page';
 import LineChart from '../components/vue-chartjs/LineChart';
 import DoughnutChart from '../components/vue-chartjs/DoughnutChart';
 import PageTitle from '../components/header/PageTitle';
-import Breadcrumb from '../components/header/Breadcrumb';
 
 export default {
 	name: 'Dashboard',
 	components: {
     Page,
     PageTitle,
-    Breadcrumb,
 		LineChart,
 		DoughnutChart
 	},
