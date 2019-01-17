@@ -37,4 +37,14 @@ class Staff extends Authenticatable
     {
         return $this->stud_middle_name ? "{$this->staff_first_name} {$this->staff_middle_name} {$this->staff_surname}" : "{$this->staff_first_name} {$this->staff_surname}";
     }
+
+    public function institution()
+    {
+        return $this->belongsTo(Institution::class);
+    }
+
+    public function course_coordinators()
+    {
+        return $this->hasMany(CourseCoordinator::class);
+    }
 }

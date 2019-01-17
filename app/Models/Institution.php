@@ -36,4 +36,14 @@ class Institution extends Model
   {
       return $this->hasMany(Department::class);
   }
+
+  public function course_coordinators()
+  {
+      return $this->hasMany(CourseCoordinator::class);
+  }
+
+  public function staff()
+  {
+      return $this->hasMany(Staff::class);
+  }
 }

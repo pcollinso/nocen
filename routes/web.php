@@ -56,6 +56,11 @@ Route::group(['middleware' => ['query_log']], function () {
             Route::post('i/courses', ['uses' => '\App\Http\Controllers\Admin\CourseController@create', 'as' => 'course.create']);
             Route::put('i/courses/{id}', ['uses' => '\App\Http\Controllers\Admin\CourseController@update', 'as' => 'course.update']);
             Route::delete('i/courses/{id}', ['uses' => '\App\Http\Controllers\Admin\CourseController@delete', 'as' => 'course.delete']);
+
+            Route::get('i/course-coordinators', ['uses' => '\App\Http\Controllers\Admin\CourseCoordinatorController@index', 'as' => 'course_coordinator.index']);
+            Route::post('i/course-coordinators', ['uses' => '\App\Http\Controllers\Admin\CourseCoordinatorController@create', 'as' => 'course_coordinator.create']);
+            Route::put('i/course-coordinators/{id}', ['uses' => '\App\Http\Controllers\Admin\CourseCoordinatorController@update', 'as' => 'course_coordinator.update']);
+            Route::delete('i/course-coordinators/{id}', ['uses' => '\App\Http\Controllers\Admin\CourseCoordinatorController@delete', 'as' => 'course_coordinator.delete']);
         });
     });
 });

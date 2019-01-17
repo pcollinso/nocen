@@ -27,6 +27,11 @@ class Course extends Model
       return $this->belongsTo(Department::class);
   }
 
+  public function course_coordinators()
+  {
+      return $this->hasMany(CourseCoordinator::class);
+  }
+
   public function isDuplicate()
   {
       $duplicates = $this

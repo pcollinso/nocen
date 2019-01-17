@@ -192,7 +192,6 @@ const defaultCourse = {
   status: 1,
   is_general: false,
   unit_load: 0.0,
-
 };
 
 export default {
