@@ -17,10 +17,6 @@ class CourseController extends Controller
       ->load('programmes', 'faculties', 'departments', 'courses');
 
     return view('courses.list', [
-      'courses' => $institution->courses,
-      'programmes' =>$institution->programmes,
-      'faculties' =>$institution->faculties,
-      'departments' =>$institution->departments,
       'institution' => $institution,
       'levels' => Level::all(),
       'semesters' => Semester::all(),
