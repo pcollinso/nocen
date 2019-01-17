@@ -37,6 +37,7 @@ const sidebarMenu = [
   { path: '#', icon: 'fa fa-gem', title: 'Manage course',
     roles: ['institutionadmin'],
     children: [
+      { path: '/i/courses', title: 'Courses', roles: ['institutionadmin'] },
       { path: '#', title: 'Course adviser', roles: ['institutionadmin'] },
       { path: '#', title: 'Course coordinator', roles: ['institutionadmin'] },
       { path: '#', title: 'Course prerequisite', roles: ['institutionadmin'] },

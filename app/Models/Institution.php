@@ -16,4 +16,24 @@ class Institution extends Model
   {
       return $this->hasMany(User::class);
   }
+
+  public function courses()
+  {
+      return $this->hasMany(Course::class);
+  }
+
+  public function programmes()
+  {
+      return $this->hasMany(Programme::class);
+  }
+
+  public function faculties()
+  {
+      return $this->hasMany(Faculty::class);
+  }
+
+  public function departments()
+  {
+      return $this->hasMany(Department::class);
+  }
 }

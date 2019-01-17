@@ -50,6 +50,13 @@ Route::group(['middleware' => ['query_log']], function () {
             Route::post('s/institution-admins', ['uses' => '\App\Http\Controllers\Admin\InstitutionAdminController@create', 'as' => 'institution_admin.create']);
             Route::put('s/institution-admins/{id}', ['uses' => '\App\Http\Controllers\Admin\InstitutionAdminController@update', 'as' => 'institution_admin.update']);
         });
+
+        Route::group(['middleware' => ['role:institutionadmin']], function () {
+            Route::get('i/courses', ['uses' => '\App\Http\Controllers\Admin\CourseController@index', 'as' => 'course.index']);
+            Route::post('i/courses', ['uses' => '\App\Http\Controllers\Admin\CourseController@create', 'as' => 'course.create']);
+            Route::put('i/courses/{id}', ['uses' => '\App\Http\Controllers\Admin\CourseController@update', 'as' => 'course.update']);
+            Route::delete('i/courses/{id}', ['uses' => '\App\Http\Controllers\Admin\CourseController@delete', 'as' => 'course.delete']);
+        });
     });
 });
 
