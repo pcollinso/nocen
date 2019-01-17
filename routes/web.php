@@ -66,6 +66,11 @@ Route::group(['middleware' => ['query_log']], function () {
             Route::post('i/course-advisers', ['uses' => '\App\Http\Controllers\Admin\CourseAdviserController@create', 'as' => 'course_adviser.create']);
             Route::put('i/course-advisers/{id}', ['uses' => '\App\Http\Controllers\Admin\CourseAdviserController@update', 'as' => 'course_adviser.update']);
             Route::delete('i/course-advisers/{id}', ['uses' => '\App\Http\Controllers\Admin\CourseAdviserController@delete', 'as' => 'course_adviser.delete']);
+
+            Route::get('i/course-prerequisites', ['uses' => '\App\Http\Controllers\Admin\CoursePrerequisiteController@index', 'as' => 'course_prerequisite.index']);
+            Route::post('i/course-prerequisites', ['uses' => '\App\Http\Controllers\Admin\CoursePrerequisiteController@create', 'as' => 'course_prerequisite.create']);
+            Route::put('i/course-prerequisites/{id}', ['uses' => '\App\Http\Controllers\Admin\CoursePrerequisiteController@update', 'as' => 'course_prerequisite.update']);
+            Route::delete('i/course-prerequisites/{id}', ['uses' => '\App\Http\Controllers\Admin\CoursePrerequisiteController@delete', 'as' => 'course_prerequisite.delete']);
         });
     });
 });

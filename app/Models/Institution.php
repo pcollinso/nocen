@@ -47,6 +47,11 @@ class Institution extends Model
       return $this->hasMany(CourseAdviser::class);
   }
 
+  public function course_prerequisites()
+  {
+      return $this->hasMany(CoursePrerequisite::class);
+  }
+
   public function staff()
   {
       return $this->hasMany(Staff::class);
