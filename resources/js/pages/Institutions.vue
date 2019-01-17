@@ -282,11 +282,11 @@ export default {
       const copy = { ...this.institution };
       copy.institution_name = copy.institution_name.toUpperCase();
 
-      if (this.institution.id) {
+      if (copy.id) {
         delete copy.institution_type;
 
         axios
-        .put(`/s/institutions/${this.institution.id}`, copy)
+        .put(`/s/institutions/${copy.id}`, copy)
         .then(({ data: { success, data, message = '' } }) => {
           if (success) {
             alert('Institution updated');

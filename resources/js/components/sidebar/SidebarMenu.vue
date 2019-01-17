@@ -9,8 +9,7 @@ const sidebarMenu = [
   { path: '#', icon: 'fa fa-th', title: 'Manage institution admins',
     roles: ['superadmin'],
     children: [
-      { path: '/institution-admins/add', title: 'Add institution admins', roles: ['superadmin'] },
-      { path: '/institution-admins/list', title: 'List institution admins', roles: ['superadmin'] }
+      { path: '/s/institution-admins', title: 'List institution admins', roles: ['superadmin'] }
     ]
   },
   { path: '#', icon: 'fa fa-th', title: 'Manage roles and permissions',

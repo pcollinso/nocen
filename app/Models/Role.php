@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     protected $table = 'roles';
+    public static $institutionadmin = 'institutionadmin';
+    public static $superadmin = 'superadmin';
+    public static $user = 'user';
+    public static $staff = 'staff';
+    public static $student = 'student';
 
     public function permissions()
     {

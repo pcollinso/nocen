@@ -45,6 +45,10 @@ Route::group(['middleware' => ['query_log']], function () {
             Route::get('s/institutions', ['uses' => '\App\Http\Controllers\Admin\InstitutionController@index', 'as' => 'institution.index']);
             Route::post('s/institutions', ['uses' => '\App\Http\Controllers\Admin\InstitutionController@create', 'as' => 'institution.create']);
             Route::put('s/institutions/{id}', ['uses' => '\App\Http\Controllers\Admin\InstitutionController@update', 'as' => 'institution.update']);
+
+            Route::get('s/institution-admins', ['uses' => '\App\Http\Controllers\Admin\InstitutionAdminController@index', 'as' => 'institution_admin.index']);
+            Route::post('s/institution-admins', ['uses' => '\App\Http\Controllers\Admin\InstitutionAdminController@create', 'as' => 'institution_admin.create']);
+            Route::put('s/institution-admins/{id}', ['uses' => '\App\Http\Controllers\Admin\InstitutionAdminController@update', 'as' => 'institution_admin.update']);
         });
     });
 });

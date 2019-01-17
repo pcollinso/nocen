@@ -37,4 +37,9 @@ class User extends Authenticatable
     {
         return $this->name;
     }
+
+    public function institution()
+    {
+        return $this->belongsTo(Institution::class);
+    }
 }
