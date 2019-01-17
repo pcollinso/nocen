@@ -1,22 +1,41 @@
 <template>
   <Page>
     <breadcrumb/>
-    <page-title title="Course coordinators"/>
+    <page-title title="Course advisers"/>
     <div class="row">
-      <div class="col-lg-4 col-sm-12">
+      <div class="col-lg-5 col-sm-12">
         <div class="panel panel-inverse">
-          <!-- begin panel-heading -->
           <div class="panel-heading">
-            <h4 class="panel-title">Add course coordinator</h4>
+            <h4 class="panel-title">Add course adviser</h4>
           </div>
-          <!-- end panel-heading -->
-          <!-- begin panel-body -->
           <div class="panel-body">
             <form @submit.stop.prevent="create()">
               <div class="form-group row m-b-15">
+                <label class="control-label col-md-3">Department * :</label>
+                <div class="col-md-9">
+                  <select class="form-control" v-model="courseAdviser.department_id">
+                    <option value="0">Select department</option>
+                    <option
+                      :value="x.id"
+                      v-for="x in institution.departments"
+                      :key="x.id"
+                    >{{ x.department_name }}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row m-b-15">
+                <label class="control-label col-md-3">Level * :</label>
+                <div class="col-md-9">
+                  <select class="form-control" v-model="courseAdviser.level_id">
+                    <option value="0">Select level</option>
+                    <option :value="x.id" v-for="x in levels" :key="x.id">{{ x.level_name }}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row m-b-15">
                 <label class="control-label col-md-3">Staff * :</label>
                 <div class="col-md-9">
-                  <select class="form-control" v-model="courseCoordinator.staff_id">
+                  <select class="form-control" v-model="courseAdviser.staff_id">
                     <option value="0">Select staff</option>
                     <option
                       :value="x.id"
@@ -27,37 +46,23 @@
                 </div>
               </div>
               <div class="form-group row m-b-15">
-                <label class="control-label col-md-3">Course * :</label>
-                <div class="col-md-9">
-                  <select class="form-control" v-model="courseCoordinator.course_id">
-                    <option value="0">Select course</option>
-                    <option
-                      :value="x.id"
-                      v-for="x in institution.courses"
-                      :key="x.id"
-                    >{{ x.course_name }}</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group row m-b-15">
                 <div class="col-sm-9 offset-md-3">
                   <button
-                    :disabled="duplicateCourseCoordinator"
+                    :disabled="duplicateCourseAdviser"
                     type="submit"
                     class="btn btn-primary btn-sm"
                   >Create</button>
                 </div>
               </div>
             </form>
-            <!-- end table-responsive -->
           </div>
         </div>
       </div>
-      <div class="col-lg-8 col-sm-12">
+      <div class="col-lg-7 col-sm-12">
         <div class="panel panel-inverse">
           <!-- begin panel-heading -->
           <div class="panel-heading">
-            <h4 class="panel-title">Course coordinators</h4>
+            <h4 class="panel-title">Course advisers</h4>
           </div>
           <!-- end panel-heading -->
           <!-- begin panel-body -->
@@ -68,18 +73,20 @@
                 <thead>
                   <tr>
                     <th>#</th>
+                    <th>Department</th>
+                    <th>Level</th>
                     <th>Staff code</th>
                     <th>Name</th>
-                    <th>Course</th>
                     <th width="1%"></th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(x, i) in displayedCourseCoordinators" :key="x.id">
+                  <tr v-for="(x, i) in displayedCourseAdvisers" :key="x.id">
                     <td>{{ ++i }}</td>
+                    <td>{{ x.department_name }}</td>
+                    <td>{{ x.level_name }}</td>
                     <td>{{ x.verification_no }}</td>
                     <td>{{ x.full_name }}</td>
-                    <td>{{ x.course_name }}</td>
                     <td class="with-btn" nowrap>
                       <button
                         @click.stop.prevent="remove(x.id)"
@@ -97,65 +104,65 @@
     </div>
   </Page>
 </template>
-
 <script>
 import Page from './Page';
 import PageTitle from '../components/header/PageTitle';
 import Breadcrumb from '../components/header/Breadcrumb';
 
-const defaultCourseCoordinator = {
+const defaultCourseAdviser = {
   institution_id: 0,
-  course_id: 0,
+  level_id: 0,
   staff_id: 0,
+  department_id: 0,
   status: 1,
 };
 
 export default {
-  name: 'CourseCoordinators',
+  name: 'CourseAdvisers',
   components: {
     Page,
     PageTitle,
     Breadcrumb
   },
-  props: ['institution'],
+  props: ['institution', 'levels'],
   data() {
     return {
-      courseCoordinator: {},
-      courseCoordinators: this.institution.course_coordinators,
-      staff: this.institution.staff,
-      courses: this.institution.courses
+      courseAdviser: {},
+      courseAdvisers: this.institution.course_advisers
     };
   },
   computed: {
-    displayedCourseCoordinators() {
-      return this.courseCoordinators
-        .map(({ course_id, staff_id, id }) => {
-          const { course_name } = this.courses.find(c => c.id === course_id);
-          const { full_name, verification_no } = this.staff.find(s => s.id === staff_id);
-          return { id, course_name, full_name, verification_no };
+    displayedCourseAdvisers() {
+      return this.courseAdvisers
+        .map(({ department_id, staff_id, level_id, id }) => {
+          const { department_name } = this.institution.departments.find(d => d.id === department_id);
+          const { level_name } = this.levels.find(l => l.id === level_id);
+          const { full_name, verification_no } = this.institution.staff.find(s => s.id === staff_id);
+          return { id, department_name, level_name, full_name, verification_no };
         });
     },
-    duplicateCourseCoordinator() {
-      return !!this.courseCoordinators
-        .filter((cc) => {
-          const { course_id, staff_id } = cc;
-          return this.courseCoordinator.course_id === course_id &&
-            this.courseCoordinator.staff_id === staff_id;
+    duplicateCourseAdviser() {
+      return !!this.courseAdvisers
+        .filter((x) => {
+          const { department_id, staff_id, level_id } = x;
+          return this.courseAdviser.department_id === department_id &&
+            this.courseAdviser.staff_id === staff_id &&
+            this.courseAdviser.level_id === level_id;
         }).length ;
     }
   },
   created() {
-    defaultCourseCoordinator.institution_id = this.institution.id;
-    this.courseCoordinator = { ...defaultCourseCoordinator };
+    defaultCourseAdviser.institution_id = this.institution.id;
+    this.courseAdviser = { ...defaultCourseAdviser };
   },
   methods: {
     create() {
       axios
-        .post('/i/course-coordinators', this.courseCoordinator)
+        .post('/i/course-advisers', this.courseAdviser)
         .then(({ data: { success, data, message = '' } }) => {
           if (success) {
-            this.courseCoordinators.push(data);
-            this.courseCoordinator = { ...defaultCourseCoordinator };
+            this.courseAdvisers.push(data);
+            this.courseAdviser = { ...defaultCourseAdviser };
           } else {
             alert(message);
           }
@@ -164,10 +171,10 @@ export default {
     },
     remove(id) {
       axios
-      .delete(`/i/course-coordinators/${id}`)
+      .delete(`/i/course-advisers/${id}`)
       .then(({ data: { success } }) => {
         if (success) {
-          this.courseCoordinators = this.courseCoordinators.filter(cc => cc.id !== id);
+          this.courseAdvisers = this.courseAdvisers.filter(x => x.id !== id);
         }
       })
       .catch(({ response: { data } }) => console.log('error', data));

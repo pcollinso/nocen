@@ -43,6 +43,21 @@ class Staff extends Authenticatable
         return $this->belongsTo(Institution::class);
     }
 
+    public function programme()
+    {
+        return $this->belongsTo(Programme::class);
+    }
+
+    public function faculty()
+    {
+        return $this->belongsTo(Faculty::class);
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+
     public function course_coordinators()
     {
         return $this->hasMany(CourseCoordinator::class);

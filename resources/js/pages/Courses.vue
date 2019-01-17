@@ -201,11 +201,14 @@ export default {
     PageTitle,
     Breadcrumb
   },
-  props: ['courses', 'programmes', 'faculties', 'departments', 'levels', 'semesters', 'institution'],
+  props: ['levels', 'semesters', 'institution'],
   data() {
     return {
       course: {},
-      localCourses: this.courses
+      localCourses: this.institution.courses,
+      programmes: this.institution.programmes,
+      faculties: this.institution.faculties,
+      departments: this.institution.departments
     };
   },
   computed: {
@@ -220,7 +223,7 @@ export default {
       if (! Object.keys(this.course).length) return false;
 
       // If there's any course that shares duplicate values, return true
-      return !!this.courses
+      return !!this.localCourses
         .filter((course) => {
           const { id, programme_id, semester_id, level_id, faculty_id, department_id, course_name, course_code } = course;
           const idsMatch = !!this.course.id ? id !== this.course.id : true;
