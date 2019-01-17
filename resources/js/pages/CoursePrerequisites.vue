@@ -1,6 +1,5 @@
 <template>
   <Page>
-    <breadcrumb/>
     <page-title title="Course prerequisites"/>
     <div class="row">
       <div class="col-lg-5 col-sm-12">
@@ -92,7 +91,6 @@
 <script>
 import Page from './Page';
 import PageTitle from '../components/header/PageTitle';
-import Breadcrumb from '../components/header/Breadcrumb';
 
 const defaultCoursePrerequisite = {
   institution_id: 0,
@@ -104,8 +102,7 @@ export default {
   name: 'CoursePrerequisites',
   components: {
     Page,
-    PageTitle,
-    Breadcrumb
+    PageTitle
   },
   props: ['institution'],
   data() {

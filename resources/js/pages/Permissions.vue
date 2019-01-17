@@ -1,6 +1,5 @@
 <template>
   <Page>
-    <breadcrumb/>
     <page-title title="Permissions"/>
     <div class="row">
       <div class="col-lg-4 col-sm-12">
@@ -82,14 +81,12 @@
 <script>
 import Page from './Page';
 import PageTitle from '../components/header/PageTitle';
-import Breadcrumb from '../components/header/Breadcrumb';
 
 export default {
   name: 'Permissions',
   components: {
     Page,
-    PageTitle,
-    Breadcrumb
+    PageTitle
   },
   props: {
     permissions: {
