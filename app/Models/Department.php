@@ -12,7 +12,17 @@ class Department extends Model
       return $this->belongsTo(Institution::class);
   }
 
-  public function departments()
+  public function programme()
+  {
+      return $this->belongsTo(Programme::class);
+  }
+
+  public function faculty()
+  {
+      return $this->belongsTo(Faculty::class);
+  }
+
+  public function course_advisers()
   {
       return $this->hasMany(CourseAdviser::class);
   }
