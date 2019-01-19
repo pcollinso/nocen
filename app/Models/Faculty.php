@@ -26,4 +26,19 @@ class Faculty extends Model
   {
       return $this->hasMany(Staff::class);
   }
+
+  public function isDuplicate()
+  {
+      $duplicates = $this
+        ->where('institution_id', $this->institution_id)
+        ->where('faculty_name', $this->faculty_name)
+        ->where('faculty_code', $this->faculty_code)
+        ->where('faculty_abbrv', $this->faculty_abbrv)
+        ->get();
+
+      $num = count($duplicates);
+      if (! $num) return false;
+      if ($num > 1) return true;
+      return $this->id && $duplicates[0]->id != $this->id;
+  }
 }

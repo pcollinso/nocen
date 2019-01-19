@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Controllers\Admin;
 use Validator;
-use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use App\Models\Faculty;
 
@@ -24,20 +23,7 @@ class FacultyController extends Controller
     $data = $this->request->all();
     $validator = Validator::make($data, [
       'institution_id' => 'exists:sup_institution,id',
-      'programme_id' => 'exists:sch_programme,id',
-      'faculty_name' => [
-        'string',
-        'max:200',
-        Rule::unique('sch_faculty')->ignore($id)],
-      'faculty_code' => [
-        'string',
-        'max:200',
-        Rule::unique('sch_faculty')->ignore($id)],
-      'faculty_abbrv' => [
-        'string',
-        'max:200',
-        Rule::unique('sch_faculty')->ignore($id)
-      ]
+      'programme_id' => 'exists:sch_programme,id'
     ]);
     if ($validator->fails()) {
         return response()->json([
@@ -50,6 +36,14 @@ class FacultyController extends Controller
     Faculty::unguard();
     $faculty = Faculty::find($id)->fill($data);
     Faculty::reguard();
+    if ($faculty->isDuplicate())
+    {
+      return response()->json([
+          'success' => false,
+          'message' => 'Faculty is duplicate',
+          'data' => []
+      ], 422);
+    }
     $faculty->save();
 
     return response()->json([
@@ -64,10 +58,7 @@ class FacultyController extends Controller
     $data = $this->request->all();
     $validator = Validator::make($data, [
       'institution_id' => 'required|exists:sup_institution,id',
-      'programme_id' => 'required|exists:sch_programme,id',
-      'faculty_name' => 'required|max:255|unique:sch_faculty',
-      'faculty_code' => 'required|max:255|unique:sch_faculty',
-      'faculty_abbrv' => 'required|max:50|unique:sch_faculty',
+      'programme_id' => 'required|exists:sch_programme,id'
     ]);
     if ($validator->fails()) {
       return response()->json([
@@ -80,6 +71,14 @@ class FacultyController extends Controller
     Faculty::unguard();
     $faculty = new Faculty($data);
     Faculty::reguard();
+    if ($faculty->isDuplicate())
+    {
+      return response()->json([
+          'success' => false,
+          'message' => 'Faculty is duplicate',
+          'data' => []
+      ], 422);
+    }
     $faculty->save();
 
     return response()->json([
