@@ -1,6 +1,5 @@
 <?php
 namespace App\Http\Controllers\Admin;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Permission;
 use Validator;
@@ -13,9 +12,9 @@ class PermissionController extends Controller
         return view('roles.permissions', ['permissions' => Permission::all()]);
     }
 
-    public function create(Request $request)
+    public function create()
     {
-        $data = array_intersect_key($request->all(), ['name' => 1]);
+        $data = array_intersect_key($this->request->all(), ['name' => 1]);
         $validator = Validator::make($data, [
             'name' => 'required|max:50'
         ]);

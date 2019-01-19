@@ -1,6 +1,5 @@
 <?php
 namespace App\Http\Controllers\Admin;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
 use App\Models\CourseCoordinator;
@@ -17,9 +16,9 @@ class CourseCoordinatorController extends Controller
     return view('course_coordinators.list', [ 'institution' => $institution ]);
   }
 
-  public function update($id, Request $request)
+  public function update($id)
   {
-    $data = $request->all();
+    $data = $this->request->all();
     $validator = Validator::make($data, [
       'institution_id' => 'exists:sup_institution,id',
       'staff_id' => 'exists:sch_staff,id',
@@ -54,9 +53,9 @@ class CourseCoordinatorController extends Controller
     ]);
   }
 
-  public function create(Request $request)
+  public function create()
   {
-    $data = $request->all();
+    $data = $this->request->all();
     $validator = Validator::make($data, [
       'institution_id' => 'required|exists:sup_institution,id',
       'staff_id' => 'required|exists:sch_staff,id',

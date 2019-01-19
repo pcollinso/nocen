@@ -1,6 +1,5 @@
 <?php
 namespace App\Http\Controllers\Admin;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
 use App\Models\CoursePrerequisite;
@@ -17,9 +16,9 @@ class CoursePrerequisiteController extends Controller
     return view('course_prerequisites.list', [ 'institution' => $institution ]);
   }
 
-  public function update($id, Request $request)
+  public function update($id)
   {
-    $data = $request->all();
+    $data = $this->request->all();
     $validator = Validator::make($data, [
       'institution_id' => 'exists:sup_institution,id',
       'course_id' => 'exists:sch_course,id'
@@ -52,9 +51,9 @@ class CoursePrerequisiteController extends Controller
     ]);
   }
 
-  public function create(Request $request)
+  public function create()
   {
-    $data = $request->all();
+    $data = $this->request->all();
     $validator = Validator::make($data, [
       'institution_id' => 'required|exists:sup_institution,id',
       'course_id' => 'required|exists:sch_course,id'

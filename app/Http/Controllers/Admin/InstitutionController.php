@@ -1,6 +1,5 @@
 <?php
 namespace App\Http\Controllers\Admin;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Institution;
 use App\Models\InstitutionType;
@@ -23,9 +22,9 @@ class InstitutionController extends Controller
         ]);
     }
 
-    public function update($id, Request $request)
+    public function update($id)
     {
-        $data = $request->all();
+        $data = $this->request->all();
         $validator = Validator::make($data, [
             'institution_type_id' => 'exists:sch_institution_type,id',
             'address' => 'string|max:125',
@@ -74,9 +73,9 @@ class InstitutionController extends Controller
         ]);
     }
 
-    public function create(Request $request)
+    public function create()
     {
-        $data = $request->all();
+        $data = $this->request->all();
         $validator = Validator::make($data, [
             'institution_code' => 'required|string|max:20|unique:sup_institution',
             'institution_name' => 'required|string|max:45|unique:sup_institution',
