@@ -1,11 +1,9 @@
 <?php
 namespace App\Http\Controllers\Admin;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Validator;
-use App\Models\Course;
-use App\Models\Level;
-use App\Models\Semester;
+use Illuminate\Validation\Rule;
+use App\Http\Controllers\Controller;
+use App\Models\Programme;
 
 class ProgrammeController extends Controller
 {
@@ -14,27 +12,23 @@ class ProgrammeController extends Controller
     $institution = auth()->user()
       ->institution()
       ->first()
-      ->load('programmes', 'faculties', 'departments', 'courses'); // need to load only programmes
+      ->load('programmes');
 
-    return view('courses.list', [
+    return view('programmes.list', [
       'institution' => $institution
     ]);
   }
 
-  public function update($id, Request $request)
+  public function update($id)
   {
-    $data = $request->all();
+    $data = $this->request->all();
     $validator = Validator::make($data, [
       'institution_id' => 'exists:sup_institution,id',
-      'programme_id' => 'exists:sch_programme,id',
-      'faculty_id' => 'exists:sch_faculty,id',
-      'department_id' => 'exists:sch_department,id',
-      'level_id' => 'exists:sch_level,id',
-      'semester_id' => 'exists:sch_semester,id',
-      'course_name' => 'string|max:200',
-      'course_code' => 'string|max:30',
-      'unit_load' => 'numeric',
-      'is_general' => 'boolean'
+      'programme_name' => [
+        'string',
+        'max:200',
+        Rule::unique('sch_programme')->ignore($id)
+      ]
     ]);
     if ($validator->fails()) {
         return response()->json([
@@ -44,40 +38,24 @@ class ProgrammeController extends Controller
         ], 422);
     }
 
-    Course::unguard();
-    $course = Course::find($id)->fill($data);
-    Course::reguard();
-    if ($course->isDuplicate())
-    {
-      return response()->json([
-          'success' => false,
-          'message' => 'Course is duplicate',
-          'data' => []
-      ], 422);
-    }
-    $course->save();
+    Programme::unguard();
+    $programme = Programme::find($id)->fill($data);
+    Programme::reguard();
+    $programme->save();
 
     return response()->json([
         'success' => true,
-        'message' => 'Course updated',
-        'data' => $course
+        'message' => 'Programme updated',
+        'data' => $programme
     ]);
   }
 
-  public function create(Request $request)
+  public function create()
   {
-    $data = $request->all();
+    $data = $this->request->all();
     $validator = Validator::make($data, [
       'institution_id' => 'required|exists:sup_institution,id',
-      'programme_id' => 'required|exists:sch_programme,id',
-      'faculty_id' => 'required|exists:sch_faculty,id',
-      'department_id' => 'required|exists:sch_department,id',
-      'level_id' => 'required|exists:sch_level,id',
-      'semester_id' => 'required|exists:sch_semester,id',
-      'course_name' => 'required|string|max:200',
-      'course_code' => 'required|string|max:30',
-      'unit_load' => 'required|numeric',
-      'is_general' => 'required|boolean'
+      'programme_name' => 'required|max:200|unique:sch_programme',
     ]);
     if ($validator->fails()) {
       return response()->json([
@@ -87,32 +65,24 @@ class ProgrammeController extends Controller
       ], 422);
     }
 
-    Course::unguard();
-    $course = new Course($data);
-    Course::reguard();
-    if ($course->isDuplicate())
-    {
-      return response()->json([
-          'success' => false,
-          'message' => 'Course is duplicate',
-          'data' => []
-      ], 422);
-    }
-    $course->save();
+    Programme::unguard();
+    $programme = new Programme($data);
+    Programme::reguard();
+    $programme->save();
 
     return response()->json([
         'success' => true,
-        'message' => 'Course created',
-        'data' => $course
+        'message' => 'Programme created',
+        'data' => $programme
     ]);
   }
 
   public function delete($id)
   {
-    $success = (bool) Course::destroy($id);
+    $success = (bool) Programme::destroy($id);
     return response()->json([
       'success' => $success,
-      'message' => $success ? 'Course deleted' : 'Could not delete course'
+      'message' => $success ? 'Programme deleted' : 'Could not delete programme'
   ]);
   }
 }

@@ -139,7 +139,7 @@ export default {
       step: 1,
       name: 'Test',
       form: {
-        login: 'institution.admin',
+        login: 'umejiofor.anthony',
         password: 'Children12@',
         type: '',
         token: ''

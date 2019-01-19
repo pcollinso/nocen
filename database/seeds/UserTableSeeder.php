@@ -44,14 +44,14 @@ class UserTableSeeder extends Seeder
             ],
             [
                 'id' => 15,
-                'username' => 'umejiofor.anthony.chinedu',
+                'username' => 'umejiofor.anthony',
                 'user_password' => 'ba16926613bca60629dcdd93bb567a43',
                 'temp_password' => '74vCT/Tt7tmcAqnr3KR1jvSwaQc6Nu5JzHVqO+fHNsYiXvWxorAm4SJsemagvmjdrNgz4LD+DmDVf2t6oR4ZGJGFBjd0kIxAUCnm31a2lAXXWossufXOPsmMLn7mPblg',
                 'password_expiry_date' => '2019-03-15',
-                'name' => 'UMEJIOFOR ANTHONY CHINEDU',
+                'name' => 'UMEJIOFOR ANTHONY',
                 'email' => 'tony@appmartgroup.com',
                 'phone' => '08037957323',
-                'institution_id' => '0',
+                'institution_id' => 1,
                 'module_id' => '1',
                 'user_group_id' => '3',
                 'status' => '1',
@@ -73,9 +73,13 @@ class UserTableSeeder extends Seeder
 
         DB::table('sup_users')->insert($data);
         $superAdminRole = Role::where('name', 'superadmin')->first();
-        $user = User::find(13);
-        $user->roles()->attach($superAdminRole);
-        $user->permissions()->attach($superAdminRole->permissions()->get());
+        $instAdminRole = Role::where('name', 'institutionadmin')->first();
+        $superAdmin = User::find(13);
+        $instAdmin = User::find(15);
+        $superAdmin->roles()->attach($superAdminRole);
+        $superAdmin->permissions()->attach($superAdminRole->permissions()->get());
+        $instAdmin->roles()->attach($instAdminRole);
+        $instAdmin->permissions()->attach($instAdminRole->permissions()->get());
 
     }
 }

@@ -23,11 +23,11 @@
         { path: '#', icon: 'fa fa-wrench', title: 'School Setup',
             roles: ['institutionadmin'],
             children: [
-                { path: '/i/setup/programme', title: 'Programme Listing', roles: ['institutionadmin']},
-                { path: '/i/setup/faculty', title: 'Faculty Listing', roles: ['institutionadmin'] },
-                { path: '/i/setup/department', title: 'Department Listing', roles: ['institutionadmin'] },
-                { path: '/i/setup/field', title: 'Field Listing', roles: ['institutionadmin'] },
-                { path: '/i/setup/course', title: 'Course Listing', roles: ['institutionadmin'] }
+                { path: '/i/setup/programmes', title: 'Programme Listing', roles: ['institutionadmin']},
+                { path: '/i/setup/faculties', title: 'Faculty Listing', roles: ['institutionadmin'] },
+                { path: '/i/setup/departments', title: 'Department Listing', roles: ['institutionadmin'] },
+                { path: '/i/setup/fields', title: 'Field Listing', roles: ['institutionadmin'] },
+                { path: '/i/courses', title: 'Course Listing', roles: ['institutionadmin'] }
             ]
         },
         { path: '#', icon: 'fa fa-user', title: 'Manage users',
