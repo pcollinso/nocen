@@ -137,8 +137,8 @@ export default {
         !!this.form.faculty_abbrv &&
         this.programmes.some(({ id }) => id === this.form.programme_id) &&
         this.faculties.every(({ faculty_name, faculty_code, faculty_abbrv }) =>
-          faculty_name !== this.form.faculty_name &&
-          faculty_code !== this.form.faculty_code &&
+          faculty_name !== this.form.faculty_name ||
+          faculty_code !== this.form.faculty_code ||
           faculty_abbrv !== this.form.faculty_abbrv);
     }
   },

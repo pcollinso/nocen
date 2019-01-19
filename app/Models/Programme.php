@@ -21,4 +21,9 @@ class Programme extends Model
   {
       return $this->hasMany(Department::class);
   }
+
+  public function fields()
+  {
+      return $this->hasMany(Field::class);
+  }
 }

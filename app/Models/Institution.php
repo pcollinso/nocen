@@ -56,4 +56,9 @@ class Institution extends Model
   {
       return $this->hasMany(Staff::class);
   }
+
+  public function fields()
+  {
+      return $this->hasMany(Field::class);
+  }
 }

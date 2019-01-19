@@ -24,7 +24,7 @@ class DepartmentController extends Controller
     $validator = Validator::make($data, [
       'institution_id' => 'exists:sup_institution,id',
       'programme_id' => 'exists:sch_programme,id',
-      'faculty_id' => 'required|exists:sch_faculty,id'
+      'faculty_id' => 'exists:sch_faculty,id'
     ]);
     if ($validator->fails()) {
         return response()->json([

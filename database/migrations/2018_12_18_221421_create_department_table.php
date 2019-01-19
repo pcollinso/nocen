@@ -25,7 +25,7 @@ class CreateDepartmentTable extends Migration
             $table->string('last_modified_by', 50)->nullable();
             $table->tinyInteger('status')->default('1');
             $table->timestamps();
-            $table->unique(['institution_id','programme_id','faculty_id','department_name'], 'DUPLICATE_RECORD');
+            $table->unique(['institution_id','faculty_id','department_name'], 'DUPLICATE_RECORD');
         });
     }
 

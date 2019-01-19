@@ -32,6 +32,11 @@ class Department extends Model
       return $this->hasMany(Staff::class);
   }
 
+  public function fields()
+  {
+      return $this->hasMany(Field::class);
+  }
+
   public function isDuplicate()
   {
       $duplicates = $this

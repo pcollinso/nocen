@@ -3,9 +3,9 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
-class Faculty extends Model
+class Field extends Model
 {
-  protected $table = 'sch_faculty';
+  protected $table = 'sch_field';
 
   public function institution()
   {
@@ -17,28 +17,23 @@ class Faculty extends Model
       return $this->belongsTo(Programme::class);
   }
 
-  public function departments()
+  public function faculty()
   {
-      return $this->hasMany(Department::class);
+      return $this->belongsTo(Faculty::class);
   }
 
-  public function staff()
+  public function department()
   {
-      return $this->hasMany(Staff::class);
-  }
-
-  public function fields()
-  {
-      return $this->hasMany(Field::class);
+      return $this->belongsTo(Department::class);
   }
 
   public function isDuplicate()
   {
       $duplicates = $this
         ->where('institution_id', $this->institution_id)
-        ->where('faculty_name', $this->faculty_name)
-        ->where('faculty_code', $this->faculty_code)
-        ->where('faculty_abbrv', $this->faculty_abbrv)
+        ->where('field_name', $this->field_name)
+        ->where('field_code', $this->field_code)
+        ->where('field_abbrv', $this->field_abbrv)
         ->get();
 
       $num = count($duplicates);
