@@ -20,14 +20,10 @@ trait HasPermissions
 
     public function hasRole( ... $roles )
     {
-      foreach ($roles as $role)
-      {
-         if ($this->roles->contains('name', $role))
-         {
-            return true;
-         }
-      }
-      return false;
+        return (bool) $this->roles->filter(function ($r) use ($roles) {
+            return in_array($r->name, $roles);
+        })
+        ->count();
     }
 
     public function hasPermissionTo($permission)

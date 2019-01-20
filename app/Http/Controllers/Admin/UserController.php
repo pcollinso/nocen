@@ -2,40 +2,56 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Validator;
-use App\Models\Course;
-use App\Models\Level;
-use App\Models\Semester;
+use Illuminate\Validation\Rule;
+use App\Models\Institution;
+use App\Models\User;
+use App\Models\Role;
+use App\Utils\Passcode;
 
-class CourseController extends Controller
+class UserController extends Controller
 {
   public function index()
   {
     $institution = auth()->user()
       ->institution()
       ->first()
-      ->load('programmes', 'faculties', 'departments', 'courses');
+      ->load('users');
 
-    return view('courses.list', [
+    $users = $institution
+      ->users
+      ->load('roles')
+      ->filter(function ($user) {
+        return ! $user->hasRole(Role::$staff, Role::$institutionadmin, Role::$superadmin);
+      })
+      ->all();
+
+    return view('users.list', [
       'institution' => $institution,
-      'levels' => Level::all(),
-      'semesters' => Semester::all(),
+      'users' => array_values($users)
     ]);
   }
 
   public function update($id)
   {
-    $data = $this->request->all();
+    $data = $this->request->only('institution_id', 'name', 'username', 'email', 'phone');
     $validator = Validator::make($data, [
-      'institution_id' => 'exists:sup_institution,id',
-      'programme_id' => 'exists:sch_programme,id',
-      'faculty_id' => 'exists:sch_faculty,id',
-      'department_id' => 'exists:sch_department,id',
-      'level_id' => 'exists:sch_level,id',
-      'semester_id' => 'exists:sch_semester,id',
-      'course_name' => 'string|max:200',
-      'course_code' => 'string|max:30',
-      'unit_load' => 'numeric',
-      'is_general' => 'boolean'
+        'institution_id' => 'exists:sup_institution,id',
+        'name' => 'string|max:156',
+        'username' => [
+          'string',
+          'max:45',
+          Rule::unique('sup_users')->ignore($id)
+        ],
+        'email' => [
+          'email',
+          'max:165',
+          Rule::unique('sup_users')->ignore($id)
+        ],
+        'phone' => [
+          'regex:/^\d{7,11}$/',
+          'max:15',
+          Rule::unique('sup_users')->ignore($id)
+        ]
     ]);
     if ($validator->fails()) {
         return response()->json([
@@ -45,40 +61,32 @@ class CourseController extends Controller
         ], 422);
     }
 
-    Course::unguard();
-    $course = Course::find($id)->fill($data);
-    Course::reguard();
-    if ($course->isDuplicate())
-    {
-      return response()->json([
-          'success' => false,
-          'message' => 'Course is duplicate',
-          'data' => []
-      ], 422);
-    }
-    $course->save();
+    User::unguard();
+    $user = User::find($id)->fill($data);
+    User::reguard();
+    $user->save();
 
     return response()->json([
         'success' => true,
-        'message' => 'Course updated',
-        'data' => $course
+        'message' => 'User updated',
+        'data' => $user
     ]);
   }
 
   public function create()
   {
-    $data = $this->request->all();
+    $data = $this->request->only('institution_id', 'name', 'username', 'email', 'phone', 'user_password');
+    if (isset($data['user_password']))
+    {
+      $data['user_password'] = Passcode::hashPassword($data['user_password']);
+    }
+
     $validator = Validator::make($data, [
       'institution_id' => 'required|exists:sup_institution,id',
-      'programme_id' => 'required|exists:sch_programme,id',
-      'faculty_id' => 'required|exists:sch_faculty,id',
-      'department_id' => 'required|exists:sch_department,id',
-      'level_id' => 'required|exists:sch_level,id',
-      'semester_id' => 'required|exists:sch_semester,id',
-      'course_name' => 'required|string|max:200',
-      'course_code' => 'required|string|max:30',
-      'unit_load' => 'required|numeric',
-      'is_general' => 'required|boolean'
+      'name' => 'required|string|max:156',
+      'username' => 'required|string|max:45|unique:sup_users',
+      'email' => 'required|email|max:165|unique:sup_users',
+      'phone' => 'regex:/^\d{7,11}$/|max:15|unique:sup_users'
     ]);
     if ($validator->fails()) {
       return response()->json([
@@ -88,32 +96,19 @@ class CourseController extends Controller
       ], 422);
     }
 
-    Course::unguard();
-    $course = new Course($data);
-    Course::reguard();
-    if ($course->isDuplicate())
-    {
-      return response()->json([
-          'success' => false,
-          'message' => 'Course is duplicate',
-          'data' => []
-      ], 422);
-    }
-    $course->save();
+    User::unguard();
+    $user = new User($data);
+    User::reguard();
+    $user->save();
+
+    $userRole = Role::where('name', Role::$user)->first();
+    $user->roles()->attach($userRole);
+    $user->permissions()->attach($userRole->permissions()->get());
 
     return response()->json([
         'success' => true,
-        'message' => 'Course created',
-        'data' => $course
+        'message' => 'User created',
+        'data' => $user
     ]);
-  }
-
-  public function delete($id)
-  {
-    $success = (bool) Course::destroy($id);
-    return response()->json([
-      'success' => $success,
-      'message' => $success ? 'Course deleted' : 'Could not delete course'
-  ]);
   }
 }

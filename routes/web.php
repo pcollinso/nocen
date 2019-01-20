@@ -92,8 +92,8 @@ Route::group(['middleware' => ['query_log']], function () {
             Route::put('i/fields/{id}', ['uses' => '\App\Http\Controllers\Admin\FieldController@update', 'as' => 'field.update']);
             Route::delete('i/fields/{id}', ['uses' => '\App\Http\Controllers\Admin\FieldController@delete', 'as' => 'field.delete']);
 
-            Route::post('i/users', ['uses' => '\App\Http\Controllers\Admin\UserController@create', 'as' => 'user.create']);
             Route::get('i/users', ['uses' => '\App\Http\Controllers\Admin\UserController@index', 'as' => 'user.index']);
+            Route::post('i/users', ['uses' => '\App\Http\Controllers\Admin\UserController@create', 'as' => 'user.create']);
             Route::put('i/users/{id}', ['uses' => '\App\Http\Controllers\Admin\UserController@update', 'as' => 'user.update']);
             Route::delete('i/users/{id}', ['uses' => '\App\Http\Controllers\Admin\UserController@delete', 'as' => 'user.delete']);
 

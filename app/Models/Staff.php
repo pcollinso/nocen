@@ -62,4 +62,9 @@ class Staff extends Authenticatable
     {
         return $this->hasMany(CourseCoordinator::class);
     }
+
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
 }

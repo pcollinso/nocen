@@ -42,4 +42,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Institution::class);
     }
+
+    public function staff()
+    {
+        return $this->belongsTo(Staff::class);
+    }
 }

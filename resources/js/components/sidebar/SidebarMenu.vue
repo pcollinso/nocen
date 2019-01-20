@@ -34,7 +34,7 @@
             roles: ['institutionadmin'],
             children: [
                 { path: '/i/users/add', title: 'Add user', roles: ['institutionadmin'] },
-                { path: '/i/users/list', title: 'List users', roles: ['institutionadmin'] },
+                { path: '/i/users', title: 'List users', roles: ['institutionadmin'] },
             ]
         },
         { path: '#', icon: 'fa fa-users', title: 'Manage staff',
