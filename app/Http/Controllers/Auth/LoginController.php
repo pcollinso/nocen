@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use Auth;
 use Route;
 use App\Http\Controllers\Controller;
+use App\Utils\Passcode;
 
 class LoginController extends Controller
 {
@@ -47,11 +48,10 @@ class LoginController extends Controller
         $errorMsg = '';
 
         if ($this->request->isMethod('post')) {
-            $data = $this->request->all();
-            $pwd = $data['user_password'];
+            $data = $this->request->only('user_password', 'new_password');
             $validator = Validator::make($data, [
-                'user_password' => 'exists:sup_institution,id',
-                'programme_id' => 'exists:sch_programme,id'
+                'user_password' => 'required|string|between:6,300',
+                'new_password' => 'required|string|between:6,300'
             ]);
             if ($validator->fails()) {
                 return response()->json([
@@ -60,10 +60,21 @@ class LoginController extends Controller
                     'data' => $validator->errors()->messages()
                 ], 422);
             }
-            
-        }elseif ($this->request->isMethod('get')) {
-            return view('auth.change-password', ['errorMsg' => $errorMsg]);
+
+            $user = auth()->user();
+
+            if (! $this->userProvider->validateCredentials($user, ['password' => $data['user_password']]))
+            {
+                $errorMsg = 'Current password not valid';
+            } else
+            {
+                $user->user_password = Passcode::hashPassword($data['new_password']);
+                $user->save();
+                return redirect('dashboard');
+            }
+
         }
+        return view('auth.change-password', ['errorMsg' => $errorMsg]);
 
     }
 }
