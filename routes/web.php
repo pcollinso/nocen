@@ -24,6 +24,9 @@ Route::group(['middleware' => ['query_log']], function () {
     Route::group(['middleware' => ['guest']], function () {
         Route::match(['get', 'post'], 'login', ['uses' => '\App\Http\Controllers\Auth\LoginController@login', 'as' => 'login']);
         Route::post('auth/check-user', ['uses' => '\App\Http\Controllers\Auth\LoginController@checkUser', 'as' => 'check-user']);
+        Route::get('change-password', ['uses' => '\App\Http\Controllers\Auth\LoginController@changePassword', 'as' => 'change-password']);
+        Route::get('action-history', ['uses' => '\App\Http\Controllers\Admin\CourseController@index', 'as' => 'action-history']);
+        Route::post('change-password', ['uses' => '\App\Http\Controllers\Auth\LoginController@changePassword', 'as' => 'change-password']);
     });
 
 

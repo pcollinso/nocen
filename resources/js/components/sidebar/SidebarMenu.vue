@@ -71,7 +71,9 @@
                 { path: '#', title: 'Solve student problems', roles: ['user', 'staff'] },
             ]
         },
-        { path: '#', img: '/images/logo/logo-bs4.png', title: 'Manage result', permissions: [] }
+        { path: '#', img: '/images/logo/logo-bs4.png', title: 'Manage result', permissions: [] },
+        { path: '/change-password', icon: 'fa fa-lock', title: 'Change password', roles: ['institutionadmin','user', 'staff','student','superadmin']},
+        { path: '/action-history', icon: 'fa fa-list', title: 'Action history', roles: ['institutionadmin','user', 'staff','student','superadmin']}
     ]
 
     export default sidebarMenu;
