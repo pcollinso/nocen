@@ -143,11 +143,14 @@ export default {
         faculty_id: 0,
       },
       programmes: this.institution.programmes,
-      faculties: this.institution.faculties,
       departments: this.institution.departments
     };
   },
   computed: {
+    faculties() {
+      return this.institution.faculties
+        .filter(({ programme_id }) => programme_id === this.form.programme_id);
+    },
     formOk() {
       return !!this.form.department_name &&
         !!this.form.department_code &&
@@ -165,11 +168,11 @@ export default {
   },
   methods: {
     programmeName(id) {
-      const p = this.programmes.find(p => p.id === id);
+      const p = this.institution.programmes.find(p => p.id === id);
       return p ? p.programme_name : 'None';
     },
     facultyName(id) {
-      const f = this.faculties.find(f => f.id === id);
+      const f = this.institution.faculties.find(f => f.id === id);
       return f ? f.faculty_name : 'None';
     },
     clear() {

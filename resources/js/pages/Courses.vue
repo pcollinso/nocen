@@ -184,6 +184,7 @@ const defaultCourse = {
   course_name: '',
   institution_id: 0,
   programme_id: 0,
+  department_id: 0,
   faculty_id: 0,
   level_id: 0,
   semester_id: 0,
@@ -203,12 +204,18 @@ export default {
     return {
       course: {},
       localCourses: this.institution.courses,
-      programmes: this.institution.programmes,
-      faculties: this.institution.faculties,
-      departments: this.institution.departments
+      programmes: this.institution.programmes
     };
   },
   computed: {
+    faculties() {
+      return this.institution.faculties
+        .filter(({ programme_id }) => programme_id === this.course.programme_id);
+    },
+    departments() {
+      return this.institution.departments
+        .filter(({ faculty_id }) => faculty_id === this.course.faculty_id);
+    },
     buttonText() {
       return this.course.id ? 'Save' : 'Create';
     },
@@ -241,17 +248,17 @@ export default {
   },
   methods: {
     programmeName(id) {
-      const p = this.programmes.find(p => id === p.id);
+      const p = this.institution.programmes.find(p => id === p.id);
       if (p) return p.programme_name;
       return id;
     },
     facultyName(id) {
-      const f = this.faculties.find(f => id === f.id);
+      const f = this.institution.faculties.find(f => id === f.id);
       if (f) return f.faculty_name;
       return id;
     },
     departmentName(id) {
-      const d = this.departments.find(d => id === d.id);
+      const d = this.institution.departments.find(d => id === d.id);
       if (d) return d.department_name;
       return id;
     },
