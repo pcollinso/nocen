@@ -18,16 +18,9 @@
       </div>
       <!-- begin login-content -->
       <div class="login-content">
-        <form
-          ref="form"
-          action="/change-password"
-          @submit.prevent="checkForm()"
-          method="POST"
-          class="margin-bottom-0"
-        >
+        <form @submit.stop.prevent="onSubmit()" class="margin-bottom-0">
           <input type="hidden" name="_token" v-model="form.token">
-
-          <div  class="form-group m-b-20">
+          <div class="form-group m-b-20">
             <label>Change Password</label>
           </div>
           <div class="form-group m-b-20">
@@ -36,34 +29,40 @@
               name="user_password"
               class="form-control form-control-lg"
               placeholder="Current Password"
-              v-model.trim="form.password"
+              v-model.trim="form.user_password"
               required
             >
           </div>
-            <div class="form-group m-b-20">
-                <input
-                    type="password"
-                    name="new_password"
-                    class="form-control form-control-lg"
-                    placeholder="New Password"
-                    v-model.trim="form.password"
-                    required
-                >
-            </div>
+          <div class="form-group m-b-20">
+            <input
+              type="password"
+              name="new_password"
+              class="form-control form-control-lg"
+              placeholder="New Password"
+              v-model.trim="form.new_password"
+              required
+            >
+          </div>
+          <p v-if="!passwordLengthOk">Passwords must have at least 6 characters</p>
 
-            <div class="form-group m-b-20">
-                <input
-                    type="password"
-                    name="confirm_password"
-                    class="form-control form-control-lg"
-                    placeholder="Confirm Password"
-                    v-model.trim="form.password"
-                    required
-                >
-            </div>
+          <div class="form-group m-b-20">
+            <input
+              type="password"
+              name="confirm_password"
+              class="form-control form-control-lg"
+              placeholder="Confirm Password"
+              v-model.trim="form.confirm_password"
+              required
+            >
+          </div>
+          <p v-if="!passwordsMatch">Confirmation does not match the new password</p>
 
           <div class="login-buttons">
-            <button type="submit" class="btn btn-primary btn-block btn-lg">{{ buttonText }}</button>
+            <button
+              :disabled="!formOk"
+              type="submit"
+              class="btn btn-primary btn-block btn-lg"
+            >Submit</button>
             <a href="/dashboard" class="btn btn-danger btn-block btn-lg">Back To Dashboard</a>
           </div>
           <!--<div class="m-t-20">
@@ -182,46 +181,36 @@ export default {
 		}
   },
   computed: {
-    buttonText() {
-      return this.step === 1 ? 'Submit' : 'Submit';
+    passwordLengthOk() {
+      return this.form.new_password.length >= 6;
     },
-    firstStep() {
-      return this.step === 1;
+    passwordsMatch() {
+      const { confirm_password, new_password } = this.form;
+      return confirm_password === new_password;
     },
-    secondStep() {
-      return this.step === 2;
+    formOk() {
+      const { user_password, new_password } = this.form;
+      return new_password.length >= 6 &&
+        this.passwordsMatch &&
+        this.passwordLengthOk;
     }
   },
   mounted() {
     this.form.token = document.querySelector('meta[name="csrf-token"]').content;
   },
 	methods: {
-		checkForm() {
-      if (this.secondStep) {
-        this.$refs.form.submit();
-        return true;
-      }
-
+    onSubmit() {
       axios
-      .post('/auth/change-password', this.form)
-      .then(({ data: { success, data } }) => {
-        if (!success) {
-          alert('Could not find user');
-          return;
-        }
-
-        if (data.verification_no) {
-          this.form.type = 'staff';
-        } else if (data.regno) {
-          this.form.type = 'student';
-        } else {
-          this.form.type = 'user';
-        }
-        this.name = data.full_name;
-
-        this.step = 2;
-      })
-      .catch(({ response: { data } }) => console.log("error", data));
+        .post('/auth/change-password', this.form)
+        .then(({ data: { success, message } }) => {
+          if (!success) {
+            alert(message);
+            return;
+          }
+          alert(message);
+          window.location = '/dashboard';
+        })
+        .catch(({ response: { data: { message } } }) => alert(message));
       return false;
 		},
 		select(x) {

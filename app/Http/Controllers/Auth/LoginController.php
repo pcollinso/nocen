@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Auth;
 use Route;
+use Validator;
 use App\Http\Controllers\Controller;
 use App\Utils\Passcode;
 
@@ -43,38 +44,43 @@ class LoginController extends Controller
         return response()->json(['success' => (bool) $data, 'data' => $data], 200);
     }
 
+    public function showChangePassword()
+    {
+        return view('auth.change-password');
+    }
+
     public function changePassword()
     {
-        $errorMsg = '';
 
-        if ($this->request->isMethod('post')) {
-            $data = $this->request->only('user_password', 'new_password');
-            $validator = Validator::make($data, [
-                'user_password' => 'required|string|between:6,300',
-                'new_password' => 'required|string|between:6,300'
-            ]);
-            if ($validator->fails()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Validation failed',
-                    'data' => $validator->errors()->messages()
-                ], 422);
-            }
-
-            $user = auth()->user();
-
-            if (! $this->userProvider->validateCredentials($user, ['password' => $data['user_password']]))
-            {
-                $errorMsg = 'Current password not valid';
-            } else
-            {
-                $user->user_password = Passcode::hashPassword($data['new_password']);
-                $user->save();
-                return redirect('dashboard');
-            }
-
+        $data = $this->request->only('user_password', 'new_password');
+        $validator = Validator::make($data, [
+            'user_password' => 'required|string|between:6,300',
+            'new_password' => 'required|string|between:6,300'
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'data' => $validator->errors()->messages()
+            ], 422);
         }
-        return view('auth.change-password', ['errorMsg' => $errorMsg]);
+
+        $user = auth()->user();
+
+        if (! $this->userProvider->validateCredentials($user, ['password' => $data['user_password']]))
+        {
+            return response()->json([
+                'success' => false,
+                'message' => 'Incorrect current password',
+            ], 400);
+        }
+
+        $user->user_password = Passcode::hashPassword($data['new_password']);
+        $user->save();
+        return response()->json([
+            'success' => true,
+            'message' => 'Password changed'
+        ]);
 
     }
 }
