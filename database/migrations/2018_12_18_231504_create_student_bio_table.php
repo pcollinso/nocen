@@ -17,15 +17,15 @@ class CreateStudentBioTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('application_id')->unsigned()->index();
             $table->string('regno', 20);
-            $table->string('j_regno', 20);
             $table->bigInteger('institution_id')->unsigned()->index();
-            $table->string('stud_surname', 200);
-            $table->string('stud_first_name', 200);
-            $table->string('stud_middle_name', 200);
+            $table->bigInteger('field_id')->unsigned()->index();
+            $table->string('surname', 200)->nullable();
+            $table->string('first_name', 200)->nullable();
+            $table->string('middle_name', 200)->nullable();
             $table->integer('gender_id')->unsigned()->index();
-            $table->string('stud_phone', 20);
-            $table->string('stud_email', 200);
-            $table->dateTime('stud_dob');
+            $table->string('phone', 20);
+            $table->string('email', 200);
+            $table->dateTime('dob')->nullable();
             $table->boolean('is_disabled')->default('0');
             $table->integer('nationality_id')->unsigned()->index();
             $table->integer('state_id')->unsigned()->index();
@@ -63,7 +63,6 @@ class CreateStudentBioTable extends Migration
             $table->rememberToken();
 
             $table->unique(['regno','institution_id'], 'duplicate_regno');
-            $table->unique(['j_regno','institution_id'], 'duplicate_jamb_regno');
             $table->unique('stud_phone', 'duplicate_phone');
             $table->unique('stud_email', 'duplicate_email');
 
@@ -75,6 +74,7 @@ class CreateStudentBioTable extends Migration
             $table->foreign('town_id')->references('id')->on('sup_town')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('institution_id')->references('id')->on('sup_institution')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('application_id')->references('id')->on('sch_application_bio')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('field_id')->references('id')->on('sch_field')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
