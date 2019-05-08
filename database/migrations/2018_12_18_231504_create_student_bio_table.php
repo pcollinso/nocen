@@ -63,8 +63,8 @@ class CreateStudentBioTable extends Migration
             $table->rememberToken();
 
             $table->unique(['regno','institution_id'], 'duplicate_regno');
-            $table->unique('stud_phone', 'duplicate_phone');
-            $table->unique('stud_email', 'duplicate_email');
+            $table->unique('phone', 'duplicate_phone');
+            $table->unique('email', 'duplicate_email');
 
             $table->foreign('gender_id')->references('id')->on('sch_gender')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('state_id')->references('id')->on('sup_state')->onDelete('cascade')->onUpdate('cascade');

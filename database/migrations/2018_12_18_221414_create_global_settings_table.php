@@ -16,9 +16,8 @@ class CreateGlobalSettingsTable extends Migration
         Schema::create('sys_global_settings', function (Blueprint $table) {
             $table->increments('id');
             $table->string('key_name', 250);
-            $table->string('key_value', 250);
+            $table->longText('key_value');
             $table->boolean('status')->default('1');
-            $table->timestamps();
         });
     }
 
