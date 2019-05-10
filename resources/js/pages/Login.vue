@@ -206,6 +206,8 @@ export default {
           this.form.type = 'staff';
         } else if (data.regno) {
           this.form.type = 'student';
+        } else if (data.j_regno) {
+          this.form.type = 'applicant';
         } else {
           this.form.type = 'user';
         }

@@ -22,17 +22,23 @@ Route::group(['middleware' => ['query_log']], function () {
     });
 
     Route::group(['middleware' => ['guest']], function () {
-        Route::match(['get', 'post'], 'login', ['uses' => '\App\Http\Controllers\Auth\LoginController@login', 'as' => 'login']);
-        Route::post('auth/check-user', ['uses' => '\App\Http\Controllers\Auth\LoginController@checkUser', 'as' => 'check-user']);
+      Route::match(['get', 'post'], 'login', ['uses' => '\App\Http\Controllers\Auth\LoginController@login', 'as' => 'login']);
+      Route::post('auth/check-user', ['uses' => '\App\Http\Controllers\Auth\LoginController@checkUser', 'as' => 'check-user']);
+      Route::get('new-applicant', ['uses' => '\App\Http\Controllers\Applicant\LoginController@showRegister']);
+      Route::post('new-applicant', ['uses' => '\App\Http\Controllers\Applicant\LoginController@createApplicant']);
     });
 
 
     Route::group(['middleware' => ['auth']], function () {
         Route::match(['get', 'post'], 'logout', ['uses' => '\App\Http\Controllers\Auth\LoginController@logout', 'as' => 'logout']);
-        Route::get('dashboard', ['uses' => '\App\Http\Controllers\Admin\AdminController@index', 'as' => 'dashboard']);
+        Route::get('dashboard', ['uses' => '\App\Http\Controllers\HomeController@index', 'as' => 'dashboard']);
         Route::get('action-history', ['uses' => '\App\Http\Controllers\Admin\CourseController@index', 'as' => 'action-history']);
         Route::get('change-password', ['uses' => '\App\Http\Controllers\Auth\LoginController@showChangePassword', 'as' => 'show-change-password']);
         Route::post('auth/change-password', ['uses' => '\App\Http\Controllers\Auth\LoginController@changePassword', 'as' => 'change-password']);
+
+        Route::group(['middleware' => ['role:applicant']], function () {
+          Route::get('a/home', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@index', 'as' => 'applicant.index']);
+        });
 
         Route::group(['middleware' => ['role:superadmin']], function () {
             Route::get('s/roles', ['uses' => '\App\Http\Controllers\Admin\RoleController@index', 'as' => 'role.index']);

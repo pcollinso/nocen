@@ -17,21 +17,20 @@ class CreateApplicationBioTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('institution_id')->unsigned()->index();
             $table->bigInteger('field_id')->unsigned()->index();
-            $table->string('regno', 20);
             $table->string('j_regno', 20);
             $table->string('surname', 200)->nullable();
             $table->string('first_name', 200)->nullable();
             $table->string('middle_name', 200)->nullable();
-            $table->integer('gender_id')->unsigned()->index();
+            $table->integer('gender_id')->unsigned()->index()->nullable();
             $table->string('phone', 20);
             $table->string('email', 200);
             $table->dateTime('dob')->nullable();
             $table->boolean('is_disabled')->default('0');
-            $table->integer('nationality_id')->unsigned()->index();
-            $table->integer('state_id')->unsigned()->index();
-            $table->integer('lga_id')->unsigned()->index();
-            $table->integer('town_id')->unsigned()->index();
-            $table->integer('religion_id')->unsigned()->index();
+            $table->integer('nationality_id')->unsigned()->index()->nullable();
+            $table->integer('state_id')->unsigned()->index()->nullable();
+            $table->integer('lga_id')->unsigned()->index()->nullable();
+            $table->integer('town_id')->unsigned()->index()->nullable();
+            $table->integer('religion_id')->unsigned()->index()->nullable();
             $table->string('resaddr', 200)->nullable();
             $table->string('passport', 200)->nullable();
             $table->boolean('verified')->default('0');
@@ -45,8 +44,8 @@ class CreateApplicationBioTable extends Migration
             $table->integer('status')->default('1');
             $table->boolean('locked')->default('0');
             $table->timestamps();
+            $table->rememberToken();
 
-            $table->unique(['regno','institution_id'], 'duplicate_regno');
             $table->unique(['j_regno','institution_id'], 'duplicate_jamb_regno');
             $table->unique('phone', 'duplicate_phone');
             $table->unique('email', 'duplicate_email');

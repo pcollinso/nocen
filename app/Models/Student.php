@@ -35,6 +35,6 @@ class Student extends Authenticatable
 
     public function getFullNameAttribute()
     {
-        return $this->stud_middle_name ? "{$this->stud_first_name} {$this->stud_middle_name} {$this->stud_surname}" : "{$this->stud_first_name} {$this->stud_surname}";
+        return $this->middle_name ? "$this->first_name $this->middle_name $this->surname" : "$this->first_name $this->surname";
     }
 }

@@ -22,7 +22,9 @@ class LoginController extends Controller
 
             if ($user) {
                 if (Auth::attempt($creds, $creds['remember'])) {
-                    return redirect('dashboard');
+                  if ($user->hasRole('applicant')) return redirect()->route('applicant.index');
+
+                  return redirect('dashboard');
                 }
             } else {
                 $errorMsg = 'User not found';

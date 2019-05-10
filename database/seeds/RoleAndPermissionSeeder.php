@@ -48,6 +48,11 @@ class RoleAndPermissionSeeder extends Seeder
         $this->student->id = 5;
         $this->student->name = 'student';
         $this->student->save();
+
+        $this->applicant = new Role();
+        $this->applicant->id = 6;
+        $this->applicant->name = 'applicant';
+        $this->applicant->save();
     }
 
     public function seedPermissions()
