@@ -17,7 +17,9 @@
               :religions="religions"
               :lgas="lgas" />
 
-            <h4 v-if="secondStep">Second step</h4>
+            <payment-confirmation v-if="secondStep && !paymentConfirmed" :applicant="localApplicant" />
+
+            <h4 v-if="thirdStep">Third step</h4>
           </div>
         </div>
         <div class="mt-4">
@@ -32,13 +34,15 @@
 import Page from './Page';
 import PageTitle from '../components/header/PageTitle';
 import ApplicationBiodata from '../components/application/Biodata';
+import PaymentConfirmation from '../components/application/PaymentConfirmation';
 
 export default {
   name: 'Application',
   components: {
     Page,
     PageTitle,
-    ApplicationBiodata
+    ApplicationBiodata,
+    PaymentConfirmation
   },
   props: ['applicant', 'genders', 'countries', 'states', 'lgas', 'religions'],
   data() {
@@ -50,11 +54,11 @@ export default {
   computed: {
     pageTitle() {
       if (this.firstStep) return 'Biodata';
-      if (this.secondStep) return 'Step 2';
+      if (this.secondStep) return 'Payment confirmation';
       return '';
     },
     nextLabel() {
-      if (this.step < 2) return 'Next';
+      if (this.step < 3) return 'Next';
       return 'Finish';
     },
     firstStep() {
@@ -63,11 +67,16 @@ export default {
     secondStep() {
       return this.step === 2;
     },
+    thirdStep() {
+      return this.step === 3;
+    },
     canPrev() {
       return this.step > 1;
     },
     canNext() {
       if (this.firstStep) return this.firstStepDone;
+
+      if (this.secondStep) return this.secondStepDone;
 
       return false;
     },
@@ -95,14 +104,29 @@ export default {
         lga_id &&
         town_id &&
         /^\d{4}-\d{2}-\d{2}$/.test(dob);
+    },
+    secondStepDone() {
+      return false;
+    },
+    paymentConfirmed() {
+      return false;
     }
+  },
+  created() {
+    if (this.firstStepDone) ++this.step;
+    if (this.secondStepDone) ++this.step;
   },
   methods: {
     next() {
-      if (this.firstStep) this.$refs.biodata.saveBiodata();
+      if (this.firstStep) {
+        this.$refs.biodata.saveBiodata();
+
+        if (this.paymentConfirmed) ++this.step;
+      }
       ++this.step;
     },
     prev() {
+      if (this.thirdStep && this.paymentConfirmed) --this.step;
       --this.step;
     },
     updateApplicant(obj) {
