@@ -36,7 +36,7 @@ class CreateApplicationBioTable extends Migration
             $table->boolean('verified')->default('0');
             $table->string('user_password', 300)->nullable();
             $table->string('temp_password', 300)->nullable();
-            $table->boolean('active')->default('0');
+            $table->boolean('active')->default('1');
             $table->boolean('biometric_status')->default('0');
             $table->dateTime('biometric_at')->nullable();
             $table->string('created_by', 50)->nullable();

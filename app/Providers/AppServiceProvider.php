@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
             $name = auth()->user() ? auth()->user()->full_name : 'Guest User';
             $roles = auth()->user() ? auth()->user()->roles()->get() : [];
             $permissions = auth()->user() ? auth()->user()->permissions()->get() : [];
-            $pageTitle = $view->pageTitle ? $view->pageTitle : 'Nocen';
+            $pageTitle = $view->pageTitle ? $view->pageTitle : 'Default';
             $view->with('currentUserName', $name);
             $view->with('currentRoles', $roles);
             $view->with('currentPermissions', $permissions);

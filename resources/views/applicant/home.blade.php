@@ -1,4 +1,10 @@
 @extends('layouts.vue-page')
 @section('content')
-    <h4>Application home</h4>
+    <application
+      :genders="{{ json_encode($genders) }}"
+      :countries="{{ json_encode($countries) }}"
+      :states="{{ json_encode($states) }}"
+      :lgas="{{ json_encode($lgas) }}"
+      :religions="{{ json_encode($religions) }}"
+      :applicant="{{ json_encode($applicant) }}" />
 @endsection

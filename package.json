@@ -31,6 +31,7 @@
         "vue-bootstrap-datetimepicker": "^5.0.0",
         "vue-chartjs": "^3.4.0",
         "vue-event-calendar": "^1.5.2",
+        "vue-flatpickr-component": "^8.1.2",
         "vue-full-calendar": "^2.6.1",
         "vue-good-table": "^2.13.3",
         "vue-hljs": "^1.0.0",

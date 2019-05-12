@@ -9,7 +9,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}">
 
-        <title>{{ $pageTitle }}</title>
+        <title>Nocen - {{ $pageTitle }}</title>
 
         <link href="{{ asset('css/app.css') }}" rel="stylesheet" type="text/css">
     </head>
