@@ -135,12 +135,12 @@ export default {
         gender_id: this.localApplicant.gender_id,
         religion_id: this.localApplicant.religion_id,
         is_disabled: this.localApplicant.is_disabled,
+        dob: this.localApplicant.dob,
       }
 
       axios
         .put(`/a/update-applicant/${this.localApplicant.id}`, copy)
         .then(({ data: { data } }) => {
-          console.log(data);
           this.localApplicant = data;
           this.$emit('update-applicant', data);
         });

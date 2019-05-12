@@ -24,7 +24,7 @@ class CreateApplicationBioTable extends Migration
             $table->integer('gender_id')->unsigned()->index()->nullable();
             $table->string('phone', 20);
             $table->string('email', 200);
-            $table->dateTime('dob')->nullable();
+            $table->date('dob')->nullable();
             $table->boolean('is_disabled')->default('0');
             $table->integer('nationality_id')->unsigned()->index()->nullable();
             $table->integer('state_id')->unsigned()->index()->nullable();
