@@ -19,7 +19,13 @@
 
             <payment-confirmation v-if="secondStep && !paymentConfirmed" :applicant="localApplicant" />
 
-            <h4 v-if="thirdStep">Third step</h4>
+            <next-of-kin
+              v-if="thirdStep"
+              @nok="updateNextOfKins"
+              :applicant="localApplicant"
+              :genders="genders" />
+
+            <h4 v-if="fourthStep">Fourth step</h4>
           </div>
         </div>
         <div class="mt-4">
@@ -35,6 +41,7 @@ import Page from './Page';
 import PageTitle from '../components/header/PageTitle';
 import ApplicationBiodata from '../components/application/Biodata';
 import PaymentConfirmation from '../components/application/PaymentConfirmation';
+import NextOfKin from '../components/application/NextOfKin';
 
 export default {
   name: 'Application',
@@ -42,7 +49,8 @@ export default {
     Page,
     PageTitle,
     ApplicationBiodata,
-    PaymentConfirmation
+    PaymentConfirmation,
+    NextOfKin
   },
   props: ['applicant', 'genders', 'countries', 'states', 'lgas', 'religions'],
   data() {
@@ -55,10 +63,11 @@ export default {
     pageTitle() {
       if (this.firstStep) return 'Biodata';
       if (this.secondStep) return 'Payment confirmation';
+      if (this.thirdStep) return 'Next of kin';
       return '';
     },
     nextLabel() {
-      if (this.step < 3) return 'Next';
+      if (this.step < 5) return 'Next';
       return 'Finish';
     },
     firstStep() {
@@ -70,6 +79,9 @@ export default {
     thirdStep() {
       return this.step === 3;
     },
+    fourthStep() {
+      return this.step === 4;
+    },
     canPrev() {
       return this.step > 1;
     },
@@ -77,6 +89,8 @@ export default {
       if (this.firstStep) return this.firstStepDone;
 
       if (this.secondStep) return this.secondStepDone;
+
+      if (this.thirdStep) return this.thirdStepDone;
 
       return false;
     },
@@ -106,23 +120,29 @@ export default {
         /^\d{4}-\d{2}-\d{2}$/.test(dob);
     },
     secondStepDone() {
+      return true; // TODO: Implement
+    },
+    thirdStepDone() {
+      return !!this.localApplicant.next_of_kins.length;
+    },
+    fourthStepDone() {
       return false;
     },
     paymentConfirmed() {
-      return false;
+      return true; // TODO: Implement
     }
   },
   created() {
     if (this.firstStepDone) ++this.step;
     if (this.secondStepDone) ++this.step;
+    if (this.thirdStepDone) ++this.step;
   },
   methods: {
     next() {
-      if (this.firstStep) {
-        this.$refs.biodata.saveBiodata();
+      if (this.firstStep) this.$refs.biodata.saveBiodata();
 
-        if (this.paymentConfirmed) ++this.step;
-      }
+      if (this.paymentConfirmed) ++this.step;
+
       ++this.step;
     },
     prev() {
@@ -131,6 +151,9 @@ export default {
     },
     updateApplicant(obj) {
       this.localApplicant = obj;
+    },
+    updateNextOfKins(kins) {
+      this.localApplicant.next_of_kins = kins;
     }
   }
 }

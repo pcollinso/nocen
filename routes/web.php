@@ -31,6 +31,7 @@ Route::group(['middleware' => ['query_log']], function () {
 
     Route::group(['middleware' => ['auth']], function () {
       Route::get('options/towns/{stateId}', ['uses' => '\App\Http\Controllers\OptionController@towns', 'as' => 'towns']);
+      Route::get('options/relationships', ['uses' => '\App\Http\Controllers\OptionController@relationships', 'as' => 'relationships']);
 
       Route::match(['get', 'post'], 'logout', ['uses' => '\App\Http\Controllers\Auth\LoginController@logout', 'as' => 'logout']);
       Route::get('dashboard', ['uses' => '\App\Http\Controllers\HomeController@index', 'as' => 'dashboard']);
@@ -41,6 +42,8 @@ Route::group(['middleware' => ['query_log']], function () {
       Route::group(['middleware' => ['role:applicant']], function () {
         Route::get('a/home', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@index', 'as' => 'applicant.index']);
         Route::put('a/update-applicant/{id}', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@updateApplicant', 'as' => 'applicant.updateApplicant']);
+        Route::post('a/next-of-kins', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@addNextOfKin', 'as' => 'applicant.addNextOfKin']);
+        Route::delete('a/next-of-kins/{id}', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@removeNextOfKin', 'as' => 'applicant.removeNextOfKin']);
       });
 
       Route::group(['middleware' => ['role:superadmin']], function () {

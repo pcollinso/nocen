@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Relationship;
 use App\Models\Town;
 
 class OptionController extends Controller
@@ -13,5 +14,10 @@ class OptionController extends Controller
     return response()->json([
       'towns' => Town::where('state_id', $stateId)->get()
     ]);
+  }
+
+  public function relationships()
+  {
+    return response()->json([ 'data' => Relationship::all() ]);
   }
 }

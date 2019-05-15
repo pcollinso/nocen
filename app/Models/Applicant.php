@@ -19,7 +19,12 @@ class Applicant extends Authenticatable
 
     public function getAuthIdentifierName()
     {
-        return 'j_regno';
+      return 'j_regno';
+    }
+
+    public function nextOfKins()
+    {
+      return $this->hasMany(NextOfKin::class, 'application_id', 'id');
     }
 
     public function getAuthIdentifier()
