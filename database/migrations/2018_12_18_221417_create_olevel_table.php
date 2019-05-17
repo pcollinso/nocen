@@ -16,7 +16,6 @@ class CreateOlevelTable extends Migration
         Schema::create('sch_olevel', function (Blueprint $table) {
             $table->increments('id');
             $table->string('olevel_name', 100);
-            $table->integer('status')->default('1');
             $table->unique('olevel_name', 'unique_olevel_name');
         });
     }

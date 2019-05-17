@@ -2,15 +2,15 @@
   <div>
     <div class="form-group">
       <label>Surname *</label>
-      <input type="text" class="form-control" v-model="form.nok_surname">
+      <input type="text" class="form-control" v-model="form.surname">
     </div>
     <div class="form-group">
       <label>First name *</label>
-      <input type="text" class="form-control" v-model="form.nok_first_name">
+      <input type="text" class="form-control" v-model="form.first_name">
     </div>
     <div class="form-group">
       <label>Middle name</label>
-      <input type="text" class="form-control" v-model="form.nok_middle_name">
+      <input type="text" class="form-control" v-model="form.middle_name">
     </div>
     <div class="form-group">
       <label>Gender *</label>
@@ -41,9 +41,9 @@
       <tbody>
         <tr v-for="(k, idx) in kins" :key="k.id">
           <td>{{ idx + 1 }}</td>
-          <td>{{ k.nok_surname }}</td>
-          <td>{{ k.nok_first_name }}</td>
-          <td>{{ k.nok_middle_name }}</td>
+          <td>{{ k.surname }}</td>
+          <td>{{ k.first_name }}</td>
+          <td>{{ k.middle_name }}</td>
           <td>{{ k.gender.gender_name }}</td>
           <td>{{ k.relationship.relationship }}</td>
           <td>
@@ -65,9 +65,9 @@ export default {
       relationships: [],
       relationship: null,
       form: {
-        nok_surname: this.applicant.surname,
-        nok_first_name: '',
-        nok_middle_name: '',
+        surname: this.applicant.surname,
+        first_name: '',
+        middle_name: '',
         relationship_id: 0,
         gender_id: 0,
         institution_id: this.applicant.institution_id,
@@ -76,8 +76,8 @@ export default {
   },
   computed: {
     formOk() {
-      return !!this.form.nok_surname &&
-        !!this.form.nok_first_name &&
+      return !!this.form.surname &&
+        !!this.form.first_name &&
         !!this.form.gender_id &&
         !!this.form.relationship_id;
     }
@@ -92,9 +92,9 @@ export default {
   },
   methods: {
     addKin() {
-      this.form.nok_surname = this.form.nok_surname.trim().toUpperCase();
-      this.form.nok_first_name = this.form.nok_first_name.trim().toUpperCase();
-      this.form.nok_middle_name = this.form.nok_middle_name.trim().toUpperCase();
+      this.form.surname = this.form.surname.trim().toUpperCase();
+      this.form.first_name = this.form.first_name.trim().toUpperCase();
+      this.form.middle_name = this.form.middle_name.trim().toUpperCase();
 
       axios
         .post(`/a/next-of-kins`, this.form)
@@ -102,9 +102,9 @@ export default {
           this.kins.push(data);
           this.form.gender_id = 0;
           this.form.relationship_id = 0;
-          this.form.nok_surname = this.applicant.surname;
-          this.form.nok_first_name = '';
-          this.form.nok_middle_name = '';
+          this.form.surname = this.applicant.surname;
+          this.form.first_name = '';
+          this.form.middle_name = '';
 
           this.$emit('nok', this.kins);
         });

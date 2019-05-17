@@ -75,14 +75,14 @@ class ApplicationController extends Controller
   {
     $data = $this->request->all();
 
-    if (empty($data['nok_middle_name'])) unset($data['nok_middle_name']);
+    if (empty($data['middle_name'])) unset($data['middle_name']);
 
     $data['application_id'] = auth()->user()->id;
 
     $validator = Validator::make($data, [
-      'nok_surname' => 'required|string',
-      'nok_first_name' => 'required|string',
-      'nok_middle_name' => 'string',
+      'surname' => 'required|string',
+      'first_name' => 'required|string',
+      'middle_name' => 'string',
       'institution_id' => 'exists:sup_institution,id',
       'nationality_id' => 'exists:sup_country,id',
       'relationship_id' => 'exists:sup_relationships,id',
