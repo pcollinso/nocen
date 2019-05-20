@@ -55,5 +55,64 @@ class ApplicantTableSeeder extends Seeder
       ];
 
       DB::table('sch_application_nof')->insert($data);
+
+      $data = [
+        [
+          'institution_id' => 1,
+          'application_id' => $applicant->id,
+          'exam_school' => 'TEST SCHOOL',
+          'olevel_id' => 1,
+          'year' => 2019,
+          'exam_reg' => '12345',
+          'sub1' => 2,
+          'sub2' => 3,
+          'sub3' => 9,
+          'sub4' => 25,
+          'sub5' => 7,
+          'sub6' => 13,
+          'sub7' => 4,
+          'sub8' => 6,
+          'sub9' => 5,
+          'gd1' => 2,
+          'gd2' => 3,
+          'gd3' => 3,
+          'gd4' => 2,
+          'gd5' => 2,
+          'gd6' => 2,
+          'gd7' => 2,
+          'gd8' => 2,
+          'gd9' => 2,
+          'status' => 1,
+        ],
+        [
+          'institution_id' => 1,
+          'application_id' => $applicant->id,
+          'exam_school' => 'TEST SCHOOL',
+          'olevel_id' => 1,
+          'year' => 2019,
+          'exam_reg' => '54321',
+          'sub1' => 2,
+          'sub2' => 3,
+          'sub3' => 4,
+          'sub4' => 5,
+          'sub5' => 6,
+          'sub6' => 7,
+          'sub7' => 10,
+          'sub8' => 8,
+          'sub9' => 25,
+          'gd1' => 1,
+          'gd2' => 1,
+          'gd3' => 1,
+          'gd4' => 1,
+          'gd5' => 1,
+          'gd6' => 1,
+          'gd7' => 1,
+          'gd8' => 1,
+          'gd9' => 1,
+          'status' => 1,
+        ]
+      ];
+
+      DB::table('sch_application_qualf')->insert($data);
     }
 }

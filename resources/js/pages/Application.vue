@@ -30,7 +30,13 @@
               @olevel="updateOlevel"
               :applicant="localApplicant"
               :olevels="olevels" />
-            <h4 v-if="fifthStep">Fifth step</h4>
+
+            <utme
+              v-if="fifthStep"
+              @utme="updateUtme"
+              :applicant="localApplicant" />
+
+            <h4 v-if="sixthStep">Sixth step</h4>
           </div>
         </div>
         <div class="mt-4">
@@ -48,6 +54,7 @@ import ApplicationBiodata from '../components/application/Biodata';
 import PaymentConfirmation from '../components/application/PaymentConfirmation';
 import NextOfKin from '../components/application/NextOfKin';
 import Olevel from '../components/application/Olevel';
+import Utme from '../components/application/Utme';
 
 export default {
   name: 'Application',
@@ -57,7 +64,8 @@ export default {
     ApplicationBiodata,
     PaymentConfirmation,
     NextOfKin,
-    Olevel
+    Olevel,
+    Utme
   },
   props: ['applicant', 'genders', 'countries', 'states', 'lgas', 'religions', 'olevels'],
   data() {
@@ -72,10 +80,11 @@ export default {
       if (this.secondStep) return 'Payment confirmation';
       if (this.thirdStep) return 'Next of kin';
       if (this.fourthStep) return 'O Level';
+      if (this.fifthStep) return 'UTME';
       return 'Under construction';
     },
     nextLabel() {
-      if (this.step < 5) return 'Next';
+      if (this.step < 6) return 'Next';
       return 'Finish';
     },
     firstStep() {
@@ -93,17 +102,18 @@ export default {
     fifthStep() {
       return this.step === 5;
     },
+    sixthStep() {
+      return this.step === 6;
+    },
     canPrev() {
       return this.step > 1;
     },
     canNext() {
       if (this.firstStep) return this.firstStepDone;
-
       if (this.secondStep) return this.secondStepDone;
-
       if (this.thirdStep) return this.thirdStepDone;
-
       if (this.fourthStep) return this.fourthStepDone;
+      if (this.fifthStep) return this.fifthStepDone;
 
       return false;
     },
@@ -142,6 +152,9 @@ export default {
       return !!this.localApplicant.olevel_results.length;
     },
     fifthStepDone() {
+      return !!this.localApplicant.utme;
+    },
+    sixthStepDone() {
       return false;
     },
     paymentConfirmed() {
@@ -153,6 +166,7 @@ export default {
     if (this.secondStepDone) ++this.step;
     if (this.thirdStepDone) ++this.step;
     if (this.fourthStepDone) ++this.step;
+    if (this.fifthStepDone) ++this.step;
   },
   methods: {
     next() {
@@ -176,6 +190,9 @@ export default {
     },
     updateOlevel(res) {
       this.localApplicant.olevel_results = res;
+    },
+    updateUtme(res) {
+      this.localApplicant.utme = res;
     }
   }
 };

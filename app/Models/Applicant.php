@@ -32,6 +32,11 @@ class Applicant extends Authenticatable
       return $this->hasMany(OlevelResult::class, 'application_id', 'id');
     }
 
+    public function utme()
+    {
+      return $this->hasOne(UtmeResult::class, 'application_id', 'id');
+    }
+
     public function getAuthIdentifier()
     {
         return $this->j_regno;

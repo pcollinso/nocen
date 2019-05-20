@@ -247,7 +247,7 @@ export default {
         gd8: null,
         gd9: null,
         exam_reg: '',
-        application_id: this.applicant.application_id,
+        application_id: this.applicant.id,
         institution_id: this.applicant.institution_id,
       }
     };

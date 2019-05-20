@@ -12,6 +12,7 @@ use App\Models\State;
 use App\Models\NextOfKin;
 use App\Models\OlevelQualification;
 use App\Models\OlevelResult;
+use App\Models\UtmeResult;
 
 class ApplicationController extends Controller
 {
@@ -19,7 +20,7 @@ class ApplicationController extends Controller
   {
     $applicant = auth()
       ->user()
-      ->load('nextOfKins', 'nextOfKins.relationship', 'nextOfKins.gender', 'olevelResults', 'olevelResults.examType');
+      ->load('nextOfKins', 'nextOfKins.relationship', 'nextOfKins.gender', 'olevelResults', 'olevelResults.examType', 'utme');
 
     $genders = Gender::all();
     $countries = Country::all();
@@ -173,6 +174,50 @@ class ApplicationController extends Controller
       return response()->json([
         'success' => false,
         'message' => 'Could not delete Olevel result'
+      ], 400);
+    }
+  }
+
+  public function addUtmeResult()
+  {
+    $data = $this->request->all();
+
+    $data['application_id'] = auth()->user()->id;
+
+    $validator = Validator::make($data, [
+      'institution_id' => 'exists:sup_institution,id',
+      'application_id' => 'exists:sch_application_bio,id',
+    ]);
+
+    if ($validator->fails()) {
+      return response()->json([
+        'success' => false,
+        'message' => 'Validation failed',
+        'data' => $validator->errors()->messages()
+      ], 422);
+    }
+
+    return response()->json([
+      'success' => true,
+      'message' => 'UTME result added',
+      'data' => UtmeResult::create($data)
+    ]);
+  }
+
+  public function removeUtmeResult($id)
+  {
+    $deleted = UtmeResult::where('id', $id)->where('application_id', auth()->user()->id)->delete();
+
+    if ($deleted)
+    {
+      return response()->json([
+        'success' => true,
+      ], 204);
+    } else
+    {
+      return response()->json([
+        'success' => false,
+        'message' => 'Could not delete UTME result'
       ], 400);
     }
   }

@@ -14,19 +14,18 @@ class CreateApplicationUtmeTable extends Migration
     public function up()
     {
         Schema::create('sch_application_utme', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->bigInteger('institution_id')->unsigned()->index();
             $table->bigInteger('application_id')->unsigned()->index();
-            $table->string('j_regno', 20);
             $table->integer('year');
-            $table->integer('sub1')->default('1')->unsigned()->index();
-            $table->integer('sub2')->default('1')->unsigned()->index();
-            $table->integer('sub3')->default('1')->unsigned()->index();
-            $table->integer('sub4')->default('1')->unsigned()->index();
-            $table->unsignedDecimal('score1', 4, 2);
-            $table->unsignedDecimal('score2', 4, 2);
-            $table->unsignedDecimal('score3', 4, 2);
-            $table->unsignedDecimal('score4', 4, 2);
+            $table->integer('sub1')->unsigned()->index();
+            $table->integer('sub2')->unsigned()->index();
+            $table->integer('sub3')->unsigned()->index();
+            $table->integer('sub4')->unsigned()->index();
+            $table->tinyInteger('score1')->unsigned();
+            $table->tinyInteger('score2')->unsigned();
+            $table->tinyInteger('score3')->unsigned();
+            $table->tinyInteger('score4')->unsigned();
             $table->timestamps();
 
             $table->foreign('institution_id')->references('id')->on('sup_institution')->onDelete('cascade')->onUpdate('cascade');

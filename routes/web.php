@@ -48,6 +48,8 @@ Route::group(['middleware' => ['query_log']], function () {
         Route::delete('a/next-of-kins/{id}', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@removeNextOfKin', 'as' => 'applicant.removeNextOfKin']);
         Route::post('a/olevel-results', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@addOlevelResult', 'as' => 'applicant.addOlevelResult']);
         Route::delete('a/olevel-results/{id}', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@removeOlevelResult', 'as' => 'applicant.removeOlevelResult']);
+        Route::post('a/utme-result', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@addUtmeResult', 'as' => 'applicant.addUtmeResult']);
+        Route::delete('a/utme-result/{id}', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@removeUtmeResult', 'as' => 'applicant.removeUtmeResult']);
       });
 
       Route::group(['middleware' => ['role:superadmin']], function () {
