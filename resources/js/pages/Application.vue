@@ -25,7 +25,12 @@
               :applicant="localApplicant"
               :genders="genders" />
 
-            <h4 v-if="fourthStep">Fourth step</h4>
+            <olevel
+              v-if="fourthStep"
+              @olevel="updateOlevel"
+              :applicant="localApplicant"
+              :olevels="olevels" />
+            <h4 v-if="fifthStep">Fifth step</h4>
           </div>
         </div>
         <div class="mt-4">
@@ -42,6 +47,7 @@ import PageTitle from '../components/header/PageTitle';
 import ApplicationBiodata from '../components/application/Biodata';
 import PaymentConfirmation from '../components/application/PaymentConfirmation';
 import NextOfKin from '../components/application/NextOfKin';
+import Olevel from '../components/application/Olevel';
 
 export default {
   name: 'Application',
@@ -50,9 +56,10 @@ export default {
     PageTitle,
     ApplicationBiodata,
     PaymentConfirmation,
-    NextOfKin
+    NextOfKin,
+    Olevel
   },
-  props: ['applicant', 'genders', 'countries', 'states', 'lgas', 'religions'],
+  props: ['applicant', 'genders', 'countries', 'states', 'lgas', 'religions', 'olevels'],
   data() {
     return {
       localApplicant: this.applicant,
@@ -64,7 +71,8 @@ export default {
       if (this.firstStep) return 'Biodata';
       if (this.secondStep) return 'Payment confirmation';
       if (this.thirdStep) return 'Next of kin';
-      return '';
+      if (this.fourthStep) return 'O Level';
+      return 'Under construction';
     },
     nextLabel() {
       if (this.step < 5) return 'Next';
@@ -82,6 +90,9 @@ export default {
     fourthStep() {
       return this.step === 4;
     },
+    fifthStep() {
+      return this.step === 5;
+    },
     canPrev() {
       return this.step > 1;
     },
@@ -91,6 +102,8 @@ export default {
       if (this.secondStep) return this.secondStepDone;
 
       if (this.thirdStep) return this.thirdStepDone;
+
+      if (this.fourthStep) return this.fourthStepDone;
 
       return false;
     },
@@ -126,6 +139,9 @@ export default {
       return !!this.localApplicant.next_of_kins.length;
     },
     fourthStepDone() {
+      return !!this.localApplicant.olevel_results.length;
+    },
+    fifthStepDone() {
       return false;
     },
     paymentConfirmed() {
@@ -136,12 +152,15 @@ export default {
     if (this.firstStepDone) ++this.step;
     if (this.secondStepDone) ++this.step;
     if (this.thirdStepDone) ++this.step;
+    if (this.fourthStepDone) ++this.step;
   },
   methods: {
     next() {
-      if (this.firstStep) this.$refs.biodata.saveBiodata();
+      if (this.firstStep) {
+        this.$refs.biodata.saveBiodata();
 
-      if (this.paymentConfirmed) ++this.step;
+        if (this.paymentConfirmed) ++this.step;
+      }
 
       ++this.step;
     },
@@ -154,7 +173,10 @@ export default {
     },
     updateNextOfKins(kins) {
       this.localApplicant.next_of_kins = kins;
+    },
+    updateOlevel(res) {
+      this.localApplicant.olevel_results = res;
     }
   }
-}
+};
 </script>

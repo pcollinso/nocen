@@ -6,5 +6,6 @@
       :states="{{ json_encode($states) }}"
       :lgas="{{ json_encode($lgas) }}"
       :religions="{{ json_encode($religions) }}"
+      :olevels="{{ json_encode($olevels) }}"
       :applicant="{{ json_encode($applicant) }}" />
 @endsection

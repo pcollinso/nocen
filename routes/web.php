@@ -32,6 +32,8 @@ Route::group(['middleware' => ['query_log']], function () {
     Route::group(['middleware' => ['auth']], function () {
       Route::get('options/towns/{stateId}', ['uses' => '\App\Http\Controllers\OptionController@towns', 'as' => 'towns']);
       Route::get('options/relationships', ['uses' => '\App\Http\Controllers\OptionController@relationships', 'as' => 'relationships']);
+      Route::get('options/subjects', ['uses' => '\App\Http\Controllers\OptionController@subjects', 'as' => 'subjects']);
+      Route::get('options/olevel-grades', ['uses' => '\App\Http\Controllers\OptionController@olevelGrades', 'as' => 'olevelGrades']);
 
       Route::match(['get', 'post'], 'logout', ['uses' => '\App\Http\Controllers\Auth\LoginController@logout', 'as' => 'logout']);
       Route::get('dashboard', ['uses' => '\App\Http\Controllers\HomeController@index', 'as' => 'dashboard']);
@@ -44,6 +46,8 @@ Route::group(['middleware' => ['query_log']], function () {
         Route::put('a/update-applicant/{id}', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@updateApplicant', 'as' => 'applicant.updateApplicant']);
         Route::post('a/next-of-kins', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@addNextOfKin', 'as' => 'applicant.addNextOfKin']);
         Route::delete('a/next-of-kins/{id}', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@removeNextOfKin', 'as' => 'applicant.removeNextOfKin']);
+        Route::post('a/olevel-results', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@addOlevelResult', 'as' => 'applicant.addOlevelResult']);
+        Route::delete('a/olevel-results/{id}', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@removeOlevelResult', 'as' => 'applicant.removeOlevelResult']);
       });
 
       Route::group(['middleware' => ['role:superadmin']], function () {

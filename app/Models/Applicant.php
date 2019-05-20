@@ -27,6 +27,11 @@ class Applicant extends Authenticatable
       return $this->hasMany(NextOfKin::class, 'application_id', 'id');
     }
 
+    public function olevelResults()
+    {
+      return $this->hasMany(OlevelResult::class, 'application_id', 'id');
+    }
+
     public function getAuthIdentifier()
     {
         return $this->j_regno;

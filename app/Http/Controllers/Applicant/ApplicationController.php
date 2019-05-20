@@ -10,17 +10,23 @@ use App\Models\Lga;
 use App\Models\Religion;
 use App\Models\State;
 use App\Models\NextOfKin;
+use App\Models\OlevelQualification;
+use App\Models\OlevelResult;
 
 class ApplicationController extends Controller
 {
   public function index()
   {
-    $applicant = auth()->user()->load('nextOfKins', 'nextOfKins.relationship', 'nextOfKins.gender');
+    $applicant = auth()
+      ->user()
+      ->load('nextOfKins', 'nextOfKins.relationship', 'nextOfKins.gender', 'olevelResults', 'olevelResults.examType');
+
     $genders = Gender::all();
     $countries = Country::all();
     $states = State::all();
     $lgas = Lga::all();
     $religions = Religion::all();
+    $olevels = OlevelQualification::all();
 
     return view('applicant.home', [
       'applicant' => $applicant,
@@ -29,6 +35,7 @@ class ApplicationController extends Controller
       'states' => $states,
       'lgas' => $lgas,
       'religions' => $religions,
+      'olevels' => $olevels,
       'pageTitle' => 'Application'
     ]);
   }
@@ -121,6 +128,51 @@ class ApplicationController extends Controller
       return response()->json([
         'success' => false,
         'message' => 'Could not delete next of kin'
+      ], 400);
+    }
+  }
+
+  public function addOlevelResult()
+  {
+    $data = $this->request->all();
+
+    $data['application_id'] = auth()->user()->id;
+
+    $validator = Validator::make($data, [
+      'institution_id' => 'exists:sup_institution,id',
+      'application_id' => 'exists:sch_application_bio,id',
+      'olevel_id' => 'exists:sch_olevel,id',
+    ]);
+
+    if ($validator->fails()) {
+      return response()->json([
+        'success' => false,
+        'message' => 'Validation failed',
+        'data' => $validator->errors()->messages()
+      ], 422);
+    }
+
+    return response()->json([
+      'success' => true,
+      'message' => 'Olevel result added',
+      'data' => OlevelResult::create($data)->load('examType')
+    ]);
+  }
+
+  public function removeOlevelResult($id)
+  {
+    $deleted = OlevelResult::where('id', $id)->where('application_id', auth()->user()->id)->delete();
+
+    if ($deleted)
+    {
+      return response()->json([
+        'success' => true,
+      ], 204);
+    } else
+    {
+      return response()->json([
+        'success' => false,
+        'message' => 'Could not delete Olevel result'
       ], 400);
     }
   }
