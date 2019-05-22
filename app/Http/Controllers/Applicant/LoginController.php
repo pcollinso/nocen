@@ -60,7 +60,6 @@ class LoginController extends Controller
 
       unset($data['token']);
       $data['user_password'] = Passcode::hashPassword($data['user_password']);
-      $data['active'] = 1;
 
       $applicant = Applicant::createApplicant($data);
 
