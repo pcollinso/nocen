@@ -36,12 +36,15 @@
               @utme="updateUtme"
               :applicant="localApplicant" />
 
-            <h4 v-if="sixthStep">Sixth step</h4>
+            <passport
+              v-if="sixthStep"
+              @passport="updatePassport"
+              :applicant="localApplicant" />
           </div>
         </div>
         <div class="mt-4">
-          <button :disabled="!canPrev" @click.stop="prev()" class="btn btn-secondary">Previous</button>
-          <button :disabled="!canNext" @click.stop="next()" class="btn btn-secondary">{{ nextLabel }}</button>
+          <button v-if="canPrev" @click.stop="prev()" class="btn btn-secondary">Previous</button>
+          <button v-if="canNext" @click.stop="next()" class="btn btn-secondary">{{ nextLabel }}</button>
         </div>
       </div>
     </div>
@@ -55,6 +58,7 @@ import PaymentConfirmation from '../components/application/PaymentConfirmation';
 import NextOfKin from '../components/application/NextOfKin';
 import Olevel from '../components/application/Olevel';
 import Utme from '../components/application/Utme';
+import Passport from '../components/application/Passport';
 
 export default {
   name: 'Application',
@@ -65,7 +69,8 @@ export default {
     PaymentConfirmation,
     NextOfKin,
     Olevel,
-    Utme
+    Utme,
+    Passport
   },
   props: ['applicant', 'genders', 'countries', 'states', 'lgas', 'religions', 'olevels'],
   data() {
@@ -81,7 +86,7 @@ export default {
       if (this.thirdStep) return 'Next of kin';
       if (this.fourthStep) return 'O Level';
       if (this.fifthStep) return 'UTME';
-      return 'Under construction';
+      if (this.sixthStep) return 'Passport';
     },
     nextLabel() {
       if (this.step < 6) return 'Next';
@@ -155,7 +160,7 @@ export default {
       return !!this.localApplicant.utme;
     },
     sixthStepDone() {
-      return false;
+      return !!this.localApplicant.passport;
     },
     paymentConfirmed() {
       return true; // TODO: Implement
@@ -193,6 +198,9 @@ export default {
     },
     updateUtme(res) {
       this.localApplicant.utme = res;
+    },
+    updatePassport(url) {
+      this.localApplicant.passport = url;
     }
   }
 };

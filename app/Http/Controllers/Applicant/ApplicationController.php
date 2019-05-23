@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Applicant;
 
 use Validator;
+use Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Applicant;
 use App\Models\Country;
@@ -220,5 +221,25 @@ class ApplicationController extends Controller
         'message' => 'Could not delete UTME result'
       ], 400);
     }
+  }
+
+  public function uploadPassport()
+  {
+    $applicant = auth()->user();
+
+    // Delete previous passport if exists
+    if (! empty($applicant->passport)) Storage::disk('public')->delete('passports/' . $applicant->passport);
+
+    $path = Storage::disk('public')->put('passports', $this->request->file('passport'), 'public');
+
+    $applicant->passport = str_ireplace('passports/', '', $path);
+    $applicant->save();
+
+
+    return response()->json([
+      'success' => true,
+      'message' => 'Passport uploaded',
+      'path' => $applicant->passport
+    ]);
   }
 }
