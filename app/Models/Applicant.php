@@ -22,6 +22,21 @@ class Applicant extends Authenticatable
       return 'j_regno';
     }
 
+    public function institution()
+    {
+        return $this->belongsTo(Institution::class);
+    }
+
+    public function field()
+    {
+        return $this->belongsTo(Field::class);
+    }
+
+    public function admission()
+    {
+        return $this->hasOne(Admission::class, 'application_id', 'id');
+    }
+
     public function nextOfKins()
     {
       return $this->hasMany(NextOfKin::class, 'application_id', 'id');
@@ -35,6 +50,36 @@ class Applicant extends Authenticatable
     public function utme()
     {
       return $this->hasOne(UtmeResult::class, 'application_id', 'id');
+    }
+
+    public function gender()
+    {
+      return $this->belongsTo(Gender::class);
+    }
+
+    public function religion()
+    {
+      return $this->belongsTo(Religion::class);
+    }
+
+    public function nationality()
+    {
+      return $this->belongsTo(Country::class, 'nationality_id', 'id');
+    }
+
+    public function state()
+    {
+      return $this->belongsTo(State::class);
+    }
+
+    public function lga()
+    {
+      return $this->belongsTo(Lga::class);
+    }
+
+    public function town()
+    {
+      return $this->belongsTo(Town::class);
     }
 
     public function getAuthIdentifier()

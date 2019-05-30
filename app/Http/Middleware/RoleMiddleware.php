@@ -19,7 +19,7 @@ class RoleMiddleware
         {
             // Check if the user has any of the listed permissions
             $hasAnyPermission = array_reduce($permissions, function ($can, $perm) use ($request) {
-                return $can || $request->user()->can($perm);
+                return $can || $request->user()->hasPermissionTo($perm);
             });
 
             if(!$hasAnyPermission)

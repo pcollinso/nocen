@@ -40,6 +40,10 @@
               v-if="sixthStep"
               @passport="updatePassport"
               :applicant="localApplicant" />
+
+            <div v-if="seventhStep">
+              <h4>Your application has been {{ grantedMsg }}</h4>
+            </div>
           </div>
         </div>
         <div class="mt-4">
@@ -88,8 +92,13 @@ export default {
       if (this.fifthStep) return 'UTME';
       if (this.sixthStep) return 'Passport';
     },
+    grantedMsg() {
+      if (! this.localApplicant.locked) return '';
+      return this.localApplicant.admission.admitted ? 'granted' : 'denied';
+    },
     nextLabel() {
-      if (this.step < 6) return 'Next';
+      const last = this.localApplicant.locked ? 7 : 6;
+      if (this.step < last) return 'Next';
       return 'Finish';
     },
     firstStep() {
@@ -110,6 +119,9 @@ export default {
     sixthStep() {
       return this.step === 6;
     },
+    seventhStep() {
+      return this.step === 7;
+    },
     canPrev() {
       return this.step > 1;
     },
@@ -119,6 +131,7 @@ export default {
       if (this.thirdStep) return this.thirdStepDone;
       if (this.fourthStep) return this.fourthStepDone;
       if (this.fifthStep) return this.fifthStepDone;
+      if (this.sixthStep) return !!this.localApplicant.locked;
 
       return false;
     },
@@ -160,7 +173,10 @@ export default {
       return !!this.localApplicant.utme;
     },
     sixthStepDone() {
-      return !!this.localApplicant.passport;
+      return !!this.localApplicant.locked;
+    },
+    seventhStepDone() {
+      return false;
     },
     paymentConfirmed() {
       return true; // TODO: Implement
@@ -172,11 +188,12 @@ export default {
     if (this.thirdStepDone) ++this.step;
     if (this.fourthStepDone) ++this.step;
     if (this.fifthStepDone) ++this.step;
+    if (this.sixthStepDone) ++this.step;
   },
   methods: {
     next() {
       if (this.firstStep) {
-        this.$refs.biodata.saveBiodata();
+        if (! this.localApplicant.locked) this.$refs.biodata.saveBiodata();
 
         if (this.paymentConfirmed) ++this.step;
       }

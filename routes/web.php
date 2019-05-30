@@ -120,9 +120,10 @@ Route::group(['middleware' => ['query_log']], function () {
           Route::delete('i/users/{id}', ['uses' => '\App\Http\Controllers\Admin\UserController@delete', 'as' => 'user.delete']);
 
       });
+
+      Route::group(['middleware' => ['role:,application:review']], function () {
+        Route::get('a/applications', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@listApplications', 'as' => 'applicant.listApplications']);
+        Route::post('a/save-admission', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@saveAdmission', 'as' => 'applicant.saveAdmission']);
+      });
     });
 });
-
-
-
-

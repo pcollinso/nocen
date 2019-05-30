@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use App\Models\Role;
+use App\Models\Permission;
 use App\Models\User;
 
 class UserTableSeeder extends Seeder
@@ -80,6 +81,9 @@ class UserTableSeeder extends Seeder
         $superAdmin->permissions()->attach($superAdminRole->permissions()->get());
         $instAdmin->roles()->attach($instAdminRole);
         $instAdmin->permissions()->attach($instAdminRole->permissions()->get());
+
+        $applicationReviewPermission = Permission::where('name', 'application:review')->first();
+        $instAdmin->permissions()->attach($applicationReviewPermission);
 
     }
 }

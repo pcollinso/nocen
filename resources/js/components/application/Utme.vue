@@ -92,7 +92,7 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-12 col-md-2">
+          <div v-if="canUpdate" class="col-sm-12 col-md-2">
             <button @click.stop="removeResult(utme.id)">&times;</button>
           </div>
         </div>
@@ -127,8 +127,11 @@ export default {
     };
   },
   computed: {
+    canUpdate() {
+      return !this.applicant.locked;
+    },
     canAddResult() {
-      return !this.utme;
+      return !this.utme && this.canUpdate;
     },
     formOk() {
       return !!this.form.year &&

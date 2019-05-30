@@ -29,6 +29,7 @@ class ApplicantTableSeeder extends Seeder
         'email' => 'test@applicant.com',
         'dob' => '2000-05-01',
         'user_password' => 'da0feea11db421a7be1173895497e71f',
+        'passport' => '08WZImx6tKeaszVNRRlWTEoGlZxlYfC64lvvcvmk.jpeg',
       ];
 
       $applicant = Applicant::createApplicant($data);
@@ -114,5 +115,23 @@ class ApplicantTableSeeder extends Seeder
       ];
 
       DB::table('sch_application_qualf')->insert($data);
+
+      $data = [
+        [
+          'institution_id' => 1,
+          'application_id' => $applicant->id,
+          'year' => 2019,
+          'sub1' => 3,
+          'sub2' => 4,
+          'sub3' => 25,
+          'sub4' => 6,
+          'score1' => 80,
+          'score2' => 80,
+          'score3' => 80,
+          'score4' => 80
+        ]
+      ];
+
+      DB::table('sch_application_utme')->insert($data);
     }
 }

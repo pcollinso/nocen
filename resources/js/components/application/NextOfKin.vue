@@ -1,29 +1,31 @@
 <template>
   <div>
-    <div class="form-group">
-      <label>Surname *</label>
-      <input type="text" class="form-control" v-model="form.surname">
-    </div>
-    <div class="form-group">
-      <label>First name *</label>
-      <input type="text" class="form-control" v-model="form.first_name">
-    </div>
-    <div class="form-group">
-      <label>Middle name</label>
-      <input type="text" class="form-control" v-model="form.middle_name">
-    </div>
-    <div class="form-group">
-      <label>Gender *</label>
-      <select v-model="form.gender_id" class="form-control">
-        <option v-for="g in genders" :key="g.id" :value="g.id">{{ g.gender_name }}</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Relationship *</label>
-      <v-select v-model="relationship" :options="relationships" label="relationship" />
-    </div>
-    <div class="form-group">
-      <button @click.stop="addKin()" :disabled="!formOk">Add next of kin</button>
+    <div v-if="canUpdate">
+      <div class="form-group">
+        <label>Surname *</label>
+        <input type="text" class="form-control" v-model="form.surname">
+      </div>
+      <div class="form-group">
+        <label>First name *</label>
+        <input type="text" class="form-control" v-model="form.first_name">
+      </div>
+      <div class="form-group">
+        <label>Middle name</label>
+        <input type="text" class="form-control" v-model="form.middle_name">
+      </div>
+      <div class="form-group">
+        <label>Gender *</label>
+        <select v-model="form.gender_id" class="form-control">
+          <option v-for="g in genders" :key="g.id" :value="g.id">{{ g.gender_name }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Relationship *</label>
+        <v-select v-model="relationship" :options="relationships" label="relationship" />
+      </div>
+      <div class="form-group">
+        <button @click.stop="addKin()" :disabled="!formOk">Add next of kin</button>
+      </div>
     </div>
     <hr>
     <table class="table">
@@ -47,7 +49,7 @@
           <td>{{ k.gender.gender_name }}</td>
           <td>{{ k.relationship.relationship }}</td>
           <td>
-            <button @click.stop="removeKin(k.id, idx)">&times;</button>
+            <button v-if="canUpdate" @click.stop="removeKin(k.id, idx)">&times;</button>
           </td>
         </tr>
       </tbody>
@@ -75,6 +77,9 @@ export default {
     };
   },
   computed: {
+    canUpdate() {
+      return !this.applicant.locked;
+    },
     formOk() {
       return !!this.form.surname &&
         !!this.form.first_name &&

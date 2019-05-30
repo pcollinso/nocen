@@ -2,51 +2,85 @@
   <div>
     <div class="form-group">
       <label>Surname *</label>
-      <input type="text" class="form-control" v-model="localApplicant.surname">
+      <input :readonly="!canUpdate" type="text" class="form-control" v-model="localApplicant.surname">
     </div>
     <div class="form-group">
       <label>First name *</label>
-      <input type="text" class="form-control" v-model="localApplicant.first_name">
+      <input :readonly="!canUpdate" type="text" class="form-control" v-model="localApplicant.first_name">
     </div>
     <div class="form-group">
       <label>Middle name</label>
-      <input type="text" class="form-control" v-model="localApplicant.middle_name">
-    </div>
-    <div class="form-group">
-      <label>Gender *</label>
-      <select v-model="localApplicant.gender_id" class="form-control">
-        <option v-for="g in genders" :key="g.id" :value="g.id">{{ g.gender_name }}</option>
-      </select>
+      <input :readonly="!canUpdate" type="text" class="form-control" v-model="localApplicant.middle_name">
     </div>
     <div class="form-check">
-      <input type="checkbox" v-model="localApplicant.is_disabled" class="form-check-input">
+      <input :readonly="!canUpdate" type="checkbox" v-model="localApplicant.is_disabled" class="form-check-input">
       <label>Are you disabled?</label>
     </div>
-    <div class="form-group">
-      <label>Religion *</label>
-      <select v-model="localApplicant.religion_id" class="form-control">
-        <option v-for="r in religions" :key="r.id" :value="r.id">{{ r.religion_name }}</option>
-      </select>
+
+    <div v-if="canUpdate">
+      <div class="form-group">
+        <label>Gender *</label>
+        <select v-model="localApplicant.gender_id" class="form-control">
+          <option v-for="g in genders" :key="g.id" :value="g.id">{{ g.gender_name }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Religion *</label>
+        <select v-model="localApplicant.religion_id" class="form-control">
+          <option v-for="r in religions" :key="r.id" :value="r.id">{{ r.religion_name }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Nationality *</label>
+        <v-select v-model="country" :options="countries" label="country" />
+      </div>
+      <div class="form-group">
+        <label>State of origin *</label>
+        <v-select v-model="state" :options="filteredStates" label="state" />
+      </div>
+      <div class="form-group">
+        <label>LGA *</label>
+        <v-select v-model="lga" :options="filteredLgas" label="name" />
+      </div>
+      <div class="form-group">
+        <label>Town *</label>
+        <v-select v-model="town" :options="filteredTowns" label="town" />
+      </div>
+      <div class="form-group">
+        <label>Date of birth *</label>
+        <flat-pickr :config="dateConfig" v-model="localApplicant.dob" type="text" class="form-control" />
+      </div>
     </div>
-    <div class="form-group">
-      <label>Nationality *</label>
-      <v-select v-model="country" :options="countries" label="country" />
-    </div>
-    <div class="form-group">
-      <label>State of origin *</label>
-      <v-select v-model="state" :options="filteredStates" label="state" />
-    </div>
-    <div class="form-group">
-      <label>LGA *</label>
-      <v-select v-model="lga" :options="filteredLgas" label="name" />
-    </div>
-    <div class="form-group">
-      <label>Town *</label>
-      <v-select v-model="town" :options="filteredTowns" label="town" />
-    </div>
-    <div class="form-group">
-      <label>Date of birth *</label>
-      <flat-pickr :config="dateConfig" v-model="localApplicant.dob" type="text" class="form-control" />
+    <div v-else>
+      <div class="form-group">
+        <label>Gender</label>
+        <input readonly type="text" class="form-control" :value="gender.gender_name">
+      </div>
+      <div class="form-group">
+        <label>Religion</label>
+        <input readonly type="text" class="form-control" :value="religion.religion_name">
+      </div>
+      <div class="form-group">
+        <label>Nationality</label>
+        <input readonly type="text" class="form-control" :value="country.country">
+      </div>
+      <div class="form-group">
+        <label>State of origin</label>
+        <input readonly type="text" class="form-control" :value="state.state">
+      </div>
+      <div class="form-group">
+        <label>LGA</label>
+        <input readonly type="text" class="form-control" :value="lga.name">
+      </div>
+      <div class="form-group">
+        <label>Town</label>
+        <input readonly type="text" class="form-control" :value="town.town">
+      </div>
+      <div class="form-group">
+        <label>Date of birth</label>
+        <input readonly type="text" class="form-control" :value="localApplicant.dob">
+      </div>
+
     </div>
   </div>
 </template>
@@ -68,10 +102,15 @@ export default {
       state: {},
       lga: {},
       town: {},
+      religion: {},
+      gender: {},
       towns: []
     };
   },
   computed: {
+    canUpdate() {
+      return !this.localApplicant.locked;
+    },
     filteredStates() {
       return this.country.id ?
         this.states.filter(({ country_id }) => country_id == this.country.id) :
@@ -105,6 +144,8 @@ export default {
     this.country = this.countries.find(({ id }) => id === this.localApplicant.nationality_id) || {};
     this.state = this.states.find(({ id }) => id === this.localApplicant.state_id) || {};
     this.lga = this.lgas.find(({ id }) => id === this.localApplicant.lga_id) || {};
+    this.religion = this.religions.find(({ id }) => id === this.localApplicant.religion_id) || {};
+    this.gender = this.genders.find(({ id }) => id === this.localApplicant.gender_id) || {};
 
     if (this.state.id) this.fetchTowns();
   },

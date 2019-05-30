@@ -125,7 +125,6 @@ class RoleAndPermissionSeeder extends Seeder
         $assignRole->roles()->attach($this->instAdmin);
 
 
-
         $createPermission = new Permission();
         $createPermission->name = 'permission:create';
         $createPermission->save();
@@ -152,5 +151,9 @@ class RoleAndPermissionSeeder extends Seeder
         $assignPermission->save();
         $assignPermission->roles()->attach($this->superAdmin);
         $assignPermission->roles()->attach($this->instAdmin);
+
+        $applicationReviewPermission = new Permission();
+        $applicationReviewPermission->name = 'application:review';
+        $applicationReviewPermission->save();
     }
 }

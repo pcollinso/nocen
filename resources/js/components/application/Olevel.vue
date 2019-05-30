@@ -1,7 +1,6 @@
 <template>
   <div>
     <div v-if="canAddResult">
-
       <div class="form-group">
         <label>Year</label>
         <select v-model="form.year" class="form-control">
@@ -204,7 +203,7 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-12 col-md-2">
+          <div v-if="canUpdate" class="col-sm-12 col-md-2">
             <button @click.stop="removeResult(r.id, idx)">&times;</button>
           </div>
         </div>
@@ -253,8 +252,11 @@ export default {
     };
   },
   computed: {
+    canUpdate() {
+      return !this.applicant.locked;
+    },
     canAddResult() {
-      return this.olevelResults.length < 2;
+      return this.olevelResults.length < 2 && this.canUpdate;
     },
     formOk() {
       return !!this.form.exam_school &&

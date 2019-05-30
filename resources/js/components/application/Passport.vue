@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="form-group">
+    <div v-if="canUpload" class="form-group">
       <label>Upload passport</label>
       <input type="file" class="form-control" accept="image/jpeg, image/png" @change="onFileInput">
     </div>
@@ -22,6 +22,9 @@ export default {
     };
   },
   computed: {
+    canUpload() {
+      return !this.applicant.locked;
+    },
     passportSrc() {
       return `/storage/passports/${this.passportUrl}`;
     }
