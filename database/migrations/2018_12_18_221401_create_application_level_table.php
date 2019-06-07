@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSemesterTable extends Migration
+class CreateApplicationLevelTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateSemesterTable extends Migration
      */
     public function up()
     {
-        Schema::create('sch_semester', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('semester_name', 100);
-            $table->integer('status')->default('1');
+        Schema::create('sys_application_level', function (Blueprint $table) {
+            $table->tinyIncrements('id');
+            $table->string('application_level', 100)->nullable();
+            $table->unique(['application_level'], 'DUPLICATE_RECORD');
         });
     }
 
@@ -27,6 +27,6 @@ class CreateSemesterTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sch_semester');
+        Schema::dropIfExists('sys_application_level');
     }
 }

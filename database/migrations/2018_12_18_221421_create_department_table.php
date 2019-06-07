@@ -15,9 +15,9 @@ class CreateDepartmentTable extends Migration
     {
         Schema::create('sch_department', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('institution_id')->nullable();
-            $table->bigInteger('programme_id')->nullable();
-            $table->bigInteger('faculty_id')->nullable();
+            $table->bigInteger('institution_id')->unsigned()->index();
+            $table->bigInteger('programme_id')->unsigned()->index();
+            $table->bigInteger('faculty_id')->unsigned()->index();
             $table->string('department_name', 200)->nullable();
             $table->string('department_abbrv', 50)->nullable();
             $table->string('department_code', 100)->nullable();
@@ -25,7 +25,10 @@ class CreateDepartmentTable extends Migration
             $table->string('last_modified_by', 50)->nullable();
             $table->tinyInteger('status')->default('1');
             $table->timestamps();
-            $table->unique(['institution_id','faculty_id','department_name'], 'DUPLICATE_RECORD');
+            $table->unique(['institution_id','programme_id','faculty_id','department_name'], 'DUPLICATE_RECORD');
+            $table->foreign('institution_id')->references('id')->on('sup_institution')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('programme_id')->references('id')->on('sch_programme')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('faculty_id')->references('id')->on('sch_faculty')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSemesterTable extends Migration
+class CreateFeeTypeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateSemesterTable extends Migration
      */
     public function up()
     {
-        Schema::create('sch_semester', function (Blueprint $table) {
+        Schema::create('sch_fee_type', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('semester_name', 100);
-            $table->integer('status')->default('1');
+            $table->string('fee_type', 100)->nullable();
+            $table->unique(['fee_type'], 'DUPLICATE_RECORD');
         });
     }
 
@@ -27,6 +27,6 @@ class CreateSemesterTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sch_semester');
+        Schema::dropIfExists('sch_fee_type');
     }
 }
