@@ -69,6 +69,13 @@ class DatabaseSeeder extends Seeder
           GeneralCourseTableSeeder::class,
           StaffCourseTableSeeder::class,
           ApplicantTableSeeder::class,
+          ApplicationLevelTableSeeder::class,
+          FeeTypeTableSeeder::class,
+          PaymentTypeTableSeeder::class,
+          FeeCheckExclusionTableSeeder::class,
+          FeeTableSeeder::class,
+          PaymentTableSeeder::class,
+
       ]);
       DB::commit();
       Model::reguard();
