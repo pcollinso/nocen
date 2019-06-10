@@ -74,7 +74,6 @@ class DatabaseSeeder extends Seeder
           PaymentTypeTableSeeder::class,
           FeeCheckExclusionTableSeeder::class,
           FeeTableSeeder::class,
-          PaymentTableSeeder::class,
 
       ]);
       DB::commit();
