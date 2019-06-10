@@ -52,3 +52,98 @@ sch_fee =>
                 'updated_by' => 2,
                 'active' => 1
 sup_users => this table is modified.unnecessary columns are removed.please adjust the codebase.
+
+3) procedure to check fee:
+a)provide form to collect confirmation_no for the claimed payment
+b)fetch the terminal_id field from sup_institution table and embed in the form
+c)append to this url http://etranzact.net/WebConnectPlus/query.jsp?TERMINAL_ID=8&CONFIRMATION_NO= respectively and make a curl
+d)check if $_POST['CONFIRMATION_NO'] exists in the sch_payment table, if exists, throw an error 'this confirmation_no is already used'
+
+e.g. of response : RECEIPT_NO=0701809211271298&PAYMENT_CODE=07025701271537524516863&MERCHANT_CODE=0701300039&TRANS_AMOUNT=1250.0&TRANS_DATE=2018/09/21 10:08:48&TRANS_DESCR=RESULT%20CHECKING%20FEE-86354555FF-OKEZIE%20CHIDIMMA&CUSTOMER_ID=86354555FF&BANK_CODE=070&BRANCH_CODE=130&SERVICE_ID=86354555FF&CUSTOMER_NAME=OKEZIE%20CHIDIMMA&CUSTOMER_ADDRESS=.&TELLER_ID=Ma.Okeke&USERNAME=N/A&PASSWORD=N/A&BANK_NAME=Fidelity%20Bank&BRANCH_NAME=NSUGBE%20BRANCH&CHANNEL_NAME=Bank&PAYMENT_METHOD_NAME=Cash&PAYMENT_CURRENCY=566&TRANS_TYPE=RC01&TRANS_FEE=0.0&TYPE_NAME=RESULT%20CHECKING%20FEE&LEAD_BANK_CODE=070&LEAD_BANK_NAME=Fidelity%20Bank
+
+				$URL = "https://www.etranzact.net/WebConnectPlus/query.jsp?TERMINAL_ID=" . $_POST['TERMINAL_ID'] . "&CONFIRMATION_NO=" . $_POST['CONFIRMATION_NO'];
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $URL);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $output = curl_exec($ch);
+                curl_close($ch);
+                urldecode($output);
+                if(!empty($output)){
+                    $arr = explode('&', $output);
+                    foreach ($arr as $r) {
+                        $arr1 = explode('=', $r);
+                        $main[$arr1[0]] = $arr1[1];
+                    }
+					$main['confirmation_no'] = $_POST['CONFIRMATION_NO'];
+					$main['terminal_id'] = $_POST['TERMINAL_ID'];
+
+                    if(!empty($TRANS_AMOUNT)){
+					$c = confirm_payment($main);
+                    if(!isset($c['error'])){
+                        // proceed to other things
+
+                    } else {$error = $c['error'];}
+                }else{$error='No response.Service error!';}
+                }else{$error='No response.Service error!';}
+
+methods:
+
+function confirm_payment($main){
+	- get the id of $main['TRANS_TYPE'] from the sys_payment_type table and store into $fee_type_id variable;
+	- if(is_student){
+	// fee_type_ids: application_fee is 1, result_checker is 2, acceptance_fee is 3, school_fee is 4.Note:
+		if(is_jambite or fresh student){
+
+			- $level_id = 1; // 100 level
+			- get_jambite_detail()
+			- check in sch_fee all fees configured where fee_type_id=$fee_type_id and application_level is by level=100 or for whole institution
+			- $j_regno = $main['CUSTOMER_ID'];
+			- $regno = null;
+
+		}elseif(is_regular){
+
+			- get_regular_detail()
+			from this detail you should have these: programme_id,faculty_id,department_id,field_id,level_id
+			- $level_id = level_id from above;
+			- check in sch_fee all fees configured where fee_type_id=$fee_type_id and application_level matches any of the student detail starting from low level to high level what this mean is that if a fee is configured for MATRIC_NO (which is the students reg) whose application_level is 2 from sys_application_level and same fee configured for faculty_id where same student exists, the fee applied for lower level supercedes.
+			- $j_regno = null;
+			- $regno = $main['CUSTOMER_ID'];
+		}
+		1) check the fee record whose amount = $main['TRANS_AMOUNT'] (most fees will appear thrice, records for each of the 3 payment types).The student is expected to make a payment corresponding to any of the 3.
+		payment types.
+		2) if this payment amount matches:
+			a)pick the row and get the payment_type_id into $payment_type_id, fee_id into $fee_id variables.
+			b)// insert into sch_payment table, use commented for the fields
+				$TRANS_AMOUNT = isset($main['TRANS_AMOUNT'])?$main['TRANS_AMOUNT']:''; // amount
+				$RECEIPT_NO = isset($main['RECEIPT_NO'])?$main['RECEIPT_NO']:''; // receipt_no
+				$PAYMENT_CODE = isset($main['PAYMENT_CODE'])?$main['PAYMENT_CODE']:''; // payment_code
+				$MERCHANT_CODE = isset($main['MERCHANT_CODE'])?$main['MERCHANT_CODE']:''; // merchant_code
+				$TRANS_DATE = isset($main['TRANS_DATE'])?$main['TRANS_DATE']:''; // payment_date
+				$TRANS_DESCR = isset($main['TRANS_DESCR'])?$main['TRANS_DESCR']:''; // payment_description
+				$CUSTOMER_ID = isset($main['CUSTOMER_ID'])?$main['CUSTOMER_ID']:''; // regno or j_regno
+				$BANK_CODE = isset($main['BANK_CODE'])?$main['BANK_CODE']:''; // cbn_code
+				$CUSTOMER_NAME = isset($main['CUSTOMER_NAME'])?$main['CUSTOMER_NAME']:''; // customer_name
+				$TELLER_ID = isset($main['TELLER_ID'])?$main['TELLER_ID']:''; // teller_id
+				$BANK_NAME = isset($main['BANK_NAME'])?$main['BANK_NAME']:''; // bank_name
+				$BRANCH_NAME = isset($main['BRANCH_NAME'])?$main['BRANCH_NAME']:''; // bank_branch
+				$PAYMENT_METHOD_NAME = isset($main['PAYMENT_METHOD_NAME'])?$main['PAYMENT_METHOD_NAME']:''; // payment_method
+				$PAYMENT_CURRENCY = isset($main['PAYMENT_CURRENCY'])?$main['PAYMENT_CURRENCY']:''; // payment_currency
+				$TYPE_NAME = isset($main['TYPE_NAME'])?$main['TYPE_NAME']:''; // payment_fee_type
+				$TRANS_TYPE = isset($main['TRANS_TYPE'])?$main['TRANS_TYPE']:''; //  transaction_type
+				$LEAD_BANK_CODE = isset($main['LEAD_BANK_CODE'])?$main['LEAD_BANK_CODE']:''; // lead_bank_code
+				$LEAD_BANK_NAME = isset($main['LEAD_BANK_NAME'])?$main['LEAD_BANK_NAME']:''; // lead_bank_name
+				$CONFIRMATION_NO = isset($main['CONFIRMATION_NO'])?$main['CONFIRMATION_NO']:''; // confirmation_no
+				$TERMINAL_ID = isset($main['TERMINAL_ID'])?$main['TERMINAL_ID']:''; // terminal_id
+				$institution_id = pick from session
+				$level_id = from above;
+				$fee_id = from 2.a) above;
+				$payment_type_id = from 2.a) above;
+				$j_regno = from above;
+				$regno = from above;
+				return inserted record;
+
+		3) if the payment amount do not match any record in the fee table, return array('error' => 'Payment amount: '.$TRANS_AMOUNT.' is invalid, please meet the school admin!'); //  it means the student paid an unaccepted amount.
+
+
+	}
+}
