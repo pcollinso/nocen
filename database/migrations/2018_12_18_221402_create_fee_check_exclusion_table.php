@@ -18,8 +18,9 @@ class CreateFeeCheckExclusionTable extends Migration
             $table->bigInteger('fee_type_id')->unsigned()->index();
             $table->string('j_regno', 20)->nullable();
             $table->string('regno', 20)->nullable();
+            $table->string('staff_code', 20)->nullable();
 
-            $table->unique(['fee_type_id','j_regno','regno'], 'DUPLICATE_RECORD');
+            $table->unique(['fee_type_id','j_regno','regno','staff_code'], 'DUPLICATE_RECORD');
             $table->foreign('fee_type_id')->references('id')->on('sch_fee_type')->onDelete('cascade')->onUpdate('cascade');
         });
     }
