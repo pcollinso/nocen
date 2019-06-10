@@ -1,0 +1,54 @@
+Terminal ID is 7009158828
+
+85091039DH
+Application pin is 07016445921531819629306 Amount is 2250
+Result checker pin is 07025708531537955700936 amount is 1250
+Acceptance pin is 07018538031539266504292 amount is 15250
+school fee pin is 07018536521539266630349 the amount is 77300
+
+85122411BB
+Application pin is 07016441811531747711131 Amount is 2250
+Result checker pin is 07018532601538488004284  amount is 1250
+Acceptance pin is 07018530271539269034219  amount is 15250
+school fee pin is 07018539701539269146016  the amount is 77300
+
+1)instructions
+terminal_id => get from sup_institution table
+course_staff_same_department,course_staff_same_faculty,course_staff_same_programme,course_staff_same_institution are set for an institution
+you can pay school fees with j_regno where level = 100, school fees are configured for levels and programmes.
+CRUD for sch_fee_type,sys_application_level may be created later, for now we can seed the tables.
+
+2)table explanations:
+sys_application_level => this table contain application_levels for actions e.g if a fee is created and applied to Faculty as application_level, then when the fee is used, it should check tomake sure the
+person affected belongs to the faculty_id in that row. i.e if application_level_id column is 7 then u should expect a value in the faculty_id field in the sch_fee table, if 8 then expect the student to
+belong to both faculty_id and same level within the faculty.
+sch_fee_check_exclusion => a fee setup in the sch_fee table can be excluded for some indivduals, matric_no, jambites or even staff.any person in this table will not be checked for this fee.
+sch_fee_type => contains all the possible fee types for the school.more can be created using CRUD or seeding directly into the table.
+sys_global_settings => contain data for the system, some keys like these course_staff_same_department,course_staff_same_faculty,course_staff_same_programme,course_staff_same_institution are now resident in institution table.
+sup_institution => now modified to contain these fields, so please adjust the institution setup to contain these fields,default value is 1 for the fields apart from terminal_id
+				'terminal_id' => '7009158828',
+                'course_staff_same_department' => 1,
+                'course_staff_same_faculty' => 1,
+                'course_staff_same_programme' => 1,
+                'course_staff_same_institution' => 1,
+sys_payment_type => contains the 3 payment types: full,first installment and final payment.so during fee check, you have to check if the amount paid corresponds to any of this payment type for the fee.
+sch_payment => log each payment confirmed to this table.the fields can be obtained from the response from the payment gateway.
+sch_fee =>
+                'fee_type_id' => 4,  // the fee type
+                'fee_description' => 'school fees for level 600, first-payment and not one-off',
+                'amount' => 40250,
+                'is_one_off' => 0, // some fees are one-off meaning their payment_type must be full e.g acceptance and application fees, school fees or hostel fees may be paid twice.
+                'application_level_id' => 10, // this fee is configured for programme/level so all 600 level students in degree (programme_id = 1 is degree)
+                'institution_id' => '0',
+                'programme_id' => '1',
+                'faculty_id' => '0',
+                'department_id' => '0',
+                'field_id' => '0',
+                'level_id' => 6,
+                'payment_type_id' => 2, // this fee is first-payment, so probably other fees are setup for same 600 level students in degree but different payment_types
+                'j_regno' => '0',
+                'regno' => '0',
+                'created_by' => 2,
+                'updated_by' => 2,
+                'active' => 1
+sup_users => this table is modified.unnecessary columns are removed.please adjust the codebase.
