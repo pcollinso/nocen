@@ -32,6 +32,10 @@ class InstitutionTypeTableSeeder extends Seeder
             [
                 'id' => 5,
                 'institution_type' => 'DOCTORATE',
+            ],
+            [
+                'id' => 6,
+                'institution_type' => 'HIGHER INSTITUTION',
             ]
         ];
 

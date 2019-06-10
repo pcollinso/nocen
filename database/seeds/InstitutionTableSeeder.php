@@ -17,20 +17,22 @@ class InstitutionTableSeeder extends Seeder
                 'id' => 1,
                 'institution_code' => 'N225',
                 'institution_name' => 'NWAFOR ORIZU COLLEGE OF EDUCTAION, NSUGBE',
-                'institution_type_id' => 4,
+                'institution_type_id' => 6,
                 'logo' => 'N225',
                 'address' => 'NSUGBE',
                 'city' => 'NSUGBE',
-                'lga' => '',
+                'lga' => 'IDEMILI NORTH',
                 'state' => 'ANAMBRA',
                 'phone' => '08011111111112',
                 'email' => 'support@nocen.edu.ng',
-                'employee_2wa' => 0,
-                'staff_2wa' => 0,
+                'terminal_id' => '7009158828',
+                'course_staff_same_department' => 1,
+                'course_staff_same_faculty' => 1,
+                'course_staff_same_programme' => 1,
+                'course_staff_same_institution' => 1,
                 'entered_by' => '13',
                 'last_modified_by' => '13',
-                'active' => 1,
-                'callback_url' => 'localhost:8080/veripay-service/accept_payment_callback.php',
+                'active' => 1
             ]
         ];
 
