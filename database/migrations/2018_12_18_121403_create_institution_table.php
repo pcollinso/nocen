@@ -25,12 +25,14 @@ class CreateInstitutionTable extends Migration
             $table->string('state', 45)->nullable();
             $table->string('phone', 15)->nullable();
             $table->string('email', 165)->nullable();
-            $table->boolean('employee_2wa')->default('0');
-            $table->boolean('staff_2wa')->default('0');
+            $table->string('terminal_id', 100)->nullable();
+            $table->boolean('course_staff_same_department')->default('1');
+            $table->boolean('course_staff_same_faculty')->default('1');
+            $table->boolean('course_staff_same_programme')->default('1');
+            $table->boolean('course_staff_same_institution')->default('1');
             $table->string('entered_by', 50)->nullable();
             $table->string('last_modified_by', 50)->nullable();
             $table->boolean('active')->default('1');
-            $table->string('callback_url', 255)->default('localhost:8080/veripay-service/accept_payment_callback.php');
             $table->timestamps();
             $table->unique('institution_code', 'DUPLICATE_INSTITUTION_CODE');
             $table->unique('institution_name', 'DUPLICATE_INSTITUTION_NAME');
