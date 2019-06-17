@@ -17,6 +17,7 @@ class CreateApplicationBioTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('institution_id')->unsigned()->index();
             $table->bigInteger('field_id')->unsigned()->index();
+            $table->string('application_code', 20);
             $table->string('j_regno', 20);
             $table->string('surname', 200)->nullable();
             $table->string('first_name', 200)->nullable();
