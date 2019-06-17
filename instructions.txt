@@ -19,6 +19,11 @@ you can pay school fees with j_regno where level = 100, school fees are configur
 CRUD for sch_fee_type,sys_application_level may be created later, for now we can seed the tables.
 
 2)table explanations:
+sch_programme: require_jamb => during application, if 1 then expect and use j_regno else use application_code.Put application_code into j_regno field too for programmes that do not need jamb.
+require_result_check_fee => check this during application if 1 and relax the check if 0
+require_application_fee => check this during application if 1 and relax the check if 0
+require_acceptance_fee => check this during application if 1 and relax the check if 0
+require_school_fee => check this during application if 1 and relax the check if 0
 sys_application_level => this table contain application_levels for actions e.g if a fee is created and applied to Faculty as application_level, then when the fee is used, it should check tomake sure the
 person affected belongs to the faculty_id in that row. i.e if application_level_id column is 7 then u should expect a value in the faculty_id field in the sch_fee table, if 8 then expect the student to
 belong to both faculty_id and same level within the faculty.
@@ -53,7 +58,32 @@ sch_fee =>
                 'active' => 1
 sup_users => this table is modified.unnecessary columns are removed.please adjust the codebase.
 
-3) procedure to check fee:
+3)
+after application (applicant dashboard):
+-applicants logs in and see "check result" on click, if result is out he will be prompted to pay result_check_fee if this fee is configured for the programme on sch_programme table
+-applicant pay fee and check result
+-if admitted, applicant is prompted to pay acceptance fee after which he can view admission status and see the field/department he is finally admitted into(bcos admin can change his dept or field during admission process)
+-student can accept or reject admission.
+-after paying acceptance fee,applicant can print admission letters and biodata(admin can also do it for student)
+-after acceptance fee paid and confirmed, display a button "GET REG. NO", if clicked provide a form for school fees confirmation.if confirmed, display message "an admin need to generate reg. number for u"
+
+after application (admin dashboard):
+-admin logs in and see application.
+-admin can screen and set result for applicants
+-admin can admit qualified applicants
+-during admission process admin can change the student field/department/faculty but not programme.
+-if admitted admin can print admission letters and biodata for student too
+-display "Generate Reg. No for student" if school fees have been confirmed otherwise display, "school fees not yet paid".On click, generate reg.no for student.requires an admin password or admin security level.
+
+after application (programmer):
+-as application starts, check these fields from the programme selected to determine what fees to request confirmation on: require_jamb,require_result_check_fee,require_application_fee,require_acceptance_fee ,require_school_fee
+-see procedure to confirm fee below in item 4)
+-as the application starts,track the applicant progress which includes his payments confirmed so as to know what is displayed in his dashboard
+-the applicant dashboard should be a step by step menu system where he sees his tasks and the ones completed or not.once admitted he cannot edit his biodata any longer
+-record each payment confirmed in the sch_payment table
+-when reg. no. is generated for student, move applicant data from sch_application table to sch_student tables including olevel results.set a default password for student (12345678) and prompt to change it.
+
+4) procedure to check fee/confirm fee:
 a)provide form to collect confirmation_no for the claimed payment
 b)fetch the terminal_id field from sup_institution table and embed in the form
 c)append to this url http://etranzact.net/WebConnectPlus/query.jsp?TERMINAL_ID=8&CONFIRMATION_NO= respectively and make a curl
@@ -89,9 +119,9 @@ e.g. of response : RECEIPT_NO=0701809211271298&PAYMENT_CODE=07025701271537524516
 methods:
 
 function confirm_payment($main){
-	- get the id of $main['TRANS_TYPE'] from the sys_payment_type table and store into $fee_type_id variable;
+	- $main['TRANS_TYPE'] is a payment_type so get the id of $main['TRANS_TYPE'] from the sys_payment_type table and store into $fee_type_id variable;
 	- if(is_student){
-	// fee_type_ids: application_fee is 1, result_checker is 2, acceptance_fee is 3, school_fee is 4.Note:
+	// e.g of fee_type_ids: application_fee is 1, result_checker is 2, acceptance_fee is 3, school_fee is 4.Note:
 		if(is_jambite or fresh student){
 
 			- $level_id = 1; // 100 level
@@ -104,14 +134,14 @@ function confirm_payment($main){
 
 			- get_regular_detail()
 			from this detail you should have these: programme_id,faculty_id,department_id,field_id,level_id
-			- $level_id = level_id from above;
-			- check in sch_fee all fees configured where fee_type_id=$fee_type_id and application_level matches any of the student detail starting from low level to high level what this mean is that if a fee is configured for MATRIC_NO (which is the students reg) whose application_level is 2 from sys_application_level and same fee configured for faculty_id where same student exists, the fee applied for lower level supercedes.
+			- $level_id = level_id from get_regular_detail();
+			- check in sch_fee all fees configured where fee_type_id=$fee_type_id and application_level matches any of the student detail starting from low level to high level what this mean is that if a fee is configured for MATRIC_NO (which is the students reg) whose application_level is 2 from sys_application_level and same fee configured for faculty_id where same student exists, the fee applied for lower level (which is MATRIC_NO) supercedes.
 			- $j_regno = null;
-			- $regno = $main['CUSTOMER_ID'];
+			- here $regno = $main['CUSTOMER_ID'];
 		}
-		1) check the fee record whose amount = $main['TRANS_AMOUNT'] (most fees will appear thrice, records for each of the 3 payment types).The student is expected to make a payment corresponding to any of the 3.
+		1) check the fee record from sch_fee table, whose amount = $main['TRANS_AMOUNT'] (most fees will appear thrice, i.e records for each of the 3 payment types).The student is expected to make a payment corresponding to any of the 3 (i.e full payment,first installment and final payments).
 		payment types.
-		2) if this payment amount matches:
+		2) if this payment amount matches any of the 3 payment_types in the sch_fee table:
 			a)pick the row and get the payment_type_id into $payment_type_id, fee_id into $fee_id variables.
 			b)// insert into sch_payment table, use commented for the fields
 				$TRANS_AMOUNT = isset($main['TRANS_AMOUNT'])?$main['TRANS_AMOUNT']:''; // amount
