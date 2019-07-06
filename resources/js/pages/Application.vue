@@ -161,7 +161,7 @@ export default {
         /^\d{4}-\d{2}-\d{2}$/.test(dob);
     },
     secondStepDone() {
-      return true; // TODO: Implement
+      return false; // TODO: Implement
     },
     thirdStepDone() {
       return !!this.localApplicant.next_of_kins.length;
