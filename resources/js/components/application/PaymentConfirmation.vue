@@ -22,13 +22,13 @@ export default {
   },
   methods: {
     confirmPayment() {
-      // axios
-      //   .put(`/a/update-applicant/${this.localApplicant.id}`, copy)
-      //   .then(({ data: { data } }) => {
-      //     console.log(data);
-      //     this.localApplicant = data;
-      //     this.$emit('update-applicant', data);
-      //   });
+      axios
+        .post(`/a/${this.localApplicant.id}/confirm-application-fee`)
+        .then(({ data: { data } }) => {
+          console.log(data);
+          // this.localApplicant = data;
+          // this.$emit('update-applicant', data);
+        });
     }
   }
 };

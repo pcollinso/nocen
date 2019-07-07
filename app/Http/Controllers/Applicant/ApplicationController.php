@@ -5,6 +5,7 @@ use Validator;
 use Storage;
 use DB;
 use App\Http\Controllers\Controller;
+use App\Http\EtranzactClient;
 use App\Models\Applicant;
 use App\Models\Admission;
 use App\Models\Country;
@@ -26,7 +27,7 @@ class ApplicationController extends Controller
     $applicant = auth()
       ->user()
       ->load('nextOfKins', 'nextOfKins.relationship', 'nextOfKins.gender', 'olevelResults', 'olevelResults.examType',
-      'utme', 'admission');
+      'utme', 'admission', 'institution');
 
     $genders = Gender::all();
     $countries = Country::all();
@@ -333,5 +334,58 @@ class ApplicationController extends Controller
       'message' => 'Admission created',
       'data' => Admission::create($data)
     ]);
+  }
+
+  public function confirmApplicationFee($id)
+  {
+    $data = $this->request->all();
+    $numericValidator = ['confirmation_no' => 'required|numeric'];
+    $uniquenessValidator = ['confirmation_no' => 'exists:sch_payment,confirmation_no'];
+
+    if (Validator::make($data, $numericValidator)->fails())
+    {
+      return response()->json([
+        'success' => false,
+        'message' => 'Validation failed',
+        'data' => $validator->errors()->messages()
+      ], 422);
+    }
+
+    // We want to ensure this code hasn't been used before.
+    // Since Laravel only has a validator to check for existence, so
+    // the validation should fail if it hasn't been used
+    if (!Validator::make($data, $uniquenessValidator)->fails())
+    {
+      return response()->json([
+        'success' => false,
+        'message' => 'Validation failed',
+        'data' => $validator->errors()->messages()
+      ], 422);
+    }
+
+
+    $applicant = auth()->user()->loadMissing('institution');
+
+    $paymentResponse = EtranzactClient::getPayment($applicant->institution->terminal_id, $data['confirmation_no']);
+
+    if (EtranzactClient::isErrorResponse($paymentResponse))
+    {
+      return response()->json([
+        'success' => false,
+        'message' => 'Payment record not found',
+        'data' => $validator->errors()->messages()
+      ], 422);
+    }
+
+    // TODO: Plug in payment confirmation
+    // $confirmed = confirm_payment($paymentResponse);
+    $confirmed = true;
+
+    if ($confirmed)
+    {
+      return response()->json(['success' => true, 'message' => 'Application payment confirmed']);
+    }
+
+    return response()->json(['success' => false, 'message' => 'Application payment not confirmed'], 400);
   }
 }

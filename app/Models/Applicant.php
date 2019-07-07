@@ -12,7 +12,7 @@ class Applicant extends Authenticatable
     protected $table = 'sch_application_bio';
     protected $hidden = ['user_password'];
     protected $guarded = [];
-    protected $appends = ['full_name'];
+    protected $appends = ['full_name', 'application_fee'];
 
     protected $roles_table = 'applicant_roles';
     protected $permissions_table = 'applicant_permissions';
@@ -82,6 +82,16 @@ class Applicant extends Authenticatable
       return $this->belongsTo(Town::class);
     }
 
+    public function payments()
+    {
+      return $this->hasMany(Payment::class, 'j_regno', 'j_regno');
+    }
+
+    public function applicationFee()
+    {
+      return $this->payments->where('fee_id', 1)->first();
+    }
+
     public function getAuthIdentifier()
     {
         return $this->j_regno;
@@ -95,6 +105,11 @@ class Applicant extends Authenticatable
     public function getFullNameAttribute()
     {
       return $this->first_name .  (!empty($this->middle_name) ? " $this->middle_name" : "") . " $this->surname";
+    }
+
+    public function getApplicationFeeAttribute()
+    {
+      return $this->applicationFee();
     }
 
     public static function phoneExists($inst, $phone)
