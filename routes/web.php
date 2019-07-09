@@ -17,6 +17,8 @@ Route::group(['middleware' => ['query_log']], function () {
         return view('home');
     });
 
+    Route::get('test', ['uses' => '\App\Http\Controllers\PaymentController@test', 'as' => 'test']);
+
     Route::get('/welcome', function () {
         return view('welcome');
     });
