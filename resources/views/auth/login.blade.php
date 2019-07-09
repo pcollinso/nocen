@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="shortcut icon" href="/images/favicon.ico">
+        <link rel="shortcut icon" href="/images/favicon.png">
 
         <title>Laravel</title>
 
@@ -14,7 +14,10 @@
         <div class="flex-center position-ref full-height">
 
             <div id="app">
-              <Login />
+              <Login
+                  :error="{{ json_encode($errorMsg) }}"
+                  :step_value="{{ $step ? json_encode($step) : 1 }}"
+              />
 
             </div>
         </div>
