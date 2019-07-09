@@ -37,4 +37,10 @@ class Student extends Authenticatable
     {
         return $this->middle_name ? "$this->first_name $this->middle_name $this->surname" : "$this->first_name $this->surname";
     }
+
+    public function getUserTypeAttribute()
+    {
+        return "student";
+    }
+
 }

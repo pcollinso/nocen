@@ -67,4 +67,10 @@ class Staff extends Authenticatable
     {
         return $this->hasOne(User::class);
     }
+
+    public function getUserTypeAttribute()
+    {
+        return "staff";
+    }
+
 }

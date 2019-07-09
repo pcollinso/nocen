@@ -133,4 +133,10 @@ class Applicant extends Authenticatable
       $applicant->roles()->attach(Role::where('name', 'applicant')->first());
       return $applicant;
     }
+
+    public function getUserTypeAttribute()
+    {
+        return "applicant";
+    }
+
 }

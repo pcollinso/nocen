@@ -47,4 +47,11 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Staff::class);
     }
+
+    public function getUserTypeAttribute()
+    {
+        return "admin";
+    }
+
+
 }

@@ -23,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         view()->composer('*', function ($view) {
+            $user_type = auth()->user() ? auth()->user()->user_type : 'guest';
             $name = auth()->user() ? auth()->user()->full_name : 'Guest User';
             $roles = auth()->user() ? auth()->user()->roles()->get() : [];
             $permissions = auth()->user() ? auth()->user()->permissions()->get() : [];
@@ -31,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
             $view->with('currentRoles', $roles);
             $view->with('currentPermissions', $permissions);
             $view->with('pageTitle', $pageTitle);
+            $view->with('currentUserType', $user_type);
         });
     }
 
