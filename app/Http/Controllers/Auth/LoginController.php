@@ -7,6 +7,7 @@ use Route;
 use Validator;
 use App\Http\Controllers\Controller;
 use App\Utils\Passcode;
+use App\Utils\Utility;
 
 class LoginController extends Controller
 {
@@ -14,24 +15,24 @@ class LoginController extends Controller
     public function login()
     {
         $errorMsg = '';
-
+        $step = 1;
         if ($this->request->isMethod('post')) {
             $creds = array_intersect_key($this->request->all(), ['login' => 1, 'password' => 1]);
             $user = $this->userProvider->retrieveByCredentials($creds);
             $creds['remember'] = (bool) $this->request->input('remember');
-
             if ($user) {
+                $step = 2;
                 if (Auth::attempt($creds, $creds['remember'])) {
-                  if ($user->hasRole('applicant')) return redirect()->route('applicant.index');
-
-                  return redirect('dashboard');
+                    if ($user->hasRole('applicant')) return redirect()->route('applicant.index');
+                    return redirect('dashboard');
+                }else{
+                    $errorMsg = 'User not authenticated';
                 }
             } else {
                 $errorMsg = 'User not found';
             }
         }
-
-        return view('auth.login', ['errorMsg' => $errorMsg]);
+        return view('auth.login', ['errorMsg' => !empty($errorMsg) ? Utility::parseErrorArray([$errorMsg]) : "", 'step' => $step]);
     }
 
     public function logout()
