@@ -24,10 +24,14 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a href="/dashboard/v2" class="navbar-brand">
+        <!--<a href="/dashboard/v2" class="navbar-brand">
           <span class="navbar-logo"></span>
           <b>Color</b> Admin
-        </a>
+        </a>-->
+          <a href="/" class="navbar-brand">
+              <img src="/images/logo.png"  alt="logo"/>
+              NOCEN
+          </a>
         <button
           type="button"
           class="navbar-toggle"
