@@ -19,11 +19,11 @@ class CreateStudentNofTable extends Migration
             $table->bigInteger('student_id')->unsigned()->index();
             $table->string('nok_surname', 45);
             $table->string('nok_first_name', 45);
-            $table->string('nok_middle_name', 45);
+            $table->string('nok_middle_name', 45)->nullable();
             $table->bigInteger('relationship_id')->unsigned()->index();
             $table->integer('gender_id')->unsigned()->index();
-            $table->string('entered_by', 50);
-            $table->string('last_modified_by', 50);
+            $table->string('entered_by', 50)->nullable();
+            $table->string('last_modified_by', 50)->nullable();
             $table->boolean('locked')->default('0');
             $table->timestamps();
 
