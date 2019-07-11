@@ -43,4 +43,59 @@ class Student extends Authenticatable
         return "student";
     }
 
+    public function field()
+    {
+        return $this->belongsTo(Field::class);
+    }
+
+    public function institution()
+    {
+        return $this->belongsTo(Institution::class);
+    }
+
+    public function nextOfKins()
+    {
+        return $this->hasMany(StudentNextOfKin::class, 'student_id', 'id');
+    }
+
+    public function olevelResults()
+    {
+        return $this->hasMany(StudentOlevelResult::class, 'student_id', 'id');
+    }
+
+    public function gender()
+    {
+        return $this->belongsTo(Gender::class);
+    }
+
+    public function religion()
+    {
+        return $this->belongsTo(Religion::class);
+    }
+
+    public function nationality()
+    {
+        return $this->belongsTo(Country::class, 'nationality_id', 'id');
+    }
+
+    public function state()
+    {
+        return $this->belongsTo(State::class);
+    }
+
+    public function lga()
+    {
+        return $this->belongsTo(Lga::class);
+    }
+
+    public function town()
+    {
+        return $this->belongsTo(Town::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'regno', 'regno');
+    }
+
 }
