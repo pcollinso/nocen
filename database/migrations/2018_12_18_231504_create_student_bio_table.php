@@ -19,6 +19,7 @@ class CreateStudentBioTable extends Migration
             $table->string('regno', 20);
             $table->bigInteger('institution_id')->unsigned()->index();
             $table->bigInteger('field_id')->unsigned()->index();
+            $table->bigInteger('level_id')->unsigned()->index();
             $table->string('surname', 200)->nullable();
             $table->string('first_name', 200)->nullable();
             $table->string('middle_name', 200)->nullable();
@@ -55,6 +56,7 @@ class CreateStudentBioTable extends Migration
             $table->foreign('institution_id')->references('id')->on('sup_institution')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('application_id')->references('id')->on('sch_application_bio')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('field_id')->references('id')->on('sch_field')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('level_id')->references('id')->on('sch_level')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
