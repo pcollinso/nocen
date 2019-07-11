@@ -28,12 +28,12 @@ class Utility
 
     public static function make_get_request($url, $headers = [])
     {
-        return php::make_request(['url' => $url, 'headers' => $headers, 'method' => 'GET']);
+        return self::make_request(['url' => $url, 'headers' => $headers, 'method' => 'GET']);
     }
 
     public static function make_post_request($params, $url, $headers)
     {
-        return php::make_request(['body' => $params, 'url' => $url, 'headers' => $headers, 'method' => 'POST']);
+        return self::make_request(['body' => $params, 'url' => $url, 'headers' => $headers, 'method' => 'POST']);
     }
 
     public static function make_request(array $params)
@@ -70,7 +70,7 @@ class Utility
     }
 
     public static function parseErrorArray($errors) {
-        $d = "<ul class=\"alert alert-warning\">";
+        $d = "<ul class=\"alert alert-warning\" style=\"list-style-type: none\">";
         foreach ($errors as $err){
             $d .= "<li>".$err."</li>";
         }
@@ -84,7 +84,7 @@ class Utility
 
 
     public static function getTP($p) {
-        return php::pauline($p);
+        return self::pauline($p);
     }
 
     public static function generatePassword(array $data)
@@ -94,7 +94,7 @@ class Utility
             $defaultPassword = Str::random(10);
             $userStr = "(email: {$data['email']}, phone: {$data['phone']})";
             Log::warning("Assigned '$defaultPassword' as default password to $userStr");
-            return php::makePassword($defaultPassword);
+            return self::makePassword($defaultPassword);
         }
         return false;
     }
