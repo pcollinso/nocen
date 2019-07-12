@@ -24,13 +24,23 @@ class RoleMiddleware
 
             if(!$hasAnyPermission)
             {
-                abort(404);
+                if ($request->ajax())
+                {
+                  return response()->json(['error' => 'Unauthorized'], 403);
+                }
+
+                abort(403);
             }
         } else
         {
             if(!$request->user()->hasRole($role))
             {
-                abort(404);
+                if ($request->ajax())
+                {
+                  return response()->json(['error' => 'Unauthorized'], 403);
+                }
+
+                abort(403);
             }
         }
 
