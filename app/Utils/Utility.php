@@ -101,7 +101,7 @@ class Utility
 
     public static function makePassword($password = 'Password')
     {
-        return array('password' => $password, 'temp_password' => php::paul($password), 'plain_password' => $password, 'laravel_encrypted' => Hash::make($password));
+        return array('password' => $password, 'temp_password' => self::paul($password), 'plain_password' => $password, 'laravel_encrypted' => Hash::make($password));
     }
 
     public static function paul($data)
