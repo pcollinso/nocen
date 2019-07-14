@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Applicant;
 use Validator;
 use Storage;
 use DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\EtranzactClient;
+use App\Utils\PaymentConfirmation;
 use App\Models\Applicant;
 use App\Models\Admission;
 use App\Models\Country;
@@ -257,6 +259,7 @@ class ApplicationController extends Controller
     ]);
   }
 
+  // TODO: Refactor
   public function listApplications()
   {
     $applicationTable = (new Applicant)->getTable();
@@ -336,33 +339,9 @@ class ApplicationController extends Controller
     ]);
   }
 
-  public function confirmApplicationFee($id)
+  public function confirmApplicationFee()
   {
     $data = $this->request->all();
-    $numericValidator = ['confirmation_no' => 'required|numeric'];
-    $uniquenessValidator = ['confirmation_no' => 'exists:sch_payment,confirmation_no'];
-
-    if (Validator::make($data, $numericValidator)->fails())
-    {
-      return response()->json([
-        'success' => false,
-        'message' => 'Validation failed',
-        'data' => $validator->errors()->messages()
-      ], 422);
-    }
-
-    // We want to ensure this code hasn't been used before.
-    // Since Laravel only has a validator to check for existence, so
-    // the validation should fail if it hasn't been used
-    if (!Validator::make($data, $uniquenessValidator)->fails())
-    {
-      return response()->json([
-        'success' => false,
-        'message' => 'Validation failed',
-        'data' => $validator->errors()->messages()
-      ], 422);
-    }
-
 
     $applicant = auth()->user()->loadMissing('institution');
 
@@ -372,20 +351,18 @@ class ApplicationController extends Controller
     {
       return response()->json([
         'success' => false,
-        'message' => 'Payment record not found',
-        'data' => $validator->errors()->messages()
-      ], 422);
+        'message' => 'Payment record not found'
+      ], 400);
     }
 
-    // TODO: Plug in payment confirmation
-    // $confirmed = confirm_payment($paymentResponse);
-    $confirmed = true;
+    ['success' => $success, 'message' => $msg, 'data' => $data] =
+      PaymentConfirmation::confirmApplicationFee($applicant, $paymentResponse);
 
-    if ($confirmed)
+    if ($success)
     {
-      return response()->json(['success' => true, 'message' => 'Application payment confirmed']);
+      return response()->json(['success' => $success, 'message' => $msg, 'payment' => $data]);
     }
 
-    return response()->json(['success' => false, 'message' => 'Application payment not confirmed'], 400);
+    return response()->json(['success' => $success, 'message' => $msg], 400);
   }
 }
