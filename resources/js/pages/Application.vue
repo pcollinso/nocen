@@ -17,7 +17,7 @@
               :religions="religions"
               :lgas="lgas" />
 
-            <payment-confirmation v-if="secondStep && !paymentConfirmed" :applicant="localApplicant" />
+            <payment-confirmation @payment-confirmed="paymentConfirmed" v-if="secondStep && !secondStepDone" :applicant="localApplicant" />
 
             <next-of-kin
               v-if="thirdStep"
@@ -161,7 +161,9 @@ export default {
         /^\d{4}-\d{2}-\d{2}$/.test(dob);
     },
     secondStepDone() {
-      return false; // TODO: Implement
+      const { localApplicant:{ application_fee } } = this;
+
+      return !!application_fee && !!application_fee.amount;
     },
     thirdStepDone() {
       return !!this.localApplicant.next_of_kins.length;
@@ -177,35 +179,42 @@ export default {
     },
     seventhStepDone() {
       return false;
-    },
-    paymentConfirmed() {
-      return true; // TODO: Implement
     }
   },
   created() {
-    if (this.firstStepDone) ++this.step;
-    if (this.secondStepDone) ++this.step;
-    if (this.thirdStepDone) ++this.step;
-    if (this.fourthStepDone) ++this.step;
-    if (this.fifthStepDone) ++this.step;
-    if (this.sixthStepDone) ++this.step;
+    if (! this.firstStepDone) return;
+    ++this.step;
+    if (! this.secondStepDone) return;
+    ++this.step;
+    if (! this.thirdStepDone) return;
+    ++this.step;
+    if (! this.fourthStepDone) return;
+    ++this.step;
+    if (! this.fifthStepDone) return;
+    ++this.step;
+    if (! this.sixthStepDone) return;
+    ++this.step;
   },
   methods: {
     next() {
       if (this.firstStep) {
         if (! this.localApplicant.locked) this.$refs.biodata.saveBiodata();
 
-        if (this.paymentConfirmed) ++this.step;
+        if (this.secondStepDone) ++this.step;
       }
 
       ++this.step;
     },
     prev() {
-      if (this.thirdStep && this.paymentConfirmed) --this.step;
-      --this.step;
+      if (this.thirdStep && this.secondStepDone) --this.step;
+      if (! this.firstStep) --this.step;
     },
     updateApplicant(obj) {
       this.localApplicant = obj;
+    },
+    paymentConfirmed(obj) {
+      this.updateApplicant(obj);
+      this.next();
     },
     updateNextOfKins(kins) {
       this.localApplicant.next_of_kins = kins;

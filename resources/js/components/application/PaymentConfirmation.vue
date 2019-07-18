@@ -2,10 +2,12 @@
   <div>
     <div class="form-group">
       <label>Confirmation code</label>
-      <input type="text" class="form-control" v-model="code">
+      <input type="text" class="form-control" v-model.trim="confirmation_no">
     </div>
     <div class="form-group">
-      <button :disabled="!code.length" @click.stop="confirmPayment()" class="btn btn-secondary">Confirm payment</button>
+      <button :disabled="!confirmation_no.length || busy" @click.stop="confirmPayment()" class="btn btn-secondary">
+        {{ buttonText }}
+      </button>
     </div>
   </div>
 </template>
@@ -16,18 +18,32 @@ export default {
   props: ['applicant'],
   data() {
     return {
-      localApplicant: this.applicant,
-      code: '',
+      confirmation_no: '',
+      busy: false
     };
+  },
+  computed: {
+    buttonText() {
+      return this.busy ? 'Confirming...' : 'Confirm payment';
+    }
   },
   methods: {
     confirmPayment() {
+      if (this.busy) return;
+
+      const body = { confirmation_no: this.confirmation_no };
+      this.busy = true;
+
       axios
-        .post(`/a/${this.localApplicant.id}/confirm-application-fee`)
-        .then(({ data: { data } }) => {
-          console.log(data);
-          // this.localApplicant = data;
-          // this.$emit('update-applicant', data);
+        .post(`/a/confirm-application-fee`, body)
+        .then(({ data: { success, message, payment } }) => {
+          this.busy = false;
+          alert(message);
+          if (success) this.$emit('payment-confirmed', Object.assign(this.applicant, { application_fee: payment }));
+        })
+        .catch(({ response: { data: { message } } }) => {
+          this.busy = false;
+          alert(message);
         });
     }
   }

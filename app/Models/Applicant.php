@@ -17,11 +17,6 @@ class Applicant extends Authenticatable
     protected $roles_table = 'applicant_roles';
     protected $permissions_table = 'applicant_permissions';
 
-    public function getAuthIdentifierName()
-    {
-      return 'j_regno';
-    }
-
     public function institution()
     {
         return $this->belongsTo(Institution::class);
@@ -90,6 +85,11 @@ class Applicant extends Authenticatable
     public function applicationFee()
     {
       return $this->payments->where('fee_id', 1)->first();
+    }
+
+    public function getAuthIdentifierName()
+    {
+      return 'j_regno';
     }
 
     public function getAuthIdentifier()
