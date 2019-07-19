@@ -12,7 +12,7 @@ class Applicant extends Authenticatable
     protected $table = 'sch_application_bio';
     protected $hidden = ['user_password'];
     protected $guarded = [];
-    protected $appends = ['full_name', 'application_fee'];
+    protected $appends = ['full_name', 'application_fee', 'post_utme_fee'];
 
     protected $roles_table = 'applicant_roles';
     protected $permissions_table = 'applicant_permissions';
@@ -82,11 +82,6 @@ class Applicant extends Authenticatable
       return $this->hasMany(Payment::class, 'j_regno', 'j_regno');
     }
 
-    public function applicationFee()
-    {
-      return $this->payments->where('fee_id', 1)->first();
-    }
-
     public function getAuthIdentifierName()
     {
       return 'j_regno';
@@ -109,7 +104,12 @@ class Applicant extends Authenticatable
 
     public function getApplicationFeeAttribute()
     {
-      return $this->applicationFee();
+      return $this->payments->where('fee_id', 1)->first();
+    }
+
+    public function getPostUtmeFeeAttribute()
+    {
+      return $this->payments->where('fee_id', 2)->first();
     }
 
     public static function phoneExists($inst, $phone)

@@ -21,6 +21,7 @@ use App\Models\OlevelResult;
 use App\Models\UtmeResult;
 use App\Models\OlevelGrade;
 use App\Models\Subject;
+use App\Models\Payment;
 
 class ApplicationController extends Controller
 {
@@ -28,8 +29,15 @@ class ApplicationController extends Controller
   {
     $applicant = auth()
       ->user()
-      ->load('nextOfKins', 'nextOfKins.relationship', 'nextOfKins.gender', 'olevelResults', 'olevelResults.examType',
-      'utme', 'admission', 'institution');
+      ->load(
+        'nextOfKins.relationship',
+        'nextOfKins.gender',
+        'olevelResults.examType',
+        'utme',
+        'admission',
+        'institution',
+        'field.programme'
+      );
 
     $genders = Gender::all();
     $countries = Country::all();
@@ -259,15 +267,14 @@ class ApplicationController extends Controller
     ]);
   }
 
-  // TODO: Refactor
   public function listApplications()
   {
     $applicationTable = (new Applicant)->getTable();
     $olevelTable = (new OlevelResult)->getTable();
     $nokTable = (new NextOfKin)->getTable();
     $utmeTable = (new UtmeResult)->getTable();
+    $paymentTable = (new Payment)->getTable();
 
-    // TODO: Check payment
     $applications = Applicant::where('locked', 0)
       ->whereNotNull('passport')
       ->whereNotNull('surname')
@@ -292,6 +299,11 @@ class ApplicationController extends Controller
         $q->select(DB::raw(1))
           ->from($utmeTable)
           ->whereRaw("{$applicationTable}.id = {$utmeTable}.application_id");
+      })
+      ->whereExists(function ($q) use($applicationTable, $paymentTable) {
+        $q->select(DB::raw(1))
+          ->from($paymentTable)
+          ->whereRaw("{$applicationTable}.j_regno = {$paymentTable}.j_regno");
       })
       ->get()
       ->load('nextOfKins', 'nextOfKins.relationship', 'nextOfKins.gender', 'olevelResults', 'olevelResults.examType',
@@ -340,6 +352,33 @@ class ApplicationController extends Controller
   }
 
   public function confirmApplicationFee()
+  {
+    $data = $this->request->all();
+
+    $applicant = auth()->user()->loadMissing('institution');
+
+    $paymentResponse = EtranzactClient::getPayment($applicant->institution->terminal_id, $data['confirmation_no']);
+
+    if (EtranzactClient::isErrorResponse($paymentResponse))
+    {
+      return response()->json([
+        'success' => false,
+        'message' => 'Payment record not found'
+      ], 400);
+    }
+
+    ['success' => $success, 'message' => $msg, 'data' => $data] =
+      PaymentConfirmation::confirmApplicationFee($applicant, $paymentResponse);
+
+    if ($success)
+    {
+      return response()->json(['success' => $success, 'message' => $msg, 'payment' => $data]);
+    }
+
+    return response()->json(['success' => $success, 'message' => $msg], 400);
+  }
+
+  public function confirmResultFee()
   {
     $data = $this->request->all();
 

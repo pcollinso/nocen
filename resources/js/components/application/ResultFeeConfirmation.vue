@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="form-group">
-      <label>Confirmation code</label>
+      <label>Result fee confirmation code</label>
       <input type="text" class="form-control" v-model.trim="confirmation_no">
     </div>
     <div class="form-group">
@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: 'PaymentConfirmation',
+  name: 'ResultFeeConfirmation',
   props: ['applicant'],
   data() {
     return {
@@ -34,11 +34,11 @@ export default {
       this.busy = true;
 
       axios
-        .post(`/a/confirm-application-fee`, { confirmation_no: this.confirmation_no })
+        .post(`/a/confirm-result-fee`, { confirmation_no: this.confirmation_no })
         .then(({ data: { success, message, payment } }) => {
           this.busy = false;
           alert(message);
-          if (success) this.$emit('payment-confirmed', Object.assign(this.applicant, { application_fee: payment }));
+          if (success) this.$emit('payment-confirmed', Object.assign(this.applicant, { post_utme_fee: payment }));
         })
         .catch(({ response: { data: { message } } }) => {
           this.busy = false;

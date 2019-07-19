@@ -52,6 +52,7 @@ Route::group(['middleware' => ['query_log']], function () {
         Route::delete('a/olevel-results/{id}', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@removeOlevelResult', 'as' => 'applicant.removeOlevelResult']);
         Route::post('a/utme-result', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@addUtmeResult', 'as' => 'applicant.addUtmeResult']);
         Route::post('a/confirm-application-fee', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@confirmApplicationFee', 'as' => 'applicant.confirmApplicationFee']);
+        Route::post('a/confirm-result-fee', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@confirmResultFee', 'as' => 'applicant.confirmResultFee']);
         Route::delete('a/utme-result/{id}', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@removeUtmeResult', 'as' => 'applicant.removeUtmeResult']);
         Route::post('a/passport', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@uploadPassport', 'as' => 'applicant.uploadPassport']);
       });

@@ -1,7 +1,20 @@
 <template>
   <Page>
     <page-title :title="pageTitle"/>
-    <div class="row">
+    <div v-if="localApplicant.locked" class="row">
+      <div class="col-lg-7 col-sm-12">
+        <div class="panel panel-inverse">
+          <div v-if="checkPostUtmePayment" class="panel-body">
+            <result-fee-confirmation @payment-confirmed="updateApplicant" :applicant="localApplicant" />
+          </div>
+          <div v-else class="panel-body">
+            <h4>Your Post UTME score is {{ localApplicant.admission.total_post_utme_score }}</h4>
+            <h4>Your application has been {{ grantedMsg }}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-else class="row">
       <div class="col-lg-7 col-sm-12">
         <div class="panel panel-inverse">
           <!-- begin panel-body -->
@@ -40,10 +53,6 @@
               v-if="sixthStep"
               @passport="updatePassport"
               :applicant="localApplicant" />
-
-            <div v-if="seventhStep">
-              <h4>Your application has been {{ grantedMsg }}</h4>
-            </div>
           </div>
         </div>
         <div class="mt-4">
@@ -59,6 +68,7 @@ import Page from './Page';
 import PageTitle from '../components/header/PageTitle';
 import ApplicationBiodata from '../components/application/Biodata';
 import PaymentConfirmation from '../components/application/PaymentConfirmation';
+import ResultFeeConfirmation from '../components/application/ResultFeeConfirmation';
 import NextOfKin from '../components/application/NextOfKin';
 import Olevel from '../components/application/Olevel';
 import Utme from '../components/application/Utme';
@@ -71,6 +81,7 @@ export default {
     PageTitle,
     ApplicationBiodata,
     PaymentConfirmation,
+    ResultFeeConfirmation,
     NextOfKin,
     Olevel,
     Utme,
@@ -93,13 +104,17 @@ export default {
       if (this.sixthStep) return 'Passport';
     },
     grantedMsg() {
-      if (! this.localApplicant.locked) return '';
-      return this.localApplicant.admission.admitted ? 'granted' : 'denied';
+      return ! this.localApplicant.locked ?
+        '' :
+        (this.localApplicant.admission.admitted ? 'granted' : 'denied');
+    },
+    checkPostUtmePayment() {
+      const { localApplicant: { post_utme_fee, field: { programme: { require_result_check_fee } } } } = this;
+
+      return require_result_check_fee && !! post_utme_fee;
     },
     nextLabel() {
-      const last = this.localApplicant.locked ? 7 : 6;
-      if (this.step < last) return 'Next';
-      return 'Finish';
+      return this.step < 6 ? 'Next' : 'Finish';
     },
     firstStep() {
       return this.step === 1;
@@ -119,9 +134,6 @@ export default {
     sixthStep() {
       return this.step === 6;
     },
-    seventhStep() {
-      return this.step === 7;
-    },
     canPrev() {
       return this.step > 1;
     },
@@ -131,7 +143,6 @@ export default {
       if (this.thirdStep) return this.thirdStepDone;
       if (this.fourthStep) return this.fourthStepDone;
       if (this.fifthStep) return this.fifthStepDone;
-      if (this.sixthStep) return !!this.localApplicant.locked;
 
       return false;
     },
@@ -161,9 +172,9 @@ export default {
         /^\d{4}-\d{2}-\d{2}$/.test(dob);
     },
     secondStepDone() {
-      const { localApplicant:{ application_fee } } = this;
+      const { localApplicant: { application_fee, field: { programme: { require_application_fee } } } } = this;
 
-      return !!application_fee && !!application_fee.amount;
+      return ! require_application_fee ? true : !!application_fee && !!application_fee.amount;
     },
     thirdStepDone() {
       return !!this.localApplicant.next_of_kins.length;
@@ -176,9 +187,6 @@ export default {
     },
     sixthStepDone() {
       return !!this.localApplicant.locked;
-    },
-    seventhStepDone() {
-      return false;
     }
   },
   created() {
