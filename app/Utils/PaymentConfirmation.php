@@ -23,7 +23,7 @@ final class PaymentConfirmation
       return ['success' => false, 'message' => "Confirmation pin already used!", 'data' => null];
     }
 
-    $amount = $etranzactResponse['TRANS_AMOUNT'] ?? ''; // amount
+    $amount = $etranzactResponse['TRANS_AMOUNT'] ?? 0; // amount
 
     // This is commented out as fee type from Etranzact is not same as fee type in database
     // $feeType = FeeType::where('fee_type', $etranzactResponse['TYPE_NAME'])->first();
