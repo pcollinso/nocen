@@ -7,9 +7,78 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
 use Log;
+use Illuminate\Http\Request;
+use Mail;
 
 class Utility
 {
+
+    public static function send_email($params) {
+        /**
+         * mail usage
+         */
+        /*$params = array(
+            'subject' => 'Contribution Payment Notification',
+            'message_body' => 'Attached is a copy of the contribution payment schedule for this institution',
+            'message_header' => 'Contribution Payment File',
+            'title' => 'Contribution Payment Notification',
+            'button_link' => '',
+            'button_link_text' => '',
+            'lower_text' => 'For any complaints, kindly reach us using the information below',
+            'to' => 'pcollinso@yahoo.com',
+            'from_name' => 'NHIS',
+            'from_email' => 'noreply@nhis.com',
+            'reply_to' => '',
+            'reply_to_email' => '',
+            'reply_to_name' => '',
+            'cc' => array(
+                ['email' => 'pcollinso@yahoo.com', 'name' => 'Paulcollins Obi']
+            ),
+            'bcc' => array(),
+            'attachment' => array(
+                ['path' => public_path(('/images/attachments/test.xls')), 'display_name' => 'File attached']
+            )
+        );
+        Utility::send_email($params);*/
+        $data = array(
+            'project_name' => ($params['project_name']) ?? env("APP_NAME"),
+            'title' => ($params['title']) ?? 'NHIS.::.Mail',
+            'message_body' => ($params['message_body']) ?? 'NHIS says Hi!!',
+            'message_header' => ($params['message_header']) ?? 'Welcome',
+            'button_link' => ($params['button_link']) ?? '',
+            'button_link_text' => ($params['button_link_text']) ?? '',
+            'lower_text' => ($params['lower_text']) ?? '',
+            'support_email' => ($params['support_email']) ?? env("SUPPORT_EMAIL"),
+            'support_phone' => ($params['support_phone']) ?? env("SUPPORT_PHONE"),
+            'website_link' => ($params['website_link']) ?? env("APP_URL"),
+            'website_name' => ($params['website_name']) ?? env("APP_NAME"),
+            'powered_by_link' => ($params['powered_by_link']) ?? env("POWERED_BY_LINK"),
+            'powered_by_name' => ($params['powered_by_name']) ?? env("POWERED_BY_NAME"),
+        );
+        Mail::send('mail.mail_verify', $data, function ($message) use ($params) {
+            $message->from($params['from_email'] ?? env("MAIL_FROM_ADDRESS"), $params['from_name'] ?? env("MAIL_FROM_NAME"));
+            $message->to($params['to']);
+            $message->subject($params['from_email']);
+            if(!empty($params['cc'])){
+                foreach($params['cc'] as $cc){
+                    $message->cc($cc['email'], $cc['name']);
+                }
+            }
+            if(!empty($params['bcc'])){
+                foreach($params['bcc'] as $bcc){
+                    $message->cc($bcc['email'], $bcc['name']);
+                }
+            }
+            if(!empty($params['attachment'])){
+                foreach($params['attachment'] as $file){
+                    $message->attach($file['path'], ['as' => $file['display_name'].'.'.File::extension($file['path']), 'mime' => File::mimeType($file['path'])]);
+                }
+            }
+            empty($params['reply_to_email']) ?: $message->replyTo($params['reply_to_email'], $params['reply_to_name']);
+            //$message->getSwiftMessage();
+        });
+        return "Email Sent with attachment. Check your inbox.";
+    }
 
     public static function hashString($pass){
         return md5(md5(sha1(sha1(md5($pass)))));
@@ -101,7 +170,7 @@ class Utility
 
     public static function makePassword($password = 'Password')
     {
-        return array('password' => $password, 'temp_password' => php::paul($password), 'plain_password' => $password, 'laravel_encrypted' => Hash::make($password));
+        return array('password' => $password, 'temp_password' => self::paul($password), 'plain_password' => $password, 'laravel_encrypted' => Hash::make($password));
     }
 
     public static function paul($data)
