@@ -111,7 +111,7 @@ export default {
     checkPostUtmePayment() {
       const { localApplicant: { post_utme_fee, field: { programme: { require_result_check_fee } } } } = this;
 
-      return require_result_check_fee && !! post_utme_fee;
+      return require_result_check_fee && ! post_utme_fee;
     },
     nextLabel() {
       return this.step < 6 ? 'Next' : 'Finish';

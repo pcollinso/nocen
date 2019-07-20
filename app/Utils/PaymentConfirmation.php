@@ -11,7 +11,7 @@ use DB;
 final class PaymentConfirmation
 {
 
-  public static function confirmApplicationFee(Applicant $applicant, array $etranzactResponse) : array
+  public static function confirmApplicationFee(Applicant $applicant, array $etranzactResponse, string $fee) : array
   {
     if ($applicant->j_regno != $etranzactResponse['CUSTOMER_ID'])
     {
@@ -27,7 +27,7 @@ final class PaymentConfirmation
 
     // This is commented out as fee type from Etranzact is not same as fee type in database
     // $feeType = FeeType::where('fee_type', $etranzactResponse['TYPE_NAME'])->first();
-    $feeType = FeeType::where('fee_type', 'APPLICATION_FEE')->first();
+    $feeType = FeeType::where('fee_type', $fee)->first();
 
     if(! $feeType)
     {

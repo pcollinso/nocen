@@ -368,7 +368,7 @@ class ApplicationController extends Controller
     }
 
     ['success' => $success, 'message' => $msg, 'data' => $data] =
-      PaymentConfirmation::confirmApplicationFee($applicant, $paymentResponse);
+      PaymentConfirmation::confirmApplicationFee($applicant, $paymentResponse, 'APPLICATION_FEE');
 
     if ($success)
     {
@@ -395,7 +395,7 @@ class ApplicationController extends Controller
     }
 
     ['success' => $success, 'message' => $msg, 'data' => $data] =
-      PaymentConfirmation::confirmApplicationFee($applicant, $paymentResponse);
+      PaymentConfirmation::confirmApplicationFee($applicant, $paymentResponse, 'POST_UTME_RESULT_CHECK_FEE');
 
     if ($success)
     {
