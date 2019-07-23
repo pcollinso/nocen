@@ -357,25 +357,9 @@ class ApplicationController extends Controller
 
     $applicant = auth()->user()->loadMissing('institution');
 
-    $paymentResponse = EtranzactClient::getPayment($applicant->institution->terminal_id, $data['confirmation_no']);
+    $confirmationResult = $this->confirmFee($applicant, $data['confirmation_no'], 'APPLICATION_FEE');
 
-    if (EtranzactClient::isErrorResponse($paymentResponse))
-    {
-      return response()->json([
-        'success' => false,
-        'message' => 'Payment record not found'
-      ], 400);
-    }
-
-    ['success' => $success, 'message' => $msg, 'data' => $data] =
-      PaymentConfirmation::confirmApplicationFee($applicant, $paymentResponse, 'APPLICATION_FEE');
-
-    if ($success)
-    {
-      return response()->json(['success' => $success, 'message' => $msg, 'payment' => $data]);
-    }
-
-    return response()->json(['success' => $success, 'message' => $msg], 400);
+    return response()->json($confirmationResult, $confirmationResult['success'] ? 200 : 400);
   }
 
   public function confirmResultFee()
@@ -384,7 +368,25 @@ class ApplicationController extends Controller
 
     $applicant = auth()->user()->loadMissing('institution');
 
-    $paymentResponse = EtranzactClient::getPayment($applicant->institution->terminal_id, $data['confirmation_no']);
+    $confirmationResult = $this->confirmFee($applicant, $data['confirmation_no'], 'POST_UTME_RESULT_CHECK_FEE');
+
+    return response()->json($confirmationResult, $confirmationResult['success'] ? 200 : 400);
+  }
+
+  public function confirmAcceptanceFee()
+  {
+    $data = $this->request->all();
+
+    $applicant = auth()->user()->loadMissing('institution');
+
+    $confirmationResult = $this->confirmFee($applicant, $data['confirmation_no'], 'ACCEPTANCE_FEE');
+
+    return response()->json($confirmationResult, $confirmationResult['success'] ? 200 : 400);
+  }
+
+  private function confirmFee($applicant, $code, $fee)
+  {
+    $paymentResponse = EtranzactClient::getPayment($applicant->institution->terminal_id, $code);
 
     if (EtranzactClient::isErrorResponse($paymentResponse))
     {
@@ -395,13 +397,10 @@ class ApplicationController extends Controller
     }
 
     ['success' => $success, 'message' => $msg, 'data' => $data] =
-      PaymentConfirmation::confirmApplicationFee($applicant, $paymentResponse, 'POST_UTME_RESULT_CHECK_FEE');
+      PaymentConfirmation::confirmApplicationFee($applicant, $paymentResponse, $fee);
 
-    if ($success)
-    {
-      return response()->json(['success' => $success, 'message' => $msg, 'payment' => $data]);
-    }
-
-    return response()->json(['success' => $success, 'message' => $msg], 400);
+    return $success ?
+      ['success' => $success, 'message' => $msg, 'payment' => $data] :
+      ['success' => $success, 'message' => $msg];
   }
 }

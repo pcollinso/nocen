@@ -10,6 +10,15 @@
           <div v-else class="panel-body">
             <h4>Your Post UTME score is {{ localApplicant.admission.total_post_utme_score }}</h4>
             <h4>Your application has been {{ grantedMsg }}</h4>
+            <hr>
+            <acceptance-fee-confirmation
+              v-if="checkAcceptancePayment"
+              @payment-confirmed="updateApplicant"
+              :applicant="localApplicant" />
+            <button v-else @click.stop="printBiodata()" class="btn btn-secondary">
+              Print biodata
+            </button>
+
           </div>
         </div>
       </div>
@@ -69,6 +78,7 @@ import PageTitle from '../components/header/PageTitle';
 import ApplicationBiodata from '../components/application/Biodata';
 import PaymentConfirmation from '../components/application/PaymentConfirmation';
 import ResultFeeConfirmation from '../components/application/ResultFeeConfirmation';
+import AcceptanceFeeConfirmation from '../components/application/AcceptanceFeeConfirmation';
 import NextOfKin from '../components/application/NextOfKin';
 import Olevel from '../components/application/Olevel';
 import Utme from '../components/application/Utme';
@@ -82,6 +92,7 @@ export default {
     ApplicationBiodata,
     PaymentConfirmation,
     ResultFeeConfirmation,
+    AcceptanceFeeConfirmation,
     NextOfKin,
     Olevel,
     Utme,
@@ -112,6 +123,11 @@ export default {
       const { localApplicant: { post_utme_fee, field: { programme: { require_result_check_fee } } } } = this;
 
       return require_result_check_fee && ! post_utme_fee;
+    },
+    checkAcceptancePayment() {
+      const { localApplicant: { acceptance_fee, field: { programme: { require_acceptance_fee } } } } = this;
+
+      return require_acceptance_fee && ! acceptance_fee;
     },
     nextLabel() {
       return this.step < 6 ? 'Next' : 'Finish';
@@ -235,6 +251,9 @@ export default {
     },
     updatePassport(url) {
       this.localApplicant.passport = url;
+    },
+    printBiodata() {
+      //
     }
   }
 };

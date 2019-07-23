@@ -12,7 +12,12 @@ class Applicant extends Authenticatable
     protected $table = 'sch_application_bio';
     protected $hidden = ['user_password'];
     protected $guarded = [];
-    protected $appends = ['full_name', 'application_fee', 'post_utme_fee'];
+    protected $appends = [
+      'full_name',
+      'application_fee',
+      'post_utme_fee',
+      'acceptance_fee'
+    ];
 
     protected $roles_table = 'applicant_roles';
     protected $permissions_table = 'applicant_permissions';
@@ -110,6 +115,11 @@ class Applicant extends Authenticatable
     public function getPostUtmeFeeAttribute()
     {
       return $this->payments->where('fee_id', 2)->first();
+    }
+
+    public function getAcceptanceFeeAttribute()
+    {
+      return $this->payments->where('fee_id', 3)->first();
     }
 
     public static function phoneExists($inst, $phone)
