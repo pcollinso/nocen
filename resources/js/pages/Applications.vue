@@ -124,7 +124,7 @@
                   </div>
                   <div class="form-group">
                     <label>Town</label>
-                    <input readonly type="text" class="form-control" v-model="application.town.name">
+                    <input readonly type="text" class="form-control" v-model="application.town.town">
                   </div>
                   <div class="form-group">
                     <label>Date of birth</label>

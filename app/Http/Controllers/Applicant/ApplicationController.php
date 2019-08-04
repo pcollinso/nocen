@@ -58,6 +58,28 @@ class ApplicationController extends Controller
     ]);
   }
 
+  public function printBiodata()
+  {
+    $applicant = auth()
+      ->user()
+      ->load(
+        'nextOfKins.relationship',
+        'nextOfKins.gender',
+        'olevelResults.examType',
+        'utme',
+        'admission',
+        'institution',
+        'field.programme'
+      );
+
+    if (! $applicant->acceptance_fee) abort(403);
+
+    return view('applicant.biodata', [
+      'applicant' => $applicant,
+      'pageTitle' => "$applicant->full_name biodata"
+    ]);
+  }
+
   public function updateApplicant($id)
   {
     if (auth()->user()->hasPermissionTo('application:review'))

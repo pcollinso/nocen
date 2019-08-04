@@ -15,9 +15,9 @@
               v-if="checkAcceptancePayment"
               @payment-confirmed="updateApplicant"
               :applicant="localApplicant" />
-            <button v-else @click.stop="printBiodata()" class="btn btn-secondary">
+            <a v-else href="/a/biodata" target="_blank" class="btn btn-secondary">
               Print biodata
-            </button>
+            </a>
 
           </div>
         </div>
@@ -251,9 +251,6 @@ export default {
     },
     updatePassport(url) {
       this.localApplicant.passport = url;
-    },
-    printBiodata() {
-      //
     }
   }
 };

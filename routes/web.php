@@ -45,6 +45,7 @@ Route::group(['middleware' => ['query_log']], function () {
 
       Route::group(['middleware' => ['role:applicant']], function () {
         Route::get('a/home', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@index', 'as' => 'applicant.index']);
+        Route::get('a/biodata', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@printBiodata', 'as' => 'applicant.printBiodata']);
         Route::put('a/update-applicant/{id}', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@updateApplicant', 'as' => 'applicant.updateApplicant']);
         Route::post('a/next-of-kins', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@addNextOfKin', 'as' => 'applicant.addNextOfKin']);
         Route::delete('a/next-of-kins/{id}', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@removeNextOfKin', 'as' => 'applicant.removeNextOfKin']);
