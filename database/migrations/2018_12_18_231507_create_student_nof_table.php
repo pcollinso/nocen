@@ -17,9 +17,9 @@ class CreateStudentNofTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('institution_id')->unsigned()->index();
             $table->bigInteger('student_id')->unsigned()->index();
-            $table->string('nok_surname', 45);
-            $table->string('nok_first_name', 45);
-            $table->string('nok_middle_name', 45)->nullable();
+            $table->string('surname', 45);
+            $table->string('first_name', 45);
+            $table->string('middle_name', 45)->nullable();
             $table->bigInteger('relationship_id')->unsigned()->index();
             $table->integer('gender_id')->unsigned()->index();
             $table->string('entered_by', 50)->nullable();
@@ -27,7 +27,7 @@ class CreateStudentNofTable extends Migration
             $table->boolean('locked')->default('0');
             $table->timestamps();
 
-            $table->unique(['institution_id','student_id','nok_surname','nok_first_name','nok_middle_name','relationship_id','gender_id'], 'DUPLICATE_RECORD');
+            $table->unique(['institution_id','student_id','surname','first_name','middle_name','relationship_id','gender_id'], 'DUPLICATE_RECORD');
 
             $table->foreign('institution_id')->references('id')->on('sup_institution')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('relationship_id')->references('id')->on('sup_relationships')->onDelete('cascade')->onUpdate('cascade');

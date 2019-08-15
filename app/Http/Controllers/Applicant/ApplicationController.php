@@ -74,7 +74,12 @@ class ApplicationController extends Controller
 
     if (! $applicant->acceptance_fee) abort(403);
 
+    $latestYear = array_reduce($applicant->olevelResults->all(), function ($year, $result) {
+      return $result->year > $year ? $result->year : $year;
+    }, 0);
+
     return view('applicant.biodata', [
+      'latestYear' => $latestYear,
       'applicant' => $applicant,
       'pageTitle' => "$applicant->full_name biodata"
     ]);
