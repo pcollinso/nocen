@@ -2,7 +2,7 @@
     <Page>
         <!-- begin login-cover -->
         <div class="login-cover">
-            <div class="login-cover-image" :style="{ backgroundImage: 'url('+ bg.activeImg +')' }"></div>
+            <div class="login-cover-image" :style="loginCoverStyle"></div>
             <div class="login-cover-bg"></div>
         </div>
         <!-- end login-cover -->
@@ -28,6 +28,7 @@
                     <input type="hidden" name="_token" v-model="form.token">
                     <div v-show="firstStep" class="form-group m-b-20">
                         <input
+                            ref="username"
                             type="text"
                             name="login"
                             class="form-control form-control-lg"
@@ -43,6 +44,7 @@
                     </div>
                     <div v-if="secondStep" class="form-group m-b-20">
                         <input
+                            ref="password"
                             type="password"
                             name="password"
                             class="form-control form-control-lg"
@@ -60,9 +62,6 @@
                         <button type="submit" class="btn btn-default btn-block btn-lg">{{ buttonText }}</button>
                         <a v-if="secondStep" href="/login" class="btn btn-inverse btn-block btn-lg">Cancel</a>
                     </div>
-                    <!--<div class="m-t-20">
-                                  Not a member yet? Click <a href="javascript:;">here</a> to register.
-                    </div>-->
                 </form>
             </div>
             <!-- end login-content -->
@@ -82,13 +81,6 @@
                     href="javascript:;"
                     v-on:click="select('bg2')"
                     style="background-image: url(/images/login-bg/login-bg-17.jpg)"
-                ></a>
-            </li>
-            <li v-bind:class="{ 'active': bg.bg3.active }">
-                <a
-                    href="javascript:;"
-                    v-on:click="select('bg3')"
-                    style="background-image: url(/images/login-bg/login-bg-15.jpg)"
                 ></a>
             </li>
             <li v-bind:class="{ 'active': bg.bg4.active }">
@@ -118,150 +110,148 @@
 </template>
 
 <script>
-    import Page from './Page';
-    import FilterMixin from '../mixins/FilterMixin';
-    import PageOptions from '../components/PageOptions';
+import Page from './Page';
+import FilterMixin from '../mixins/FilterMixin';
+import PageOptions from '../components/PageOptions';
 
-    export default {
-        name: 'Login',
-        mixins: [FilterMixin],
-        props: {
-            error: {
-                type: String,
-            },
-            step_value: {
-                type: Number,
-            }
-        },
-        components: {
-            Page
-        },
-        created() {
-            PageOptions.pageEmpty = true;
-        },
-        beforeRouteLeave (to, from, next) {
-            PageOptions.pageEmpty = false;
-            next();
-        },
-        data() {
-            return {
-                step: this.step_value ? this.step_value : 1,
-                name: 'Test',
-                form: {
-                    login: '',
-                    password: '',
-                    type: '',
-                    token: ''
-                },
-                bg: {
-                    activeImg: '/images/login-bg/login-bg-16.jpg',
-                    bg1: {
-                        active: true,
-                        img: '/images/login-bg/login-bg-16.jpg'
-                    },
-                    bg2: {
-                        active: false,
-                        img: '/images/login-bg/login-bg-17.jpg'
-                    },
-                    bg3: {
-                        active: false,
-                        img: '/assets/img/login-bg/login-bg-15.jpg'
-                    },
-                    bg4: {
-                        active: false,
-                        img: '/images/login-bg/login-bg-14.jpg'
-                    },
-                    bg5: {
-                        active: false,
-                        img: '/images/login-bg/login-bg-13.jpg'
-                    },
-                    bg6: {
-                        active: false,
-                        img: '/images/login-bg/login-bg-12.jpg'
-                    }
-                }
-            }
-        },
-        computed: {
-            buttonText() {
-                return this.step === 1 ? 'Check' : 'Submit';
-            },
-            firstStep() {
-                return this.step === 1;
-            },
-            secondStep() {
-                return this.step === 2;
-            }
-        },
-        mounted() {
-            this.form.token = document.querySelector('meta[name="csrf-token"]').content;
-        },
-        methods: {
-            checkForm() {
-                if (this.secondStep) {
-                    this.$refs.form.submit();
-                    return false;
-                }
-
-                axios
-                    .post('/auth/check-user', this.form)
-                    .then(({ data: { success, data } }) => {
-                        if (!success) {
-                            alert('Could not find user');
-                            return;
-                        }
-
-                        if (data.verification_no) {
-                            this.form.type = 'staff';
-                        } else if (data.regno) {
-                            this.form.type = 'student';
-                        } else if (data.j_regno) {
-                            this.form.type = 'applicant';
-                        } else {
-                            this.form.type = 'user';
-                        }
-                        this.name = data.full_name;
-
-                        this.step = 2;
-                    })
-                    .catch(({ response: { data } }) => console.log("error", data));
-                return false;
-            },
-            select(x) {
-                this.bg.bg1.active = false;
-                this.bg.bg2.active = false;
-                this.bg.bg3.active = false;
-                this.bg.bg4.active = false;
-                this.bg.bg5.active = false;
-                this.bg.bg6.active = false;
-
-                switch (x) {
-                    case 'bg1':
-                        this.bg.bg1.active = true;
-                        this.bg.activeImg = this.bg.bg1.img;
-                        break;
-                    case 'bg2':
-                        this.bg.bg2.active = true;
-                        this.bg.activeImg = this.bg.bg2.img;
-                        break;
-                    case 'bg3':
-                        this.bg.bg3.active = true;
-                        this.bg.activeImg = this.bg.bg3.img;
-                        break;
-                    case 'bg4':
-                        this.bg.bg4.active = true;
-                        this.bg.activeImg = this.bg.bg4.img;
-                        break;
-                    case 'bg5':
-                        this.bg.bg5.active = true;
-                        this.bg.activeImg = this.bg.bg5.img;
-                        break;
-                    case 'bg6':
-                        this.bg.bg6.active = true;
-                        this.bg.activeImg = this.bg.bg6.img;
-                        break;
-                }
-            }
-        }
+export default {
+  name: 'Login',
+  mixins: [FilterMixin],
+  props: {
+    error: {
+      type: String,
+    },
+    step_value: {
+      type: Number,
     }
+  },
+  components: {
+    Page
+  },
+  created() {
+    PageOptions.pageEmpty = true;
+  },
+  data() {
+    return {
+      step: this.step_value ? this.step_value : 1,
+      name: 'Test',
+      form: {
+        login: '',
+        password: '',
+        type: '',
+        token: ''
+      },
+      bg: {
+        activeImg: '/images/login-bg/login-bg-16.jpg',
+        bg1: {
+          active: true,
+          img: '/images/login-bg/login-bg-16.jpg'
+        },
+        bg2: {
+          active: false,
+          img: '/images/login-bg/login-bg-17.jpg'
+        },
+        bg4: {
+          active: false,
+          img: '/images/login-bg/login-bg-14.jpg'
+        },
+        bg5: {
+          active: false,
+          img: '/images/login-bg/login-bg-13.jpg'
+        },
+        bg6: {
+          active: false,
+          img: '/images/login-bg/login-bg-12.jpg'
+        }
+      }
+    }
+  },
+  computed: {
+    loginCoverStyle() {
+      return { backgroundImage: `url(${this.bg.activeImg})` };
+    },
+    buttonText() {
+      return this.step === 1 ? 'Check' : 'Submit';
+    },
+    firstStep() {
+      return this.step === 1;
+    },
+    secondStep() {
+      return this.step === 2;
+    }
+  },
+  watch: {
+    step(_) {
+      if (this.secondStep) {
+        this.$nextTick(() => this.$refs.password.focus());
+      }
+    }
+  },
+  mounted() {
+    this.form.token = document.querySelector('meta[name="csrf-token"]').content;
+    this.$refs.username.focus();
+  },
+  methods: {
+    checkForm() {
+      if (this.secondStep && this.form.password.length) {
+        this.$refs.form.submit();
+        return false;
+      }
+
+      axios
+        .post('/auth/check-user', this.form)
+        .then(({ data: { success, data } }) => {
+            if (!success) {
+                alert('Could not find user');
+                return;
+            }
+
+            if (data.verification_no) {
+                this.form.type = 'staff';
+            } else if (data.regno) {
+                this.form.type = 'student';
+            } else if (data.j_regno) {
+                this.form.type = 'applicant';
+            } else {
+                this.form.type = 'user';
+            }
+            this.name = data.full_name;
+
+            this.step = 2;
+        })
+        .catch(({ response: { data } }) => console.log("error", data));
+      return false;
+    },
+    select(x) {
+      this.bg.bg1.active = false;
+      this.bg.bg2.active = false;
+      this.bg.bg4.active = false;
+      this.bg.bg5.active = false;
+      this.bg.bg6.active = false;
+
+      switch (x) {
+          case 'bg1':
+              this.bg.bg1.active = true;
+              this.bg.activeImg = this.bg.bg1.img;
+              break;
+          case 'bg2':
+              this.bg.bg2.active = true;
+              this.bg.activeImg = this.bg.bg2.img;
+              break;
+          case 'bg4':
+              this.bg.bg4.active = true;
+              this.bg.activeImg = this.bg.bg4.img;
+              break;
+          case 'bg5':
+              this.bg.bg5.active = true;
+              this.bg.activeImg = this.bg.bg5.img;
+              break;
+          case 'bg6':
+              this.bg.bg6.active = true;
+              this.bg.activeImg = this.bg.bg6.img;
+              break;
+      }
+    }
+  }
+};
 </script>
