@@ -1,75 +1,86 @@
 <template>
   <Page>
     <page-title :title="pageTitle"/>
-    <div v-if="localApplicant.locked" class="row">
-      <div class="col-lg-7 col-sm-12">
-        <div class="panel panel-inverse">
-          <div v-if="checkPostUtmePayment" class="panel-body">
-            <result-fee-confirmation @payment-confirmed="updateApplicant" :applicant="localApplicant" />
-          </div>
-          <div v-else class="panel-body">
-            <h4>Your Post UTME score is {{ localApplicant.admission.total_post_utme_score }}</h4>
-            <h4>Your application has been {{ grantedMsg }}</h4>
-            <hr>
-            <acceptance-fee-confirmation
-              v-if="checkAcceptancePayment"
-              @payment-confirmed="updateApplicant"
-              :applicant="localApplicant" />
-            <a v-else href="/a/biodata" target="_blank" class="btn btn-secondary">
-              Print biodata
-            </a>
+    <b-tabs content-class="mt-3">
+      <b-tab title="Details" active>
+        <div class="row">
+          <div class="col-lg-7 col-sm-12">
+            <div class="panel panel-inverse">
+              <!-- begin panel-body -->
+              <div class="panel-body">
+                <application-biodata
+                  v-if="firstStep"
+                  @update-applicant="updateApplicant"
+                  ref="biodata"
+                  :applicant="localApplicant"
+                  :genders="genders"
+                  :countries="countries"
+                  :states="states"
+                  :religions="religions"
+                  :lgas="lgas" />
 
-          </div>
-        </div>
-      </div>
-    </div>
-    <div v-else class="row">
-      <div class="col-lg-7 col-sm-12">
-        <div class="panel panel-inverse">
-          <!-- begin panel-body -->
-          <div class="panel-body">
-            <application-biodata
-              v-if="firstStep"
-              @update-applicant="updateApplicant"
-              ref="biodata"
-              :applicant="localApplicant"
-              :genders="genders"
-              :countries="countries"
-              :states="states"
-              :religions="religions"
-              :lgas="lgas" />
+                <payment-confirmation @payment-confirmed="paymentConfirmed" v-if="secondStep && !secondStepDone" :applicant="localApplicant" />
 
-            <payment-confirmation @payment-confirmed="paymentConfirmed" v-if="secondStep && !secondStepDone" :applicant="localApplicant" />
+                <next-of-kin
+                  v-if="thirdStep"
+                  @nok="updateNextOfKins"
+                  :applicant="localApplicant"
+                  :genders="genders" />
 
-            <next-of-kin
-              v-if="thirdStep"
-              @nok="updateNextOfKins"
-              :applicant="localApplicant"
-              :genders="genders" />
+                <olevel
+                  v-if="fourthStep"
+                  @olevel="updateOlevel"
+                  :applicant="localApplicant"
+                  :olevels="olevels" />
 
-            <olevel
-              v-if="fourthStep"
-              @olevel="updateOlevel"
-              :applicant="localApplicant"
-              :olevels="olevels" />
+                <utme
+                  v-if="fifthStep"
+                  @utme="updateUtme"
+                  :applicant="localApplicant" />
 
-            <utme
-              v-if="fifthStep"
-              @utme="updateUtme"
-              :applicant="localApplicant" />
-
-            <passport
-              v-if="sixthStep"
-              @passport="updatePassport"
-              :applicant="localApplicant" />
+                <passport
+                  v-if="sixthStep"
+                  @passport="updatePassport"
+                  :applicant="localApplicant" />
+              </div>
+            </div>
+            <div class="mt-4">
+              <button :disabled="!canPrev" @click.stop="prev()" class="btn btn-secondary">Previous</button>
+              <button :disabled="!canNext" @click.stop="next()" class="btn btn-secondary">Next</button>
+            </div>
           </div>
         </div>
-        <div class="mt-4">
-          <button v-if="canPrev" @click.stop="prev()" class="btn btn-secondary">Previous</button>
-          <button v-if="canNext" @click.stop="next()" class="btn btn-secondary">{{ nextLabel }}</button>
+      </b-tab>
+      <b-tab title="Response">
+        <div v-if="localApplicant.locked" class="row">
+          <div class="col-lg-7 col-sm-12">
+            <div class="panel panel-inverse">
+              <div v-if="checkPostUtmePayment" class="panel-body">
+                <result-fee-confirmation @payment-confirmed="updateApplicant" :applicant="localApplicant" />
+              </div>
+              <div v-else class="panel-body">
+                <h4>Your Post UTME score is {{ localApplicant.admission.total_post_utme_score }}</h4>
+                <h4>Your admission application has been {{ grantedMsg }}</h4>
+                <hr>
+                <acceptance-fee-confirmation
+                  v-if="checkAcceptancePayment"
+                  @payment-confirmed="updateApplicant"
+                  :applicant="localApplicant" />
+                <a v-else href="/a/biodata" target="_blank" class="btn btn-secondary">
+                  Print biodata
+                </a>
+
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+        <div v-else class="row">
+          <div class="col-sm-12">
+            <h4>Waiting for verdict...</h4>
+          </div>
+        </div>
+      </b-tab>
+    </b-tabs>
   </Page>
 </template>
 <script>
@@ -128,9 +139,6 @@ export default {
       const { localApplicant: { acceptance_fee, field: { programme: { require_acceptance_fee } } } } = this;
 
       return require_acceptance_fee && ! acceptance_fee;
-    },
-    nextLabel() {
-      return this.step < 6 ? 'Next' : 'Finish';
     },
     firstStep() {
       return this.step === 1;
@@ -217,7 +225,6 @@ export default {
     if (! this.fifthStepDone) return;
     ++this.step;
     if (! this.sixthStepDone) return;
-    ++this.step;
   },
   methods: {
     next() {
