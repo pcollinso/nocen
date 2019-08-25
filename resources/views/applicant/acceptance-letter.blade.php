@@ -238,91 +238,31 @@
             <tr>
               <td>
                 <table width="100%" style="font-size: 15px; padding-top:20px; line-height: 20px; ">
-                  <tr>
-                    <td>
-                      <table style=" width: 100%;">
-                        <tr>                                        
-                          <td align="center"><strong>OFFICE OF THE REGISTRAR (STATISTICS &
-                              RECORDS)</strong><br>
-                              <p style="text-decoration: underline;font-weight: bold; text-align: center;">PERSONAL DATA FORM</p></td>
-                              <td> <img alt="logo" height="70" src="/storage/passports/{{ $applicant->passport }}" width="70" /></td>
-                          </tr>
-                      </table>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <table width="100%" style="padding:20px;" cellpadding="5">
-                        <tbody>
-                            
-                          <tr  class="grad" >
-                            <td>Name of Student:</td>
-                            <td><strong>{{ $applicant->full_name }}</strong></td>
-                          </tr>
-                          <tr class="gra">
-                            <td>Registration No:</td>
-                            <td>{{ $applicant->j_regno }}</td>
-                          </tr>
-                          <tr  class="grad">
-                            <td>Educational Qualification with dates:</td>
-                            <td>SECONDARY SCHOOL, {{ $latestYear }}</td>
-                          </tr>
-                            <!-- <tr  class="gra">
-                            <td>Last School Attended with dates:</td>
-                            <td>QUEEN OF THE ROSARY, COMPREHENSIVE SEC
-                                SCH. EZIOWELLE 2011/2017</td>
-                            </tr> -->
-                          <tr  class="grad">
-                            <td>Department:</td>
-                            <td>{{ $applicant->field->field_name }}</td>
-                          </tr>
-                          <tr  class="gra">
-                            <td>Year of Admission:</td>
-                            <td>{{ $applicant->admission->admission_year }}</td>
-                          </tr>
-                          <tr  class="grad">
-                            <td>Probable year of Graduation:</td>
-                            <td></td>
-                          </tr>
-                          <tr  class="gra">
-                            <td>Date of Birth:</td>
-                            <td>{{ $applicant->dob }}</td>
-                          </tr>
-                          <tr  class="grad">
-                            <td>Town of Origin:</td>
-                            <td>{{ $applicant->town->town }}</td>
-                          </tr>
-                          <tr  class="gra">
-                            <td>Local Govt. Area:</td>
-                            <td>{{ $applicant->lga->name }}</td>
-                          </tr>
-                          <tr  class="grad">
-                            <td>Religious Denomination:</td>
-                            <td>{{ $applicant->religion->religion_name }}</td>
-                          </tr>
-                          <tr  class="gra">
-                            <td>Next of Kin:</td>
-                            <td>{{ $applicant->nextOfKins[0]->full_name }}</td>
-                          </tr>
-                          <tr  class="grad">
-                            <td>Relationship of Next of Kin:</td>
-                            <td>{{ $applicant->nextOfKins[0]->relationship->relationship }}</td>
-                          </tr>
-                          <tr  class="gra">
-                            <td>Address of Next of Kin:</td>
-                            <td></td>
-                          </tr>
-                          
-                        </tbody>
-                      </table>
+                  <tr align="left">
+                    <td width="100%">
+                      <strong>OFFICE OF THE REGISTRAR</strong><br>
+                      The Registrar<br>
+                      Nwafor Orizu College of Education, Nsugbe<br>
+                      <p style="text-decoration: underline;font-weight: bold; text-align: center;">ACCEPTANCE OF OFFER OF ADMISSION AND PLEDGE</p>
+                      I, <strong>{{ $applicant->full_name }}</strong> hereby accept the offer of
+                      provisional admission to prusue a 4 (Four) year course in the University. Leading
+                      to <strong>Bachelor of Education</strong> in {{ $applicant->field->field_name }} under the
+                      conditions stipulated in the letter of admission by the Admission and<br>
+                      Matriculation Board Reference No.: _______<br>
+                      Dated .: {{ date('D d M, Y') }}<br>
+                      <strong>JAMB REG. NO.: {{ $applicant->j_regno }}</strong>
+                      <p style="text-decoration: underline;font-weight: bold; text-align: center;">PLEDGE</p>
+                      I <strong>{{ $applicant->full_name }},</strong> Registration Number.: {{ $applicant->j_regno }}
+                      of the Department {{ $applicant->field->department->department_name }} In consideration of my being admitted into
+                      the University of Nigeria hereby solemnly pledge to be of good behaviour and to
+                      abide by the rules and regulations of the University of Nigeria and the college and
+                      any other regulations of the Federal or any State Government specifically made to
+                      ensure civilized and orderly community life in the college.<br>
+                      I accept that failure and or refusal by me to abide by this undertaking shall enable
+                      the college in its abosolute discretion to take any disciplinary action against me.
                     </td>
                   </tr>
                 </table>
-              </td>
-            </tr>
-            <tr  class="">
-              <td>Name and Address of Person to be contacted in case of emergency:_________________________________________________
-                  ________________________________________________________
               </td>
             </tr>
             <tr>
@@ -332,17 +272,15 @@
                     <tr>
                       <td class="auto-style7"><br>
                         <table width="100%" >
-                          <tr align="left">
-                            <td width="100%">
-                              Marital Status:___________________________<br><br>
-                              Name and Address of Spouse_______________________<br><br>
-                              No. of Children (If any) indicate ages____________________                               
+                          <tr>
+                            <td style="font-size: 14px;">&nbsp;</td>
+                            <td style="text-align: right">
+                              Signature:___________________________<br><br>
+                              Date:___________________________
                             </td>
                           </tr>
                         </table>
                       </td>
-                    </tr>
-                    <tr><td><i style="font-size:9px; text-align:center">I certify that the above information is correct</i></td></tr>
                   </tr>
                 </table>
               </td>

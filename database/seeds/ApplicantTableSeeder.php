@@ -28,6 +28,7 @@ class ApplicantTableSeeder extends Seeder
             'first_name' => 'MICHAEL',
             'phone' => '09091112222',
             'email' => 'test@applicant.com',
+            'resaddr' => '#1 test address',
             'dob' => '2000-05-01',
             'user_password' => 'da0feea11db421a7be1173895497e71f',
             'passport' => '08WZImx6tKeaszVNRRlWTEoGlZxlYfC64lvvcvmk.jpeg',

@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models;
+
+use DB;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Traits\HasPermissions;
 
@@ -87,6 +89,11 @@ class Applicant extends Authenticatable
       return $this->hasMany(Payment::class, 'j_regno', 'j_regno');
     }
 
+    public function getUserTypeAttribute()
+    {
+      return "applicant";
+    }
+
     public function getAuthIdentifierName()
     {
       return 'j_regno';
@@ -144,9 +151,47 @@ class Applicant extends Authenticatable
       return $applicant;
     }
 
-    public function getUserTypeAttribute()
+    public static function getApplicationsForReview()
     {
-        return "applicant";
+      $applicationTable = (new Applicant)->getTable();
+      $olevelTable = (new OlevelResult)->getTable();
+      $nokTable = (new NextOfKin)->getTable();
+      $utmeTable = (new UtmeResult)->getTable();
+      $paymentTable = (new Payment)->getTable();
+
+      return Applicant::whereNotNull('passport')
+        ->whereNotNull('surname')
+        ->whereNotNull('first_name')
+        ->whereNotNull('gender_id')
+        ->whereNotNull('religion_id')
+        ->whereNotNull('nationality_id')
+        ->whereNotNull('state_id')
+        ->whereNotNull('lga_id')
+        ->whereNotNull('dob')
+        ->whereExists(function ($q) use($applicationTable, $olevelTable) {
+          $q->select(DB::raw(1))
+            ->from($olevelTable)
+            ->whereRaw("{$applicationTable}.id = {$olevelTable}.application_id");
+        })
+        ->whereExists(function ($q) use($applicationTable, $nokTable) {
+          $q->select(DB::raw(1))
+            ->from($nokTable)
+            ->whereRaw("{$applicationTable}.id = {$nokTable}.application_id");
+        })
+        ->whereExists(function ($q) use($applicationTable, $utmeTable) {
+          $q->select(DB::raw(1))
+            ->from($utmeTable)
+            ->whereRaw("{$applicationTable}.id = {$utmeTable}.application_id");
+        })
+        ->whereExists(function ($q) use($applicationTable, $paymentTable) {
+          $q->select(DB::raw(1))
+            ->from($paymentTable)
+            ->whereRaw("{$applicationTable}.j_regno = {$paymentTable}.j_regno");
+        })
+        ->get()
+        ->load('nextOfKins', 'nextOfKins.relationship', 'nextOfKins.gender', 'olevelResults', 'olevelResults.examType',
+          'utme', 'field', 'field.programme', 'field.department', 'field.faculty', 'gender', 'religion', 'nationality',
+          'state', 'lga', 'town', 'admission');
     }
 
 }

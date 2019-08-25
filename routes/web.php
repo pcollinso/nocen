@@ -130,6 +130,10 @@ Route::group(['middleware' => ['query_log']], function () {
       Route::group(['middleware' => ['role:,application:review']], function () {
         Route::get('a/applications', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@listApplications', 'as' => 'applicant.listApplications']);
         Route::post('a/save-admission', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@saveAdmission', 'as' => 'applicant.saveAdmission']);
+        Route::get('a/acceptance-letter/{id}', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@printAcceptanceLetter', 'as' => 'applicant.printAcceptanceLetter']);
+        Route::get('a/admission-letter/{id}', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@printAdmissionLetter', 'as' => 'applicant.printAdmissionLetter']);
+        Route::get('a/provisional-clearance/{id}', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@printProvisionalClearance', 'as' => 'applicant.printProvisionalClearance']);
+        Route::get('a/undertaking/{id}', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@printUndertaking', 'as' => 'applicant.printUndertaking']);
       });
     });
 });

@@ -235,84 +235,44 @@
                 </table>
               </td>
             </tr>
-            <tr>
+            <tr style="font-size: 15px; padding-top:20px; line-height: 20px; ">
               <td>
-                <table width="100%" style="font-size: 15px; padding-top:20px; line-height: 20px; ">
-                  <tr>
-                    <td>
-                      <table style=" width: 100%;">
-                        <tr>                                        
-                          <td align="center"><strong>OFFICE OF THE REGISTRAR (STATISTICS &
-                              RECORDS)</strong><br>
-                              <p style="text-decoration: underline;font-weight: bold; text-align: center;">PERSONAL DATA FORM</p></td>
-                              <td> <img alt="logo" height="70" src="/storage/passports/{{ $applicant->passport }}" width="70" /></td>
-                          </tr>
-                      </table>
+                <table width="100%" >
+                  <tr align="right">
+                    <td width="100%">
+                      <strong>FORM R/REG______________</strong><br>
+                      <p style="text-decoration: underline;font-weight: bold; text-align: center;">
+                        <strong>
+                          OFFICE OF THE REGISTRAR<br>
+                          PROVISIONAL CLEARANCE
+                        </strong>
+                      </p>
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      <table width="100%" style="padding:20px;" cellpadding="5">
+                      <table width="100%" style="padding:20px;" cellpadding="8">
                         <tbody>
-                            
-                          <tr  class="grad" >
-                            <td>Name of Student:</td>
-                            <td><strong>{{ $applicant->full_name }}</strong></td>
+                          <tr  class="grad" style="padding:20px;">
+                            <td><strong>NAME:</strong></td>
+                            <td>{{ $applicant->full_name }}</td>
                           </tr>
-                          <tr class="gra">
-                            <td>Registration No:</td>
+                          <tr class="gra" style="margin:20px;">
+                            <td><strong>JAMB NO:</strong></td>
                             <td>{{ $applicant->j_regno }}</td>
                           </tr>
                           <tr  class="grad">
-                            <td>Educational Qualification with dates:</td>
-                            <td>SECONDARY SCHOOL, {{ $latestYear }}</td>
-                          </tr>
-                            <!-- <tr  class="gra">
-                            <td>Last School Attended with dates:</td>
-                            <td>QUEEN OF THE ROSARY, COMPREHENSIVE SEC
-                                SCH. EZIOWELLE 2011/2017</td>
-                            </tr> -->
-                          <tr  class="grad">
-                            <td>Department:</td>
+                            <td><strong>DEPARTMENT:</strong></td>
                             <td>{{ $applicant->field->field_name }}</td>
                           </tr>
                           <tr  class="gra">
-                            <td>Year of Admission:</td>
-                            <td>{{ $applicant->admission->admission_year }}</td>
+                            <td><strong>FACULTY/SCHOOL:</strong></td>
+                            <td>{{ $applicant->field->faculty->faculty_name }}</td>
                           </tr>
                           <tr  class="grad">
-                            <td>Probable year of Graduation:</td>
-                            <td></td>
-                          </tr>
-                          <tr  class="gra">
-                            <td>Date of Birth:</td>
-                            <td>{{ $applicant->dob }}</td>
-                          </tr>
-                          <tr  class="grad">
-                            <td>Town of Origin:</td>
-                            <td>{{ $applicant->town->town }}</td>
-                          </tr>
-                          <tr  class="gra">
-                            <td>Local Govt. Area:</td>
-                            <td>{{ $applicant->lga->name }}</td>
-                          </tr>
-                          <tr  class="grad">
-                            <td>Religious Denomination:</td>
-                            <td>{{ $applicant->religion->religion_name }}</td>
-                          </tr>
-                          <tr  class="gra">
-                            <td>Next of Kin:</td>
-                            <td>{{ $applicant->nextOfKins[0]->full_name }}</td>
-                          </tr>
-                          <tr  class="grad">
-                            <td>Relationship of Next of Kin:</td>
-                            <td>{{ $applicant->nextOfKins[0]->relationship->relationship }}</td>
-                          </tr>
-                          <tr  class="gra">
-                            <td>Address of Next of Kin:</td>
-                            <td></td>
-                          </tr>
-                          
+                            <td><strong>SESSION:</strong></td>
+                            <td>{{ $applicant->admission->admission_year }}/{{ $applicant->admission->admission_year + 1 }}</td>
+                          </tr>                              
                         </tbody>
                       </table>
                     </td>
@@ -320,9 +280,10 @@
                 </table>
               </td>
             </tr>
-            <tr  class="">
-              <td>Name and Address of Person to be contacted in case of emergency:_________________________________________________
-                  ________________________________________________________
+            <tr>
+              <td>
+                The above-mentioned has been provisionally cleared by me for the reason that
+                there is inconclusive evidence of entry qualifications.
               </td>
             </tr>
             <tr>
@@ -331,18 +292,24 @@
                   <tr>                                
                     <tr>
                       <td class="auto-style7"><br>
-                        <table width="100%" >
-                          <tr align="left">
-                            <td width="100%">
-                              Marital Status:___________________________<br><br>
-                              Name and Address of Spouse_______________________<br><br>
-                              No. of Children (If any) indicate ages____________________                               
+                        <table width="100%">
+                          <tr>
+                            <td style="font-size: 14px;">
+                              School Officer's Signature:_______________________________________<br><br>
+                              Name in Full:___________________________________<br><br>
+                              Date:___________________________________
+                                  
+                            </td>                                    
+                          </tr>
+                          <tr>
+                            <td style="text-align: right"><br><br>
+                                _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br>
+                              OFFICE STAMP
                             </td>
                           </tr>
                         </table>
                       </td>
                     </tr>
-                    <tr><td><i style="font-size:9px; text-align:center">I certify that the above information is correct</i></td></tr>
                   </tr>
                 </table>
               </td>

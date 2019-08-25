@@ -3,7 +3,6 @@ namespace App\Http\Controllers\Applicant;
 
 use Validator;
 use Storage;
-use DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\EtranzactClient;
@@ -81,7 +80,77 @@ class ApplicationController extends Controller
     return view('applicant.biodata', [
       'latestYear' => $latestYear,
       'applicant' => $applicant,
-      'pageTitle' => "$applicant->full_name biodata"
+      'pageTitle' => "$applicant->full_name | Biodata"
+    ]);
+  }
+
+  public function printAcceptanceLetter($id)
+  {
+    $applicant = Applicant::find($id)->load('admission', 'field.programme');
+
+    if (! $applicant->admission->admitted) abort(403);
+
+    return view('applicant.acceptance-letter', [
+      'applicant' => $applicant,
+      'pageTitle' => "$applicant->full_name | Acceptance letter"
+    ]);
+  }
+
+  public function printAdmissionLetter($id)
+  {
+    $applicant = Applicant::find($id)->load('admission', 'field.programme');
+
+    if (! $applicant->admission->admitted) abort(403);
+
+    return view('applicant.admission-letter', [
+      'applicant' => $applicant,
+      'pageTitle' => "$applicant->full_name | Admission letter"
+    ]);
+  }
+
+  public function printProvisionalClearance($id)
+  {
+    $applicant = Applicant::find($id)
+      ->load(
+        'admission',
+        'institution',
+        'field.programme'
+      );
+
+    if (! $applicant->admission->admitted) abort(403);
+
+    return view('applicant.provisional-clearance', [
+      'applicant' => $applicant,
+      'pageTitle' => "$applicant->full_name | Provisional clearance"
+    ]);
+  }
+
+  public function printUndertaking($id)
+  {
+    $applicant = Applicant::find($id)
+      ->load(
+        'admission',
+        'olevelResults.examType',
+        'institution',
+        'field.programme'
+      );
+
+    $subjects = array_reduce(Subject::all()->all(), function ($subArr, $s) {
+      $subArr[$s->id] = $s->subject_name;
+      return $subArr;
+    }, []);
+    $grades = array_reduce(OlevelGrade::all()->all(), function ($gradeArr, $g) {
+      $gradeArr[$g->id] = $g->grade_name;
+      return $gradeArr;
+    }, []);
+
+    if (! $applicant->admission->admitted) abort(403);
+
+    return view('applicant.undertaking', [
+      'grades' => $grades,
+      'subjects' => $subjects,
+      'applicant' => $applicant,
+      'pageTitle' => "$applicant->full_name | Letter of undertaking"
     ]);
   }
 
@@ -296,50 +365,9 @@ class ApplicationController extends Controller
 
   public function listApplications()
   {
-    $applicationTable = (new Applicant)->getTable();
-    $olevelTable = (new OlevelResult)->getTable();
-    $nokTable = (new NextOfKin)->getTable();
-    $utmeTable = (new UtmeResult)->getTable();
-    $paymentTable = (new Payment)->getTable();
-
-    $applications = Applicant::where('locked', 0)
-      ->whereNotNull('passport')
-      ->whereNotNull('surname')
-      ->whereNotNull('first_name')
-      ->whereNotNull('gender_id')
-      ->whereNotNull('religion_id')
-      ->whereNotNull('nationality_id')
-      ->whereNotNull('state_id')
-      ->whereNotNull('lga_id')
-      ->whereNotNull('dob')
-      ->whereExists(function ($q) use($applicationTable, $olevelTable) {
-        $q->select(DB::raw(1))
-          ->from($olevelTable)
-          ->whereRaw("{$applicationTable}.id = {$olevelTable}.application_id");
-      })
-      ->whereExists(function ($q) use($applicationTable, $nokTable) {
-        $q->select(DB::raw(1))
-          ->from($nokTable)
-          ->whereRaw("{$applicationTable}.id = {$nokTable}.application_id");
-      })
-      ->whereExists(function ($q) use($applicationTable, $utmeTable) {
-        $q->select(DB::raw(1))
-          ->from($utmeTable)
-          ->whereRaw("{$applicationTable}.id = {$utmeTable}.application_id");
-      })
-      ->whereExists(function ($q) use($applicationTable, $paymentTable) {
-        $q->select(DB::raw(1))
-          ->from($paymentTable)
-          ->whereRaw("{$applicationTable}.j_regno = {$paymentTable}.j_regno");
-      })
-      ->get()
-      ->load('nextOfKins', 'nextOfKins.relationship', 'nextOfKins.gender', 'olevelResults', 'olevelResults.examType',
-        'utme', 'field', 'field.programme', 'field.department', 'field.faculty', 'gender', 'religion', 'nationality',
-        'state', 'lga', 'town');
-
     return view('application.list', [
       'institution' => auth()->user()->institution->loadMissing('programmes', 'faculties', 'departments', 'fields'),
-      'applications' => $applications,
+      'applications' => Applicant::getApplicationsForReview(),
       'subjects' => Subject::all()->toArray(),
       'grades' => OlevelGrade::all()->toArray(),
       'pageTitle' => 'Applications'

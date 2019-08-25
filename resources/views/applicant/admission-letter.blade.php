@@ -237,112 +237,61 @@
             </tr>
             <tr>
               <td>
-                <table width="100%" style="font-size: 15px; padding-top:20px; line-height: 20px; ">
+                <table width="100%" style="font-size: 15px; padding-top:20px; line-height: 20px;">
                   <tr>
                     <td>
-                      <table style=" width: 100%;">
-                        <tr>                                        
-                          <td align="center"><strong>OFFICE OF THE REGISTRAR (STATISTICS &
-                              RECORDS)</strong><br>
-                              <p style="text-decoration: underline;font-weight: bold; text-align: center;">PERSONAL DATA FORM</p></td>
-                              <td> <img alt="logo" height="70" src="/storage/passports/{{ $applicant->passport }}" width="70" /></td>
-                          </tr>
+                      <table style="padding-bottom:20px; width: 100%;">
+                        <tr>
+                          <td> <strong>Our Ref: NOCEN/ADM/DM/59/</strong></td>
+                          <td align="right">Date: {{ date('D d M, Y') }}</td>
+                        </tr>
                       </table>
-                    </td>
+                    </td>                               
                   </tr>
-                  <tr>
-                    <td>
-                      <table width="100%" style="padding:20px;" cellpadding="5">
-                        <tbody>
-                            
-                          <tr  class="grad" >
-                            <td>Name of Student:</td>
-                            <td><strong>{{ $applicant->full_name }}</strong></td>
-                          </tr>
-                          <tr class="gra">
-                            <td>Registration No:</td>
-                            <td>{{ $applicant->j_regno }}</td>
-                          </tr>
-                          <tr  class="grad">
-                            <td>Educational Qualification with dates:</td>
-                            <td>SECONDARY SCHOOL, {{ $latestYear }}</td>
-                          </tr>
-                            <!-- <tr  class="gra">
-                            <td>Last School Attended with dates:</td>
-                            <td>QUEEN OF THE ROSARY, COMPREHENSIVE SEC
-                                SCH. EZIOWELLE 2011/2017</td>
-                            </tr> -->
-                          <tr  class="grad">
-                            <td>Department:</td>
-                            <td>{{ $applicant->field->field_name }}</td>
-                          </tr>
-                          <tr  class="gra">
-                            <td>Year of Admission:</td>
-                            <td>{{ $applicant->admission->admission_year }}</td>
-                          </tr>
-                          <tr  class="grad">
-                            <td>Probable year of Graduation:</td>
-                            <td></td>
-                          </tr>
-                          <tr  class="gra">
-                            <td>Date of Birth:</td>
-                            <td>{{ $applicant->dob }}</td>
-                          </tr>
-                          <tr  class="grad">
-                            <td>Town of Origin:</td>
-                            <td>{{ $applicant->town->town }}</td>
-                          </tr>
-                          <tr  class="gra">
-                            <td>Local Govt. Area:</td>
-                            <td>{{ $applicant->lga->name }}</td>
-                          </tr>
-                          <tr  class="grad">
-                            <td>Religious Denomination:</td>
-                            <td>{{ $applicant->religion->religion_name }}</td>
-                          </tr>
-                          <tr  class="gra">
-                            <td>Next of Kin:</td>
-                            <td>{{ $applicant->nextOfKins[0]->full_name }}</td>
-                          </tr>
-                          <tr  class="grad">
-                            <td>Relationship of Next of Kin:</td>
-                            <td>{{ $applicant->nextOfKins[0]->relationship->relationship }}</td>
-                          </tr>
-                          <tr  class="gra">
-                            <td>Address of Next of Kin:</td>
-                            <td></td>
-                          </tr>
-                          
-                        </tbody>
-                      </table>
+                  <tr align="left">
+                    <td width="100%">
+                      <strong>{{ $applicant->full_name }}<br>
+                        {{ $applicant->field->faculty->faculty_name }} / {{ $applicant->field->field_name }}
+                      </strong><br>                                  
+                      <p style="text-decoration: underline;font-weight: bold; text-align: center;">OFFER OF PROVISIONAL ADMISSION FOR {{ $applicant->admission->admission_year }} SESSION</p><br>
+                      I am happy to inform you that you have been offered Provisional Admission into
+                        <strong>Nwafor Orizu College of Education, Nsugbe in affiliation with
+                      University of Nigeria, Nsukka</strong>
+                      to pursue a three/four years degree programme in {{ $applicant->field->field_name }} for
+                      the {{ $applicant->admission->admission_year }} academic session.<br>
+                      (a) An Offer of Admission lapses if the candidate does not register within one
+                      month from the date of admission<br>
+                      (b) Regularization of this offer will be subject to:<br>
+                      &nbsp;&nbsp;&nbsp;&nbsp;(i) Screening of the originals of your credentials by the Admission Officer<br>
+                      &nbsp;&nbsp;&nbsp;&nbsp;(ii) Your producing the original receipt of fees paid with photocopies during
+                      the screening<br>
+                      Failure to comply with the conditions stated above will automatically lead to the
+                      withdrawal of the offer of admission at any point in time.<br>
+                      We congratulate you and look forward to your registration as a student of the
+                      University in the College.<br><br>
+                      Thank you.
                     </td>
                   </tr>
                 </table>
               </td>
             </tr>
-            <tr  class="">
-              <td>Name and Address of Person to be contacted in case of emergency:_________________________________________________
-                  ________________________________________________________
-              </td>
-            </tr>
             <tr>
               <td height="" valign="top">
                 <table style="width: 100%">
-                  <tr>                                
-                    <tr>
-                      <td class="auto-style7"><br>
-                        <table width="100%" >
-                          <tr align="left">
-                            <td width="100%">
-                              Marital Status:___________________________<br><br>
-                              Name and Address of Spouse_______________________<br><br>
-                              No. of Children (If any) indicate ages____________________                               
-                            </td>
-                          </tr>
-                        </table>
-                      </td>
-                    </tr>
-                    <tr><td><i style="font-size:9px; text-align:center">I certify that the above information is correct</i></td></tr>
+                  <tr>
+                    <td class="auto-style7"><br>
+                      <table width="100%" >
+                        <tr>
+                          <td style="font-size: 14px;">
+                            ____________________<br><br>
+                            For <strong>REGISTRAR</strong>
+                          </td>
+                          <td style="text-align: right">
+                            &nbsp;
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
                   </tr>
                 </table>
               </td>
