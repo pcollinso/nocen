@@ -16,6 +16,8 @@ class LoginController extends Controller
     {
         $errorMsg = '';
         $step = 1;
+        $creds = [];
+
         if ($this->request->isMethod('post')) {
             $creds = array_intersect_key($this->request->all(), ['login' => 1, 'password' => 1]);
             $user = $this->userProvider->retrieveByCredentials($creds);
@@ -32,7 +34,11 @@ class LoginController extends Controller
                 $errorMsg = 'User not found';
             }
         }
-        return view('auth.login', ['errorMsg' => !empty($errorMsg) ? Utility::parseErrorArray([$errorMsg]) : "", 'step' => $step]);
+        return view('auth.login', [
+          'errorMsg' => !empty($errorMsg) ? Utility::parseErrorArray([$errorMsg]) : "", 
+          'step' => $step,
+          'login' => $creds['login'] ?? ''
+        ]);
     }
 
     public function logout()

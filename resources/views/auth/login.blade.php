@@ -17,6 +17,7 @@
               <Login
                   :error="{{ json_encode($errorMsg) }}"
                   :step_value="{{ $step ? json_encode($step) : 1 }}"
+                  current-login="{{ $login }}"
               />
 
             </div>

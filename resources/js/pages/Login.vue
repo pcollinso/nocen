@@ -40,7 +40,7 @@
 
                     <div v-if="secondStep" class="form-group m-b-20">
                         <label v-if="error.length" v-html="error"> </label>
-                        <label v-else>Welcome {{ name }} ({{ form.type | capitalize }})</label>
+                        <label>Welcome {{ name }} ({{ form.type | capitalize }})</label>
                     </div>
                     <div v-if="secondStep" class="form-group m-b-20">
                         <input
@@ -123,6 +123,10 @@ export default {
     },
     step_value: {
       type: Number,
+    },
+    currentLogin: {
+      type: String,
+      default: () => ''
     }
   },
   components: {
@@ -189,7 +193,13 @@ export default {
   },
   mounted() {
     this.form.token = document.querySelector('meta[name="csrf-token"]').content;
-    this.$refs.username.focus();
+
+    if (this.currentLogin.length) {
+      this.form.login = this.currentLogin;
+      this.checkForm();
+    } else {
+      this.$refs.username.focus();
+    }
   },
   methods: {
     checkForm() {
