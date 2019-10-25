@@ -19,7 +19,9 @@
                   :religions="religions"
                   :lgas="lgas" />
 
-                <payment-confirmation @payment-confirmed="paymentConfirmed" v-if="secondStep && !secondStepDone" :applicant="localApplicant" />
+                <div v-if="secondStep && !secondStepDone">
+                  <h4>Application fee not paid or confirmed. <a href="/a/payments">Make/confirm payment</a></h4>
+                </div>
 
                 <next-of-kin
                   v-if="thirdStep"
@@ -56,16 +58,18 @@
           <div class="col-lg-7 col-sm-12">
             <div class="panel panel-inverse">
               <div v-if="checkPostUtmePayment" class="panel-body">
-                <result-fee-confirmation @payment-confirmed="updateApplicant" :applicant="localApplicant" />
+                <h4>
+                  Post-UTME result fee not paid/confirmed. <a href="/a/payments">Make/confirm payment</a>
+                </h4>
               </div>
               <div v-else class="panel-body">
                 <h4>Your Post UTME score is {{ localApplicant.admission.total_post_utme_score }}</h4>
                 <h4>Your admission application has been {{ grantedMsg }}</h4>
                 <hr>
-                <acceptance-fee-confirmation
-                  v-if="checkAcceptancePayment"
-                  @payment-confirmed="updateApplicant"
-                  :applicant="localApplicant" />
+
+                <h4 v-if="checkAcceptancePayment">
+                  Acceptance fee not paid/confirmed. <a href="/a/payments">Make/confirm payment</a>
+                </h4>
                 <a v-else href="/a/biodata" target="_blank" class="btn btn-secondary">
                   Print biodata
                 </a>

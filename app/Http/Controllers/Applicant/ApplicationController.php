@@ -57,6 +57,24 @@ class ApplicationController extends Controller
     ]);
   }
 
+  public function payments()
+  {
+    $applicant = auth()
+      ->user()
+      ->load(
+        'olevelResults.examType',
+        'utme',
+        'admission',
+        'institution',
+        'field.programme'
+      );
+    
+    return view('applicant.payments', [
+      'applicant' => $applicant,
+      'pageTitle' => 'Application payments'
+    ]);
+  }
+
   public function printBiodata()
   {
     $applicant = auth()

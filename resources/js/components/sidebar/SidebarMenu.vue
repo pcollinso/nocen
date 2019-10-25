@@ -1,5 +1,5 @@
 <script>
-    const sidebarMenu = [
+  export default [
         { path: '#', icon: 'fa fa-th', title: 'Create/setup institution',
             roles: ['superadmin'],
             children: [
@@ -74,8 +74,8 @@
         { path: '/a/applications', icon: 'fa fa-graduation-cap', title: 'Review applications', permissions: ['application:review'] },
         { path: '#', img: '/images/logo/logo-bs4.png', title: 'Manage result', permissions: [] },
         { path: '/change-password', icon: 'fa fa-lock', title: 'Change password', roles: ['institutionadmin','user', 'staff','student','superadmin']},
-        { path: '/action-history', icon: 'fa fa-list', title: 'Action history', roles: ['institutionadmin','user', 'staff','student','superadmin']}
-    ]
-
-    export default sidebarMenu;
+        { path: '/action-history', icon: 'fa fa-list', title: 'Action history', roles: ['institutionadmin','user', 'staff','student','superadmin']},
+        { path: '/a/home', icon: 'fa fa-graduation-cap', title: 'Application', roles: ['applicant']},
+        { path: '/a/payments', icon: 'fa fa-list', title: 'Payments', roles: ['applicant']}
+    ];
 </script>
