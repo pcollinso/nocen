@@ -25,7 +25,7 @@ class InstitutionTableSeeder extends Seeder
                 'state' => 'ANAMBRA',
                 'phone' => '08011111111112',
                 'email' => 'support@nocen.edu.ng',
-                'terminal_id' => '7009158828',
+                'terminal_id' => '4922690965',
                 'course_staff_same_department' => 1,
                 'course_staff_same_faculty' => 1,
                 'course_staff_same_programme' => 1,

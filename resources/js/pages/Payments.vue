@@ -5,48 +5,49 @@
       <div v-if="checkApplicationFee" class="form-group">
         <label>Application fee</label>
         &emsp;
-        <div class="d-inline" v-if="applicationFeePaid">
-          <i class="fa fa-check text-success h3"></i>
+        <i v-if="applicationFeePaid" class="fa fa-check text-success h3"></i>
+        <div class="row" v-else>
+          <div class="col-md-1">
+            <button class="btn btn-sm btn-outline-secondary">
+              Pay
+            </button>
+          </div>
+          <div class="col-md-2">
+            <application-fee-confirmation @payment-confirmed="updateApplicant" type="application" />
+          </div>
         </div>
-        <div class="d-inline" v-else>
-          <button class="btn btn-sm btn-outline-secondary">
-            Pay
-          </button>
-          <button class="btn btn-sm btn-outline-secondary">
-            Confirm bank payment
-          </button>
-        </div>
+        
       </div>
 
       <div v-if="checkPostUtmeResultPayment" class="form-group">
         <label>Post-UTME result fee</label>
         &emsp;
-        <div class="d-inline" v-if="postUtmeResultPaid">
-          <i class="fa fa-check text-success h3"></i>
-        </div>
-        <div class="d-inline" v-else>
-          <button class="btn btn-sm btn-outline-secondary">
-            Pay
-          </button>
-          <button class="btn btn-sm btn-outline-secondary">
-            Confirm bank payment
-          </button>
+        <i v-if="postUtmeResultPaid" class="fa fa-check text-success h3"></i>
+        <div class="row" v-else>
+          <div class="col-md-1">
+            <button class="btn btn-sm btn-outline-secondary">
+              Pay
+            </button>
+          </div>
+          <div class="col-md-2">
+            <application-fee-confirmation @payment-confirmed="updateApplicant" type="post-utme" />
+          </div>
         </div>
       </div>
 
       <div v-if="checkAcceptancePayment" class="form-group">
         <label>Acceptance fee</label>
         &emsp;
-        <div class="d-inline" v-if="acceptanceFeePaid">
-          <i class="fa fa-check text-success h3"></i>
-        </div>
-        <div class="d-inline" v-else>
-          <button class="btn btn-sm btn-outline-secondary">
-            Pay
-          </button>
-          <button class="btn btn-sm btn-outline-secondary">
-            Confirm bank payment
-          </button>
+        <i v-if="acceptanceFeePaid" class="fa fa-check text-success h3"></i>
+        <div class="row" v-else>
+          <div class="col-md-1">
+            <button class="btn btn-sm btn-outline-secondary">
+              Pay
+            </button>
+          </div>
+          <div class="col-md-2">
+            <application-fee-confirmation @payment-confirmed="updateApplicant" type="acceptance" />
+          </div>
         </div>
       </div>
     </div>
@@ -55,12 +56,14 @@
 <script>
 import Page from './Page';
 import PageTitle from '../components/header/PageTitle';
+import ApplicationFeeConfirmation from '../components/application/ApplicationFeeConfirmation';
 
 export default {
   name: 'Payments',
   components: {
     Page,
     PageTitle,
+    ApplicationFeeConfirmation,
   },
   props: ['applicant'],
   data() {
@@ -92,6 +95,11 @@ export default {
     },
     acceptanceFeePaid() {
       return !! this.localApplicant.acceptance_fee;
+    }
+  },
+  methods: {
+    updateApplicant(obj) {
+      this.localApplicant = obj;
     }
   }
 };

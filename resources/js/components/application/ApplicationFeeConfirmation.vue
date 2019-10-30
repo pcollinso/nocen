@@ -1,30 +1,34 @@
 <template>
-  <div>
-    <div class="form-group">
-      <label>Confirmation code</label>
-      <input type="text" class="form-control" v-model.trim="confirmation_no">
-    </div>
-    <div class="form-group">
-      <button :disabled="!confirmation_no.length || busy" @click.stop="confirmPayment()" class="btn btn-secondary">
-        {{ buttonText }}
-      </button>
+  <div class="d-inline">
+    <div class="input-group">
+      <input type="text" class="form-control" v-model.trim="rrr">
+      <div class="input-group-append">
+        <button :disabled="!rrr.length || busy" @click.stop="confirmPayment()" class="btn btn-sm btn-outline-secondary">
+          {{ buttonText }}
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'PaymentConfirmation',
-  props: ['applicant'],
+  name: 'ApplicationFeeConfirmation',
+  props: ['applicant', 'type'],
   data() {
     return {
-      confirmation_no: '',
+      rrr: '',
       busy: false
     };
   },
   computed: {
     buttonText() {
       return this.busy ? 'Confirming...' : 'Confirm payment';
+    },
+    endpoint() {
+      if (this.type === 'application') return '/a/confirm-application-fee';
+      if (this.type === 'post-utme') return '/a/confirm-result-fee';
+      if (this.type === 'acceptance') return '/a/confirm-acceptance-fee';
     }
   },
   methods: {
@@ -34,7 +38,7 @@ export default {
       this.busy = true;
 
       axios
-        .post(`/a/confirm-application-fee`, { confirmation_no: this.confirmation_no })
+        .post(this.endpoint, { rrr: this.rrr })
         .then(({ data: { success, message, payment } }) => {
           this.busy = false;
           alert(message);

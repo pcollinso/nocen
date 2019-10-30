@@ -5,7 +5,7 @@ use Validator;
 use Storage;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Http\EtranzactClient;
+use App\Http\RemitaClient;
 use App\Utils\PaymentConfirmation;
 use App\Models\Applicant;
 use App\Models\Admission;
@@ -430,7 +430,7 @@ class ApplicationController extends Controller
 
     $applicant = auth()->user()->loadMissing('institution');
 
-    $confirmationResult = $this->confirmFee($applicant, $data['confirmation_no'], 'APPLICATION_FEE');
+    $confirmationResult = $this->confirmFee($applicant, $data['rrr'], 'APPLICATION_FEE');
 
     return response()->json($confirmationResult, $confirmationResult['success'] ? 200 : 400);
   }
@@ -441,7 +441,7 @@ class ApplicationController extends Controller
 
     $applicant = auth()->user()->loadMissing('institution');
 
-    $confirmationResult = $this->confirmFee($applicant, $data['confirmation_no'], 'POST_UTME_RESULT_CHECK_FEE');
+    $confirmationResult = $this->confirmFee($applicant, $data['rrr'], 'POST_UTME_RESULT_CHECK_FEE');
 
     return response()->json($confirmationResult, $confirmationResult['success'] ? 200 : 400);
   }
@@ -452,25 +452,36 @@ class ApplicationController extends Controller
 
     $applicant = auth()->user()->loadMissing('institution');
 
-    $confirmationResult = $this->confirmFee($applicant, $data['confirmation_no'], 'ACCEPTANCE_FEE');
+    $confirmationResult = $this->confirmFee($applicant, $data['rrr'], 'ACCEPTANCE_FEE');
 
     return response()->json($confirmationResult, $confirmationResult['success'] ? 200 : 400);
   }
 
-  private function confirmFee($applicant, $code, $fee)
+  private function confirmFee($applicant, $rrr, $fee)
   {
-    $paymentResponse = EtranzactClient::getPayment($applicant->institution->terminal_id, $code);
+    $paymentRecord = Payment::where('j_regno', $applicant->j_regno)
+      ->where('institution_id', $applicant->institution_id)
+      ->where('rrr', $rrr)
+      ->where('completed', 0)
+      ->first();
 
-    if (EtranzactClient::isErrorResponse($paymentResponse))
+    if (empty($paymentRecord))
     {
-      return response()->json([
-        'success' => false,
-        'message' => 'Payment record not found'
-      ], 400);
+      return ['success' => false, 'message' => 'Payment record not found'];
+    }
+
+    $paymentResponse = RemitaClient::getPayment($applicant->institution->terminal_id, $paymentRecord->rrr);
+
+    if ($paymentResponse['status'] != '00')
+    {
+      return ['success' => false, 'message' => 'Payment confirmation failed'];
     }
 
     ['success' => $success, 'message' => $msg, 'data' => $data] =
-      PaymentConfirmation::confirmApplicationFee($applicant, $paymentResponse, $fee);
+      PaymentConfirmation::confirmApplicationFee($applicant, 
+        $paymentResponse, 
+        $paymentRecord, 
+        $fee);
 
     return $success ?
       ['success' => $success, 'message' => $msg, 'payment' => $data] :

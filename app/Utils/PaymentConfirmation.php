@@ -1,7 +1,7 @@
 <?php
 namespace App\Utils;
 
-use App\Http\EtranzactClient;
+use App\Http\RemitaClient;
 use App\Models\Applicant;
 use App\Models\Payment;
 use App\Models\Fee;
@@ -11,22 +11,18 @@ use DB;
 final class PaymentConfirmation
 {
 
-  public static function confirmApplicationFee(Applicant $applicant, array $etranzactResponse, string $fee) : array
+  public static function confirmApplicationFee(Applicant $applicant, 
+    array $remitaResponse, 
+    Payment $paymentRecord, 
+    string $fee) : array
   {
-    if ($applicant->j_regno != $etranzactResponse['CUSTOMER_ID'])
+    if ($applicant->j_regno != $paymentRecord->j_regno)
     {
       return ['success' => false, 'message' => "Payment record does not belong to applicant", 'data' => null];
     }
 
-    if(Payment::where('confirmation_no', $etranzactResponse['CONFIRMATION_NO'])->exists())
-    {
-      return ['success' => false, 'message' => "Confirmation pin already used!", 'data' => null];
-    }
+    if ($remitaResponse['status'] != '00')  return ['success' => false];
 
-    $amount = $etranzactResponse['TRANS_AMOUNT'] ?? 0; // amount
-
-    // This is commented out as fee type from Etranzact is not same as fee type in database
-    // $feeType = FeeType::where('fee_type', $etranzactResponse['TYPE_NAME'])->first();
     $feeType = FeeType::where('fee_type', $fee)->first();
 
     if(! $feeType)
@@ -36,7 +32,7 @@ final class PaymentConfirmation
 
     $levelId = 1;
     $regno = null;
-    $applicant->loadMissing(['field', 'utme', 'olevelResults', 'nextOfKins']);
+    $applicant->loadMissing(['field']);
 
     $query = "SELECT sf.* FROM sch_fee sf";
     $query .= " INNER JOIN sup_institution si ON sf.institution_id=si.id";
@@ -63,16 +59,22 @@ final class PaymentConfirmation
       $applicant->j_regno,
       $regno,
       $applicant->field->id,
-      $applicant->field->id,$levelId,
+      $applicant->field->id,
+      $levelId,
       $applicant->field->department_id,
-      $applicant->field->department_id,$levelId,
+      $applicant->field->department_id,
+      $levelId,
       $applicant->field->faculty_id,
-      $applicant->field->faculty_id,$levelId,
+      $applicant->field->faculty_id,
+      $levelId,
       $applicant->field->programme_id,
-      $applicant->field->programme_id,$levelId,
+      $applicant->field->programme_id,
+      $levelId,
       $applicant->field->institution_id,
-      $applicant->field->institution_id,$levelId,
-      $feeType->id,$applicant->field->institution_id
+      $applicant->field->institution_id,
+      $levelId,
+      $feeType->id,
+      $applicant->field->institution_id
     ]);
 
     $fee = array_shift($fee);
@@ -82,12 +84,10 @@ final class PaymentConfirmation
       return ['success' => false, 'message' => "Fee type not found!", 'data' => null];
     }
 
-    if($fee->is_one_off &&
-      ! in_array($fee->amount, [$amount, $amount + 100, $amount - 10]))
+    if($fee->is_one_off && ! in_array($fee->amount, [$amount, $amount + 100, $amount - 10]))
     {
       return ['success' => false, 'message' => "Invalid fee amount paid!", 'data' => null];
     }
-
 
     $feeDetail = $fee->is_one_off ?
       $fee :
@@ -105,42 +105,20 @@ final class PaymentConfirmation
       return ['success' => false, 'message' => "Invalid fee amount paid!", 'data' => null];
     }
 
-    $uniqueParams = [
-      'j_regno' => $applicant->j_regno,
-      'regno' => $regno,
-      'receipt_no' => $etranzactResponse['RECEIPT_NO'] ?? '',
-      'institution_id' => $applicant->field->institution_id,
-      'fee_id' => $fee->fee_type_id,
-    ];
+    // $rest = [
+    //   'j_regno' => $applicant->j_regno,
+    //   'regno' => $regno,
+    //   'institution_id' => $applicant->field->institution_id,
+    //   'fee_id' => $fee->fee_type_id,
+    //   'payment_type_id' => $feeDetail->payment_type_id,
+    //   'level_id' => $levelId,
+    //   'amount' => $feeDetail->amount,
+    // ];
 
-    $rest = [
-      'confirmation_no' => $etranzactResponse['CONFIRMATION_NO'],
-      'payment_type_id' => $feeDetail->payment_type_id,
-      'level_id' => $levelId,
-      'amount' => $feeDetail->amount,
-      'terminal_id' => $etranzactResponse['TERMINAL_ID'],
-      'payment_code' => $etranzactResponse['PAYMENT_CODE'] ?? '',
-      'merchant_code' => $etranzactResponse['MERCHANT_CODE'] ?? '',
-      'payment_date' => $etranzactResponse['TRANS_DATE'] ?? '',
-      'payment_description' => $etranzactResponse['TRANS_DESCR'] ?? '',
-      'cbn_code' => $etranzactResponse['BANK_CODE'] ?? '',
-      'bank_name' => $etranzactResponse['BANK_NAME'] ?? '',
-      'bank_branch' => $etranzactResponse['BRANCH_NAME'] ?? '',
-      'lead_bank_code' => $etranzactResponse['LEAD_BANK_CODE'] ?? '',
-      'lead_bank_name' => $etranzactResponse['LEAD_BANK_NAME'] ?? '',
-      'customer_name' => $etranzactResponse['CUSTOMER_NAME'] ?? '',
-      'teller_id' => $etranzactResponse['TELLER_ID'] ?? '',
-      'payment_method' => $etranzactResponse['PAYMENT_METHOD_NAME'] ?? '',
-      'payment_currency' => $etranzactResponse['PAYMENT_CURRENCY'] ?? '',
-      'transaction_type' => $etranzactResponse['TRANS_TYPE'] ?? '',
-      'payment_fee_type' => $etranzactResponse['TYPE_NAME'] ?? ''
-    ];
+    $paymentRecord->completed = true;
+    $paymentRecord->save();
 
-    Payment::unguard();
-    $paymentInfo = Payment::updateOrCreate($uniqueParams, $rest);
-    Payment::reguard();
-
-    return ['success' => true, 'message' => 'Payment confirmed', 'data' => $paymentInfo];
+    return ['success' => true, 'message' => 'Payment confirmed', 'data' => $paymentRecord];
   }
 
 }

@@ -91,9 +91,6 @@
 import Page from './Page';
 import PageTitle from '../components/header/PageTitle';
 import ApplicationBiodata from '../components/application/Biodata';
-import PaymentConfirmation from '../components/application/PaymentConfirmation';
-import ResultFeeConfirmation from '../components/application/ResultFeeConfirmation';
-import AcceptanceFeeConfirmation from '../components/application/AcceptanceFeeConfirmation';
 import NextOfKin from '../components/application/NextOfKin';
 import Olevel from '../components/application/Olevel';
 import Utme from '../components/application/Utme';
@@ -105,9 +102,6 @@ export default {
     Page,
     PageTitle,
     ApplicationBiodata,
-    PaymentConfirmation,
-    ResultFeeConfirmation,
-    AcceptanceFeeConfirmation,
     NextOfKin,
     Olevel,
     Utme,
