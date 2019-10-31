@@ -428,32 +428,27 @@ class ApplicationController extends Controller
 
   public function confirmApplicationFee()
   {
-    $data = $this->request->all();
-
     $applicant = auth()->user()->loadMissing('institution');
 
-    $confirmationResult = $this->confirmFee($applicant, $data['rrr'], 'APPLICATION_FEE');
+    $confirmationResult = $this->confirmFee($applicant, $this->request->input('rrr'), 'APPLICATION_FEE');
 
     return response()->json($confirmationResult, $confirmationResult['success'] ? 200 : 400);
   }
 
   public function confirmResultFee()
   {
-    $data = $this->request->all();
-
     $applicant = auth()->user()->loadMissing('institution');
 
-    $confirmationResult = $this->confirmFee($applicant, $data['rrr'], 'POST_UTME_RESULT_CHECK_FEE');
+    $confirmationResult = $this->confirmFee($applicant, $this->request->input('rrr'), 'POST_UTME_RESULT_CHECK_FEE');
 
     return response()->json($confirmationResult, $confirmationResult['success'] ? 200 : 400);
   }
 
   public function confirmAcceptanceFee()
   {
-    $data = $this->request->all();
     $applicant = auth()->user()->loadMissing('institution');
 
-    $confirmationResult = $this->confirmFee($applicant, $data['rrr'], 'ACCEPTANCE_FEE');
+    $confirmationResult = $this->confirmFee($applicant, $this->request->input('rrr'), 'ACCEPTANCE_FEE');
 
     return response()->json($confirmationResult, $confirmationResult['success'] ? 200 : 400);
   }
@@ -461,9 +456,8 @@ class ApplicationController extends Controller
   public function generateRrr()
   {
     $orderId = date('dmyHis');
-    $data = $this->request->all();
     $applicant = auth()->user()->loadMissing(['institution', 'field.programme']);
-    $feeType = FeeType::where('fee_type', $data['fee'])->first();
+    $feeType = FeeType::where('fee_type', $this->request->input('fee'))->first();
     $fee = Fee::where('fee_type_id', $feeType->id)
       ->where('institution_id', $applicant->institution_id)
       ->first();
@@ -516,12 +510,35 @@ class ApplicationController extends Controller
 
   public function generateRrrHash()
   {
-    $data = $this->request->all();
     $applicant = auth()->user()->loadMissing('institution');
 
     return response()->json([
-      'hash' => RemitaClient::generateHash($applicant->institution->terminal_id, $data['rrr'])
+      'hash' => RemitaClient::generateHash($applicant->institution->terminal_id, $this->request->input('rrr'))
     ]);
+  }
+
+  public function remitaResponse()
+  {
+    $orderId = $this->request->query('orderID');
+
+    if(isset($orderId)) {
+      $response_code ="";
+      $rrr = "";
+      $response_message = "";
+      if($orderID != null){
+        $response = remita_transaction_details($orderID);
+        $response_code = $response['status'];
+        if (isset($response['RRR'])) {
+            $rrr = $response['RRR'];
+        }
+        $response_message = $response['message'];
+      }
+
+      if($response_code == '01' || $response_code == '00'){
+      // add payment successful procedure including update payment table
+      
+      }
+    }
   }
 
   private function confirmFee($applicant, $rrr, $fee)

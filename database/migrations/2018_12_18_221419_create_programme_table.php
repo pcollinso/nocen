@@ -17,6 +17,7 @@ class CreateProgrammeTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('institution_id')->unsigned()->index();
             $table->string('programme_name', 200);
+            $table->string('service_type_id', 20)->nullable();
             $table->boolean('require_jamb')->default('1');
             $table->boolean('require_result_check_fee')->default('1');
             $table->boolean('require_application_fee')->default('1');
