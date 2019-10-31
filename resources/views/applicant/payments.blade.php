@@ -1,5 +1,6 @@
 @extends('layouts.vue-page')
 @section('content')
-    <payments
-      :applicant="{{ json_encode($applicant) }}" />
+  <payments
+    response-url="{{ route('applicant.paymentresponse') }}"
+    :applicant="{{ json_encode($applicant) }}" />
 @endsection

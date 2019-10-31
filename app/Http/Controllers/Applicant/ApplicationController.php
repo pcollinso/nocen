@@ -21,6 +21,8 @@ use App\Models\UtmeResult;
 use App\Models\OlevelGrade;
 use App\Models\Subject;
 use App\Models\Payment;
+use App\Models\FeeType;
+use App\Models\Fee;
 
 class ApplicationController extends Controller
 {
@@ -449,12 +451,77 @@ class ApplicationController extends Controller
   public function confirmAcceptanceFee()
   {
     $data = $this->request->all();
-
     $applicant = auth()->user()->loadMissing('institution');
 
     $confirmationResult = $this->confirmFee($applicant, $data['rrr'], 'ACCEPTANCE_FEE');
 
     return response()->json($confirmationResult, $confirmationResult['success'] ? 200 : 400);
+  }
+
+  public function generateRrr()
+  {
+    $orderId = date('dmyHis');
+    $data = $this->request->all();
+    $applicant = auth()->user()->loadMissing(['institution', 'field.programme']);
+    $feeType = FeeType::where('fee_type', $data['fee'])->first();
+    $fee = Fee::where('fee_type_id', $feeType->id)
+      ->where('institution_id', $applicant->institution_id)
+      ->first();
+
+    $paymentRecord = Payment::where('j_regno', $applicant->j_regno)
+      ->where('institution_id', $applicant->institution_id)
+      ->where('fee_id', $fee->fee_id)
+      ->where('completed', 0)
+      ->first();
+
+    if ($paymentRecord)
+    {
+      return response()->json([
+        'success' => true,
+        'payment' => $paymentRecord
+      ]);
+    }
+
+    $response = RemitaClient::getRrr([
+      'applicant' => $applicant, 
+      'orderId' => $orderId, 
+      'fee' => $fee
+      ]);
+
+    if ($response['statuscode'] === '025')
+    {
+      $paymentRecord = Payment::create([
+        'j_regno' => $applicant->j_regno,
+        'regno' => null,
+        'institution_id' => $applicant->institution_id,
+        'fee_id' => $fee->id,
+        'payment_type_id' => $fee->is_one_off ? 1 : 0,
+        'level_id' => 1,
+        'amount' => $fee->amount,
+        'order_id' => $orderId,
+        'rrr' => trim($response['RRR'])
+      ]);
+    
+      return response()->json([
+        'success' => true,
+        'payment' => $paymentRecord
+      ]);
+    }
+    
+    return response()->json([
+      'success' => false,
+      'message' => "Error generating RRR - {$response['status']}"
+    ]);
+  }
+
+  public function generateRrrHash()
+  {
+    $data = $this->request->all();
+    $applicant = auth()->user()->loadMissing('institution');
+
+    return response()->json([
+      'hash' => RemitaClient::generateHash($applicant->institution->terminal_id, $data['rrr'])
+    ]);
   }
 
   private function confirmFee($applicant, $rrr, $fee)

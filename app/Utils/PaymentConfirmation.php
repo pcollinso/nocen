@@ -105,16 +105,6 @@ final class PaymentConfirmation
       return ['success' => false, 'message' => "Invalid fee amount paid!", 'data' => null];
     }
 
-    // $rest = [
-    //   'j_regno' => $applicant->j_regno,
-    //   'regno' => $regno,
-    //   'institution_id' => $applicant->field->institution_id,
-    //   'fee_id' => $fee->fee_type_id,
-    //   'payment_type_id' => $feeDetail->payment_type_id,
-    //   'level_id' => $levelId,
-    //   'amount' => $feeDetail->amount,
-    // ];
-
     $paymentRecord->completed = true;
     $paymentRecord->save();
 

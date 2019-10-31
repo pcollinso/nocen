@@ -56,8 +56,11 @@ Route::group(['middleware' => ['query_log']], function () {
         Route::post('a/confirm-application-fee', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@confirmApplicationFee', 'as' => 'applicant.confirmApplicationFee']);
         Route::post('a/confirm-result-fee', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@confirmResultFee', 'as' => 'applicant.confirmResultFee']);
         Route::post('a/confirm-acceptance-fee', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@confirmAcceptanceFee', 'as' => 'applicant.confirmAcceptanceFee']);
+        Route::post('a/generate-rrr', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@generateRrr', 'as' => 'applicant.generateRrr']);
+        Route::post('a/generate-rrr-hash', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@generateRrrHash', 'as' => 'applicant.generateRrrHash']);
         Route::delete('a/utme-result/{id}', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@removeUtmeResult', 'as' => 'applicant.removeUtmeResult']);
         Route::post('a/passport', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@uploadPassport', 'as' => 'applicant.uploadPassport']);
+        Route::get('a/remita-response', ['uses' => '\App\Http\Controllers\Applicant\ApplicationController@remitaResponse', 'as' => 'applicant.paymentresponse']);
       });
 
       Route::group(['middleware' => ['role:superadmin']], function () {
