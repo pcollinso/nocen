@@ -521,24 +521,31 @@ class ApplicationController extends Controller
   {
     $orderId = $this->request->query('orderID');
 
-    if(isset($orderId)) {
-      $response_code ="";
-      $rrr = "";
-      $response_message = "";
-      if($orderID != null){
-        $response = remita_transaction_details($orderID);
-        $response_code = $response['status'];
-        if (isset($response['RRR'])) {
-            $rrr = $response['RRR'];
-        }
-        $response_message = $response['message'];
-      }
-
-      if($response_code == '01' || $response_code == '00'){
-      // add payment successful procedure including update payment table
+    if (! empty($orderId))
+    {
+      $applicant = auth()->user()->loadMissing('institution');
+      $response = RemitaClient::getPayment($applicant->institution->terminal_id, $orderId);
       
-      }
+      $paymentRecord = Payment::where('j_regno', $applicant->j_regno)
+        ->where('institution_id', $applicant->institution_id)
+        ->where('order_id', $orderId)
+        ->where('completed', 0)
+        ->first();
+
+      if($response['status'] == '01' || $response['status'] == '00')
+      {
+        $paymentRecord->rrr = $response['RRR'];
+        $paymentRecord->completed = true;
+        $paymentRecord->save();
+
+        return redirect()->route('applicant.payments');
+      } 
+      
+      echo 'Incorrect payment response';
+      return;
     }
+    
+    echo 'Order ID not found';
   }
 
   private function confirmFee($applicant, $rrr, $fee)
