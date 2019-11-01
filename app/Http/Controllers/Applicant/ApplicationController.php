@@ -554,7 +554,7 @@ class ApplicationController extends Controller
       return ['success' => false, 'message' => 'Payment record not found'];
     }
 
-    $paymentResponse = RemitaClient::getPayment($applicant->institution->terminal_id, $paymentRecord->rrr);
+    $paymentResponse = RemitaClient::getPayment($applicant->institution->terminal_id, $paymentRecord->order_id);
 
     if ($paymentResponse['status'] != '00')
     {
